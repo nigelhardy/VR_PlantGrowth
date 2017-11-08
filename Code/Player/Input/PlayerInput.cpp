@@ -26,7 +26,7 @@ void CPlayerInput::PostInit(IGameObject *pGameObject)
 
 	// NOTE: Since CRYENGINE 5.3, the game is responsible to initialize the action maps
 	IActionMapManager *pActionMapManager = gEnv->pGameFramework->GetIActionMapManager();
-	pActionMapManager->InitActionMaps("Libs/config/defaultprofile.xml");
+	pActionMapManager->InitActionMaps("Libs/config/vr_profile.xml");
 	pActionMapManager->Enable(true);
 
 	pActionMapManager->EnableActionMap("player", true);

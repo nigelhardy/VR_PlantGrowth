@@ -36,34 +36,8 @@ public:
 				//controllerEntity->getClosestEntity();
 			}
 		}
-		//if (auto* pEntity = gEnv->pEntitySystem->GetEntity(entityId))
-		//{
-		//	if (IsPortActive(pActInfo, eInputPort_MoveHmd))
-		//	{
-		//		auto* controllerEntity = pEntity->GetComponent<CControllerREntity>();
-		//		// return selected string len
-		//		TFlowInputData output;
-		//		output.Set<Vec3>(controllerEntity->getHmdOffset());
-		//		output.SetUserFlag(true);
-		//		ActivateOutput(pActInfo, eOutputPort_MovePlayer, output);
-		//	}
-		//}
 	}
-	Vec3 getHmdOffset()
-	{
-		if (movePlayerDest)
-		{
-			return *movePlayerDest;
-		}
-		else if(m_pOffsetEntity)
-		{
-			return m_pOffsetEntity->GetPos();
-		}
-		else
-		{
-			return Vec3(0, 0, 0);
-		}
-	}
+
 	IFlowGraph* m_pFlowGraph;
 	virtual void SetFlowGraph(IFlowGraph* pFlowGraph) override
 	{
@@ -104,44 +78,26 @@ public:
 		GetEntity()->Physicalize(params);
 		spawnPlaceholders();
 	}
+	IEntity* spawnEntity(char* name, char* className, float size) {
+		SEntitySpawnParams spawnParams;
+		spawnParams.sName = name;
+		spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass(className);
+		spawnParams.nFlags = ENTITY_FLAG_CLIENT_ONLY;
+		spawnParams.vScale = Vec3(size, size, size);
+		IEntity* entity = gEnv->pEntitySystem->SpawnEntity(spawnParams);
+		GetEntity()->AttachChild(entity);
+		Matrix34 locMat = entity->GetLocalTM();
+		locMat.SetTranslation(Vec3(0, .005f, 0));
+		entity->SetLocalTM(locMat);
+		entity->Hide(true);
+		return entity;
+	}
 	void spawnPlaceholders()
 	{
-		SEntitySpawnParams spawnParamsP;
-		spawnParamsP.sName = "plantPlaceholder";
-		spawnParamsP.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("GBeanPlantCustom");
-		spawnParamsP.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		spawnParamsP.vScale = Vec3(.01f, .01f, .01f);
-		plantPlaceholder = gEnv->pEntitySystem->SpawnEntity(spawnParamsP);
-		GetEntity()->AttachChild(plantPlaceholder);
+		plantPlaceholder = spawnEntity("plantPlaceHolder", "GBeanPlantCustom", .01f);
 		plantPlaceholder->GetComponent<CPlantEntityCustom>()->growthSwitch(false);
-		Matrix34 locMat = plantPlaceholder->GetLocalTM();
-		locMat.SetTranslation(Vec3(0, .005f, 0));
-		plantPlaceholder->SetLocalTM(locMat);
-		plantPlaceholder->Hide(true);
-
-		SEntitySpawnParams spawnParamsL;
-		spawnParamsL.sName = "lightPlaceholder";
-		spawnParamsL.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("LightGeom");
-		spawnParamsL.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		spawnParamsL.vScale = Vec3(.005f, .005f, .005f);
-		lightPlaceholder = gEnv->pEntitySystem->SpawnEntity(spawnParamsL);
-		GetEntity()->AttachChild(lightPlaceholder);
-		locMat = lightPlaceholder->GetLocalTM();
-		locMat.SetTranslation(Vec3(0, .005f, 0));
-		lightPlaceholder->SetLocalTM(locMat);
-		lightPlaceholder->Hide(true);
-
-		SEntitySpawnParams spawnParamsR;
-		spawnParamsR.sName = "robotPlaceholder";
-		spawnParamsR.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Robot");
-		spawnParamsR.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		spawnParamsR.vScale = Vec3(.2f, .2f, .2f);
-		robotPlaceholder = gEnv->pEntitySystem->SpawnEntity(spawnParamsR);
-		GetEntity()->AttachChild(robotPlaceholder);
-		locMat = robotPlaceholder->GetLocalTM();
-		locMat.SetTranslation(Vec3(0, .005f, 0));
-		robotPlaceholder->SetLocalTM(locMat);
-		robotPlaceholder->Hide(true);
+		lightPlaceholder = spawnEntity("lightPlaceHolder", "LightGeom", .005f);
+		robotPlaceholder = spawnEntity("robotPlaceholder", "Robot", .2f);
 	}
 	virtual IEntityPropertyGroup* GetPropertyGroup() override { return this; }
 
@@ -704,104 +660,53 @@ public:
 		return false;
 		
 	}
-	IEntity* spawnPlant()
+	SEntitySpawnParams createSpawnParams(char* name, char* className, Vec3 scale) 
 	{
 		SEntitySpawnParams spawnParams;
-		spawnParams.sName = "beanPlant";
-		spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("GBeanPlantCustom");
+		spawnParams.sName = name;
+		spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass(className);
+		spawnParams.vScale = scale;
 		spawnParams.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		IEntity *pSpawnedEntity = gEnv->pEntitySystem->SpawnEntity(spawnParams);
-		pSpawnedEntity->SetPos(GetEntity()->GetPos() + GetEntity()->GetForwardDir() * .25f);
-		pSpawnedEntity->SetRotation(IDENTITY);
-		if (lightManager)
-		{
-			lightManager->addPlant(pSpawnedEntity);
-		}
-		else if (getLightManager())
-		{
-			lightManager->addPlant(pSpawnedEntity);
-		}
-		return pSpawnedEntity;
+		return spawnParams;
 	}
-	IEntity* spawnRobot()
+	IEntity* spawnBasicEntity(SEntitySpawnParams sp) 
 	{
-		SEntitySpawnParams spawnParams;
-		spawnParams.sName = "robot";
-		spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Robot");
-		spawnParams.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		spawnParams.vScale = Vec3(10.f, 10.f, 10.f);
-		IEntity *pSpawnedEntity = gEnv->pEntitySystem->SpawnEntity(spawnParams);
-		pSpawnedEntity->SetPos(GetEntity()->GetPos() + GetEntity()->GetForwardDir() * .25f);
-		pSpawnedEntity->SetRotation(IDENTITY);
-		if (lightManager)
-		{
-			lightManager->addRobot(pSpawnedEntity);
-		}
-		else if (getLightManager())
-		{
-			lightManager->addRobot(pSpawnedEntity);
-		}
-		return pSpawnedEntity;
-	}
-	IEntity* spawnNewLight(Vec3 pos)
-	{
-		// spawn lightgeom
-		SEntitySpawnParams spawnParams;
-		spawnParams.sName = "lightGeom";
-		spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("LightGeom");
-		spawnParams.vScale = Vec3(.2f, .2f, .2f);
-		spawnParams.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		IEntity *pSpawnedEntity = gEnv->pEntitySystem->SpawnEntity(spawnParams);
-		pSpawnedEntity->SetPos(pos);
-		pSpawnedEntity->SetRotation(IDENTITY);
-		if (lightManager)
-		{
-			lightManager->addLight(pSpawnedEntity);
-		}
-		else if (getLightManager())
-		{
-			lightManager->addLight(pSpawnedEntity);
-		}
-		// Spawn light
-		SEntitySpawnParams spawnParamsL;
-		spawnParamsL.sName = "light";
-		spawnParamsL.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Light");
-		spawnParamsL.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		IEntity *pSpawnedEntityL = gEnv->pEntitySystem->SpawnEntity(spawnParamsL);
-		SChildAttachParams childParams;
-		pSpawnedEntity->AttachChild(pSpawnedEntityL, childParams);
-		pSpawnedEntityL->SetLocalTM(Matrix34::CreateIdentity());
 		
+		IEntity *pSpawnedEntity = gEnv->pEntitySystem->SpawnEntity(sp);
+		pSpawnedEntity->SetPos(GetEntity()->GetPos() + GetEntity()->GetForwardDir() * .25f);
+		pSpawnedEntity->SetRotation(IDENTITY);
 		return pSpawnedEntity;
 	}
+	void spawnPlant()
+	{
+		if (getLightManager())
+		{
+			SEntitySpawnParams sp = createSpawnParams("beanPlant", "GBeanPlantCustom", Vec3(1.0f));
+			lightManager->addPlant(spawnBasicEntity(sp));
+		}
+	}
+	void spawnRobot()
+	{
+		if (getLightManager())
+		{
+			SEntitySpawnParams sp = createSpawnParams("robot", "Robot", Vec3(10.f));
+			lightManager->addRobot(spawnBasicEntity(sp));
+		}
+	}
+
 	void spawnNewLight()
 	{
-		// spawn lightgeom
-		SEntitySpawnParams spawnParams;
-		spawnParams.sName = "lightGeom";
-		spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("LightGeom");
-		spawnParams.vScale = Vec3(.2f, .2f, .2f);
-		spawnParams.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		IEntity *pSpawnedEntity = gEnv->pEntitySystem->SpawnEntity(spawnParams);
-		pSpawnedEntity->SetPos(GetEntity()->GetPos() + GetEntity()->GetForwardDir() * .25f);
-		pSpawnedEntity->SetRotation(IDENTITY);
-		if (lightManager)
+		if (getLightManager())
 		{
+			SEntitySpawnParams sp = createSpawnParams("lightGeom", "LightGeom", Vec3(.2f));
+			IEntity* pSpawnedEntity = spawnBasicEntity(sp);
+			SEntitySpawnParams spL = createSpawnParams("light", "Light", Vec3(1.0f));
+			IEntity *pSpawnedEntityL = spawnBasicEntity(spL);
+			SChildAttachParams childParams;
+			pSpawnedEntity->AttachChild(pSpawnedEntityL, childParams);
+			pSpawnedEntityL->SetLocalTM(Matrix34::CreateIdentity());
 			lightManager->addLight(pSpawnedEntity);
 		}
-		else if (getLightManager())
-		{
-			lightManager->addLight(pSpawnedEntity);
-		}
-		// Spawn light
-		SEntitySpawnParams spawnParamsL;
-		spawnParamsL.sName = "light";
-		spawnParamsL.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Light");
-		spawnParamsL.nFlags = ENTITY_FLAG_CLIENT_ONLY;
-		IEntity *pSpawnedEntityL = gEnv->pEntitySystem->SpawnEntity(spawnParamsL);
-		SChildAttachParams childParams;
-		pSpawnedEntity->AttachChild(pSpawnedEntityL, childParams);
-		pSpawnedEntityL->SetLocalTM(Matrix34::CreateIdentity());
 	}
 	IEntity* getClosestEntity(string name)
 	{
