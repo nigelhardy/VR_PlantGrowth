@@ -19,13 +19,13 @@
 
 class CPlantEntityCustom;
 
-class CLightManagerEntity
+class CEntityManagerEntity
 	: public IEntityFlowGraphComponent
 {
 public:
 
 	//{30CD4C05103040D9-BED41FCCB292ACFA}
-	CRY_ENTITY_COMPONENT_INTERFACE_AND_CLASS(CLightManagerEntity, "LightManager", 0x30CD4C05103040D9, 0xBED41FCCB292ACFA);
+	CRY_ENTITY_COMPONENT_INTERFACE_AND_CLASS(CEntityManagerEntity, "EntityManager", 0x30CD4C05103040D9, 0xBED41FCCB292ACFA);
 	static void OnFlowgraphActivation(EntityId entityId, IFlowNode::SActivationInfo* pActInfo, const class CEntityFlowNode* pNode);
 	void AddEventListener(IEntityEventListener* pListener);
 	void RemoveEventListener(IEntityEventListener* pListener);

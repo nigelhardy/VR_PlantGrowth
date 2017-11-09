@@ -15,12 +15,13 @@
 #include <math.h>
 #include "GamePlugin.h"
 #include <vector>
-#include "LightManager.h"
+#include "EntityManager.h"
 #include "CryParticleSystem\IParticles.h"
 #include "LightGeom.h"
 #include "robot.h"
 #include <limits>
 using namespace std::chrono;
+
 class CControllerREntity
 	: public IEntityFlowGraphComponent
 	, public IEntityPropertyGroup
@@ -163,9 +164,9 @@ public:
 		// remove entity from holding vector
 		for (int i = 0; i < holdingPlant.size(); i++)
 		{
-			if (lightManager)
+			if (entityManager)
 			{
-				holdingPlant.at(i)->GetComponent<CPlantEntityCustom>()->growthSwitch(lightManager->GetGlobalGrowth());
+				holdingPlant.at(i)->GetComponent<CPlantEntityCustom>()->growthSwitch(entityManager->GetGlobalGrowth());
 			}
 
 		}
@@ -217,21 +218,21 @@ public:
 	{
 		if (holdingPlant.size() > 0 || holdingLight.size() > 0 || holdingRobot.size() > 0)
 		{
-			if (lightManager)
+			if (entityManager)
 			{
 				for (int i = 0; i < holdingPlant.size(); i++)
 				{
-					lightManager->removePlant(holdingPlant.at(i));
+					entityManager->removePlant(holdingPlant.at(i));
 					//holdingPlant.erase(holdingPlant.begin() + i);
 				}
 				for (int i = 0; i < holdingLight.size(); i++)
 				{
-					lightManager->removeLight(holdingLight.at(i));
+					entityManager->removeLight(holdingLight.at(i));
 					//holdingLight.erase(holdingLight.begin() + i);
 				}
 				for (int i = 0; i < holdingRobot.size(); i++)
 				{
-					lightManager->removeRobot(holdingRobot.at(i));
+					entityManager->removeRobot(holdingRobot.at(i));
 					//holdingRobot.erase(holdingRobot.begin() + i);
 				}
 				holdingPlant.clear();
@@ -254,11 +255,11 @@ public:
 			{
 				if (lGeom->lightSwitch())
 				{
-					lightManager->lightSwitch(holdingLight.at(i), true);
+					entityManager->lightSwitch(holdingLight.at(i), true);
 				}
 				else
 				{
-					lightManager->lightSwitch(holdingLight.at(i), false);
+					entityManager->lightSwitch(holdingLight.at(i), false);
 				}
 			}
 		}
@@ -482,13 +483,13 @@ public:
 				}
 				if (touchTrig && touchTrig != touchTrigLast)
 				{
-					if (lightManager)
+					if (entityManager)
 					{
-						lightManager->growSwitch();
+						entityManager->growSwitch();
 					}
 					else if (getLightManager())
 					{
-						lightManager->growSwitch();
+						entityManager->growSwitch();
 					}
 					lastResetTime = gEnv->pTimer->GetCurrTime();
 				}
@@ -500,12 +501,12 @@ public:
 						{
 							if (buttonMenu) // menu button is held too
 							{
-								lightManager->removeAll();
+								entityManager->removeAll();
 							}
 							else
 							{
-								lightManager->resetGrowth();
-								lightManager->grow(true);
+								entityManager->resetGrowth();
+								entityManager->grow(true);
 							}
 
 						}
@@ -682,7 +683,7 @@ public:
 		if (getLightManager())
 		{
 			SEntitySpawnParams sp = createSpawnParams("beanPlant", "GBeanPlantCustom", Vec3(1.0f));
-			lightManager->addPlant(spawnBasicEntity(sp));
+			entityManager->addPlant(spawnBasicEntity(sp));
 		}
 	}
 	void spawnRobot()
@@ -690,7 +691,7 @@ public:
 		if (getLightManager())
 		{
 			SEntitySpawnParams sp = createSpawnParams("robot", "Robot", Vec3(10.f));
-			lightManager->addRobot(spawnBasicEntity(sp));
+			entityManager->addRobot(spawnBasicEntity(sp));
 		}
 	}
 
@@ -705,7 +706,7 @@ public:
 			SChildAttachParams childParams;
 			pSpawnedEntity->AttachChild(pSpawnedEntityL, childParams);
 			pSpawnedEntityL->SetLocalTM(Matrix34::CreateIdentity());
-			lightManager->addLight(pSpawnedEntity);
+			entityManager->addLight(pSpawnedEntity);
 		}
 	}
 	IEntity* getClosestEntity(string name)
@@ -751,13 +752,13 @@ public:
 protected:
 	bool getLightManager()
 	{
-		if (!lightManager)
+		if (!entityManager)
 		{
 			auto* pEntity = gEnv->pEntitySystem->FindEntityByName("LightManager");
 			if (pEntity != NULL)
 			{
-				lightManager = pEntity->GetComponent<CLightManagerEntity>();
-				if (lightManager)
+				entityManager = pEntity->GetComponent<CEntityManagerEntity>();
+				if (entityManager)
 				{
 					return true;
 				}
@@ -799,7 +800,7 @@ protected:
 	IEntitySystem *m_pIEntitySystem;
 	IEntity *m_pOffsetEntity;
 	IEntity *m_moveIndicatorEntity = NULL;
-	CLightManagerEntity *lightManager = NULL;
+	CEntityManagerEntity *entityManager = NULL;
 	Quat offsetRotation = Quat(IDENTITY);
 	bool leftController = true;
 	Vec3 posArea;

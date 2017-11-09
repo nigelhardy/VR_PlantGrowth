@@ -2,7 +2,7 @@
 #include <string>
 #include "FlowNodes\LightManagerFlowNode.h"
 #include "FlowNodes\FlowNodeHelper.cpp"
-#include "Entities\LightManager.h"
+#include "Entities\EntityManager.h"
 #include "GamePlugin.h"
 
 class CLFlowNodeRegistrator : public IEntityRegistrator
@@ -93,7 +93,7 @@ void CFlowNode_LightManager::ProcessEvent(EFlowEvent event, SActivationInfo* pAc
 			auto* pEntity = gEnv->pEntitySystem->FindEntityByName("LightManager");
 			if (pEntity != NULL && value != NULL)
 			{
-				auto x = pEntity->GetComponent<CLightManagerEntity>();
+				auto x = pEntity->GetComponent<CEntityManagerEntity>();
 				if (x != NULL)
 				{
 					x->addLight(gEnv->pEntitySystem->GetEntity(*value));

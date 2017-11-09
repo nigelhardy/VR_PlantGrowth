@@ -1,18 +1,18 @@
 #include "StdAfx.h"
-#include "LightManager.h"
+#include "EntityManager.h"
 
 using namespace std::chrono;
 
-class CMyLightManagerEntityRegistrator : public IEntityRegistrator
+class CEntityManagerEntityRegistrator : public IEntityRegistrator
 {
 	virtual void Register() override
 	{
-		RegisterEntityWithDefaultComponent<CLightManagerEntity>("LightManager", "Plant_Tools");
+		RegisterEntityWithDefaultComponent<CEntityManagerEntity>("LightManager", "Plant_Tools");
 		// Flow Node Defaults
 		CEntityFlowNodeFactory* pFlowNodeFactory = new CEntityFlowNodeFactory("entity:LightManager");
 
 		pFlowNodeFactory->m_inputs.push_back(InputPortConfig<EntityId>("LightEntityId", ""));
-		pFlowNodeFactory->m_activateCallback = CLightManagerEntity::OnFlowgraphActivation;
+		pFlowNodeFactory->m_activateCallback = CEntityManagerEntity::OnFlowgraphActivation;
 		pFlowNodeFactory->Close();
 	}
 	virtual void Unregister() override
@@ -20,15 +20,15 @@ class CMyLightManagerEntityRegistrator : public IEntityRegistrator
 
 	}
 };
-static CMyLightManagerEntityRegistrator g_entityRegistratorLight;
+static CEntityManagerEntityRegistrator g_entityRegistratorLight;
 
-CRYREGISTER_CLASS(CLightManagerEntity)
+CRYREGISTER_CLASS(CEntityManagerEntity)
 
-void CLightManagerEntity::OnFlowgraphActivation(EntityId entityId, IFlowNode::SActivationInfo* pActInfo, const class CEntityFlowNode* pNode)
+void CEntityManagerEntity::OnFlowgraphActivation(EntityId entityId, IFlowNode::SActivationInfo* pActInfo, const class CEntityFlowNode* pNode)
 {
 	if (auto* pEntity = gEnv->pEntitySystem->GetEntity(entityId))
 	{
-		auto* thisEntity = pEntity->GetComponent<CLightManagerEntity>();
+		auto* thisEntity = pEntity->GetComponent<CEntityManagerEntity>();
 		if (IsPortActive(pActInfo, eInputPort_LightPosition))
 		{
 			EntityId tmp = GetPortEntityId(pActInfo, eInputPort_LightPosition);
@@ -41,16 +41,16 @@ void CLightManagerEntity::OnFlowgraphActivation(EntityId entityId, IFlowNode::SA
 	}
 		
 }
-void CLightManagerEntity::AddEventListener(IEntityEventListener* pListener)
+void CEntityManagerEntity::AddEventListener(IEntityEventListener* pListener)
 {
 	// Does not check uniquiness due to performance reasons.
 	//m_listeners.push_back(pListener);
 }
-void CLightManagerEntity::RemoveEventListener(IEntityEventListener* pListener)
+void CEntityManagerEntity::RemoveEventListener(IEntityEventListener* pListener)
 {
 	//stl::find_and_erase(m_listeners, pListener);
 }
-void CLightManagerEntity::addLight(IEntity* light)
+void CEntityManagerEntity::addLight(IEntity* light)
 {
 	if (light != NULL)
 	{
@@ -62,7 +62,7 @@ void CLightManagerEntity::addLight(IEntity* light)
 	}
 	
 }
-void CLightManagerEntity::removeLight(IEntity* light)
+void CEntityManagerEntity::removeLight(IEntity* light)
 {
 	if (light != NULL)
 	{
@@ -84,7 +84,7 @@ void CLightManagerEntity::removeLight(IEntity* light)
 	}
 
 }
-void CLightManagerEntity::lightSwitch(IEntity* light, bool on)
+void CEntityManagerEntity::lightSwitch(IEntity* light, bool on)
 {
 	if (light != NULL)
 	{
@@ -110,7 +110,7 @@ void CLightManagerEntity::lightSwitch(IEntity* light, bool on)
 	}
 
 }
-void CLightManagerEntity::addPlant(IEntity* plant)
+void CEntityManagerEntity::addPlant(IEntity* plant)
 {
 	if (plant != NULL)
 	{
@@ -134,7 +134,7 @@ void CLightManagerEntity::addPlant(IEntity* plant)
 		
 	}
 }
-void CLightManagerEntity::removePlant(IEntity* plant)
+void CEntityManagerEntity::removePlant(IEntity* plant)
 {
 	if (plant != NULL)
 	{
@@ -149,14 +149,14 @@ void CLightManagerEntity::removePlant(IEntity* plant)
 		}
 	}
 }
-void CLightManagerEntity::addRobot(IEntity* robot)
+void CEntityManagerEntity::addRobot(IEntity* robot)
 {
 	if (robot != NULL)
 	{
 		robotEntities.push_back(robot);
 	}
 }
-void CLightManagerEntity::removeRobot(IEntity* robot)
+void CEntityManagerEntity::removeRobot(IEntity* robot)
 {
 	if (robot != NULL)
 	{
@@ -171,14 +171,14 @@ void CLightManagerEntity::removeRobot(IEntity* robot)
 		}
 	}
 }
-void CLightManagerEntity::resetGrowth()
+void CEntityManagerEntity::resetGrowth()
 {
 	for (int i = 0; i < plantEntities.size(); i++)
 	{
 		plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->Reset();
 	}
 }
-void CLightManagerEntity::grow(bool grow)
+void CEntityManagerEntity::grow(bool grow)
 {
 	globalGrowth = grow;
 	for (int i = 0; i < plantEntities.size(); i++)
@@ -186,7 +186,7 @@ void CLightManagerEntity::grow(bool grow)
 		plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->growthSwitch(grow);
 	}
 }
-void CLightManagerEntity::growSwitch()
+void CEntityManagerEntity::growSwitch()
 {
 	globalGrowth = !globalGrowth;
 	for (int i = 0; i < plantEntities.size(); i++)
@@ -194,7 +194,7 @@ void CLightManagerEntity::growSwitch()
 		plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->growthSwitch(globalGrowth);
 	}
 }
-void CLightManagerEntity::removeAll()
+void CEntityManagerEntity::removeAll()
 {
 	for (int i = 0; i < plantEntities.size(); i++)
 	{
@@ -212,7 +212,7 @@ void CLightManagerEntity::removeAll()
 	plantEntities.clear();
 	robotEntities.clear();
 }
-IEntity* CLightManagerEntity::getOneLight()
+IEntity* CEntityManagerEntity::getOneLight()
 {
 	if (lightEntities.size() > 0)
 	{
@@ -224,11 +224,11 @@ IEntity* CLightManagerEntity::getOneLight()
 	}
 	
 }
-bool CLightManagerEntity::GetGlobalGrowth()
+bool CEntityManagerEntity::GetGlobalGrowth()
 {
 	return globalGrowth;
 }
-void CLightManagerEntity::SetFlowGraph(IFlowGraph* pFlowGraph)
+void CEntityManagerEntity::SetFlowGraph(IFlowGraph* pFlowGraph)
 {
 	if (m_pFlowGraph)
 		m_pFlowGraph->Release();
@@ -236,10 +236,10 @@ void CLightManagerEntity::SetFlowGraph(IFlowGraph* pFlowGraph)
 	if (m_pFlowGraph)
 		m_pFlowGraph->AddRef();
 };
-IFlowGraph* CLightManagerEntity::GetFlowGraph() {
+IFlowGraph* CEntityManagerEntity::GetFlowGraph() {
 	return m_pFlowGraph;
 };
-void CLightManagerEntity::Initialize()
+void CEntityManagerEntity::Initialize()
 {
 	GetEntity()->SetUpdatePolicy(ENTITY_UPDATE_ALWAYS);
 	GetEntity()->Activate(true); // necessary for UPDATE event to be called
@@ -257,7 +257,7 @@ void CLightManagerEntity::Initialize()
 	// Spawn the entity, bullet is propelled in CBullet based on the rotation and position here
 
 }
-void CLightManagerEntity::ProcessEvent(SEntityEvent &event)
+void CEntityManagerEntity::ProcessEvent(SEntityEvent &event)
 {
 	switch (event.event)
 	{
@@ -282,7 +282,7 @@ void CLightManagerEntity::ProcessEvent(SEntityEvent &event)
 		break;
 	}
 }
-void CLightManagerEntity::GetLightsInScene()
+void CEntityManagerEntity::GetLightsInScene()
 {
 	float constraintRadius = 10.0f;
 	const Vec3 boxMin = GetEntity()->GetWorldPos() - Vec3(constraintRadius + 5.f);
@@ -305,7 +305,7 @@ void CLightManagerEntity::GetLightsInScene()
 		}
 	}
 }
-void CLightManagerEntity::GetPlantsInScene()
+void CEntityManagerEntity::GetPlantsInScene()
 {
 	float constraintRadius = 10.0f;
 	const Vec3 boxMin = GetEntity()->GetWorldPos() - Vec3(constraintRadius + 5.f);
@@ -328,12 +328,12 @@ void CLightManagerEntity::GetPlantsInScene()
 		}
 	}
 }
-uint64 CLightManagerEntity::GetEventMask() const {
+uint64 CEntityManagerEntity::GetEventMask() const {
 	return BIT64(ENTITY_EVENT_UPDATE) | BIT64(ENTITY_EVENT_START_GAME) | BIT64(ENTITY_EVENT_RESET);
 }
 
 
-void CLightManagerEntity::Reset()
+void CEntityManagerEntity::Reset()
 {
 	lightEntities.clear();
 	plantEntities.clear();
