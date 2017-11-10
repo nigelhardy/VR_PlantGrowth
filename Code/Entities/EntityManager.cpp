@@ -87,7 +87,36 @@ void CEntityManagerEntity::spawnPlant(Vec3 pos) {
 			addPlant(newPlant);
 		}
 	}
-	
+}
+void CEntityManagerEntity::spawnRobot(Vec3 pos) {
+	IEntity* newRobot = spawnEntity("robotPlaceholder", "Robot", 10.0f, pos);
+	if (newRobot)
+	{
+		addRobot(newRobot);
+	}
+}
+void CEntityManagerEntity::spawnLight(Vec3 pos) {
+	IEntity* newLight = spawnEntity("lightPlaceHolder", "LightGeom", .5f, pos);
+	if (newLight)
+	{
+		addLight(newLight);
+	}
+}
+void CEntityManagerEntity::spawnSelectedEntity(Vec3 pos) {
+	switch (currentSpawnEntity)
+	{
+	case plant:
+		spawnPlant(pos);
+		break;
+	case light:
+		spawnLight(pos);
+		break;
+	case robot:
+		spawnRobot(pos);
+		break;
+	default:
+		break;
+	}
 }
 void CEntityManagerEntity::removeLight(IEntity* light)
 {
@@ -109,6 +138,15 @@ void CEntityManagerEntity::removeLight(IEntity* light)
 		gEnv->pEntitySystem->RemoveEntity(light->GetId());
 	}
 
+}
+void CEntityManagerEntity::changeSelectedEntity(int diff)
+{
+	// keep it in range
+	currentSpawnEntity = (currentSpawnEntity + diff) % entityCount;
+	if (currentSpawnEntity < 0)
+	{
+		currentSpawnEntity += entityCount;
+	}
 }
 void CEntityManagerEntity::lightSwitch(IEntity* light, bool on)
 {

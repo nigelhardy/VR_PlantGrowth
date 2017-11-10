@@ -36,8 +36,10 @@ public:
 
 
 	void spawnPlant(Vec3 pos);
+	void spawnRobot(Vec3 pos);
+	void spawnLight(Vec3 pos);
 	IEntity* spawnEntity(char* name, char* className, float size, Vec3 pos);
-
+	void spawnSelectedEntity(Vec3 pos);
 
 	void removeLight(IEntity* light);
 	void lightSwitch(IEntity* light, bool on);
@@ -49,6 +51,9 @@ public:
 	void growSwitch();
 	void removeAll();
 	bool GetGlobalGrowth();
+
+	void changeSelectedEntity(int diff);
+
 
 	IEntity* getOneLight();
 	
@@ -64,6 +69,7 @@ public:
 protected:
 
 	void Reset();
+	int currentSpawnEntity = plant;
 
 public:
 	std::vector<IEntity*> lightEntities;
@@ -84,4 +90,12 @@ public:
 		eOutputPort_CollisionSurfaceName,
 		eOutputPort_OnGeometryChanged
 	};
+	enum entityType
+	{
+		plant = 0,
+		light,
+		robot,
+		entityCount = 3
+	};
+
 };

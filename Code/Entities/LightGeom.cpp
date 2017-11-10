@@ -45,6 +45,16 @@ void CMyLightGeomEntity::Initialize()
 	params.mass = 1.0f;
 	GetEntity()->Physicalize(params);
 
+
+	SEntitySpawnParams spawnParamsL;
+	spawnParamsL.sName = "light";
+	spawnParamsL.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Light");
+	spawnParamsL.nFlags = ENTITY_FLAG_CLIENT_ONLY;
+	IEntity *pSpawnedEntityL = gEnv->pEntitySystem->SpawnEntity(spawnParamsL);
+	SChildAttachParams childParams;
+	GetEntity()->AttachChild(pSpawnedEntityL, childParams);
+	pSpawnedEntityL->SetLocalTM(Matrix34::CreateIdentity());
+
 	/*SEntitySpawnParams spawnParams;
 	spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Light");
 

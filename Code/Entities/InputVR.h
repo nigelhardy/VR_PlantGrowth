@@ -39,46 +39,64 @@ public:
 	virtual ~Command() {};
 };
 
-class CommandQueue
-{
-	CommandQueue();
-	void execute()
-	{
-
-	}
-	void newCommand(int command)
-	{
-		if (menu1Down)
-		{
-			CryLogAlways("Menu 1 Down");
-		}
-	}
-};
-
-
-
-class SpawnPlant : public Command
+class SpawnEntityCommand : public Command
 {
 public:
-	SpawnPlant(CEntityManagerEntity* entityMan, Vec3 pos) 
+	SpawnEntityCommand(CEntityManagerEntity* entityMan, Vec3 pos)
 	{
 		spawnPos = pos;
-		if (entityMan)
-		{
-			entityManager = entityMan;
-		}
+		entityManager = entityMan;
 	}
 	void execute() override
 	{
 		if (entityManager)
 		{
-			entityManager->spawnPlant(spawnPos);
+			entityManager->spawnSelectedEntity(spawnPos);
 		}
 	};
 protected:
 	CEntityManagerEntity* entityManager;
 	Vec3 spawnPos;
 };
+
+class RemoveAllEntitiesCommand : public Command
+{
+public:
+	RemoveAllEntitiesCommand(CEntityManagerEntity* entityMan)
+	{
+		entityManager = entityMan;
+	}
+	void execute() override
+	{
+		if (entityManager)
+		{
+			entityManager->removeAll();
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+};
+
+class ChangeEntityCommand : public Command
+{
+public:
+	ChangeEntityCommand(CEntityManagerEntity* entityMan, int diff)
+	{
+		entityManager = entityMan;
+		difference = diff;
+	}
+	void execute() override
+	{
+		if (entityManager)
+		{
+			entityManager->changeSelectedEntity(difference);
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+	int difference;
+};
+
 
 using namespace std::chrono;
 
@@ -155,7 +173,6 @@ protected:
 	Quat controllerRot2 = Quat(IDENTITY);
 
 	std::vector< Command* > commands;
-
 public:
 	enum EInputPorts
 	{

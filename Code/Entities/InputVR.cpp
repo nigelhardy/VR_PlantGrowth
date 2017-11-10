@@ -71,7 +71,6 @@ void CInputVREntity::Initialize()
 {
 	//GetEntity()->SetUpdatePolicy(ENTITY_UPDATE_ALWAYS);
 	GetEntity()->Activate(true); // necessary for UPDATE event to be called
-	
 	controllerEntity1 = spawnController("controller1");
 	pMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/controller/vive_controller_ce1.mtl");
 	pMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMat);
@@ -138,19 +137,36 @@ void CInputVREntity::getControllerInput()
 		Vec2 trackpadVec = pController->GetThumbStickValue(currentController, eKI_Motion_OpenVR_TouchPad_X);
 
 		if (touchMenu != touchMenuLast) {
-			if (touchMenu) {		
-				commands.push_back(new SpawnPlant(entityManager, controllerPos1));
-				//entityManager->spawnPlant(controllerPos1);
+			if (touchMenu) {
+				// spawn selected entity
+				//commands.push_back(new SpawnEntityCommand(entityManager, controllerPos1));
+				commands.insert(commands.begin(), new SpawnEntityCommand(entityManager, controllerPos1));
 			}
 		}
 		if (touchGrip != touchGripLast) {
-
+			if (touchGrip)
+			{
+				commands.push_back(new RemoveAllEntitiesCommand(entityManager));
+			}
 		}
 		if (touchTrig != touchTrigLast) {
 
 		}
 		if (touchTrack != touchTrackLast) {
-
+			if (touchTrack)
+			{
+				if (trackpadVec.y >= 0.0f)
+				{
+					// up on d-pad
+					commands.push_back(new ChangeEntityCommand(entityManager, 1));
+				}
+				else
+				{
+					// down on d-pad
+					commands.push_back(new ChangeEntityCommand(entityManager, -1));
+				}
+			}
+			
 		}
 
 		touchMenuLast = touchMenu;
@@ -235,7 +251,6 @@ bool CInputVREntity::getEntityManager()
 		return true;
 	}
 	return false;
-		
 }
 void CInputVREntity::getVRDevices() {
 	if (IHmdManager* pHmdManager = gEnv->pSystem->GetHmdManager()) // Check, if the HMD Manager exists
@@ -256,7 +271,6 @@ void CInputVREntity::getVRDevices() {
 void CInputVREntity::Reset()
 {
 	getVRDevices();
-
 }
 
 CRYREGISTER_CLASS(CInputVREntity)

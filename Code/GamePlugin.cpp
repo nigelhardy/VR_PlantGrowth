@@ -78,7 +78,7 @@ void CGamePlugin::OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lp
 			pTemp = pTemp->m_pNext;
 		}
 
-		gEnv->pConsole->ExecuteString("map RefactorTest", false, false);
+		gEnv->pConsole->ExecuteString("map example", false, false);
 		//gEnv->pConsole->ExecuteString("e_TimeOfDay 12.7");
 		//gEnv->pConsole->ExecuteString("e_TimeOfDaySpeed 1.1");
 		//gEnv->pAISystem->GetNavigationSystem()
