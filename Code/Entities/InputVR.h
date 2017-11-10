@@ -21,6 +21,65 @@
 #include "LightGeom.h"
 #include "robot.h"
 #include <limits>
+#include <vector>
+
+enum controllerCommands
+{
+	menu1Down = 0,
+	menu1Up,
+	trigger1Down,
+	trigger1up
+
+};
+
+class Command
+{
+public:
+	virtual void execute() = 0;
+	virtual ~Command() {};
+};
+
+class CommandQueue
+{
+	CommandQueue();
+	void execute()
+	{
+
+	}
+	void newCommand(int command)
+	{
+		if (menu1Down)
+		{
+			CryLogAlways("Menu 1 Down");
+		}
+	}
+};
+
+
+
+class SpawnPlant : public Command
+{
+public:
+	SpawnPlant(CEntityManagerEntity* entityMan, Vec3 pos) 
+	{
+		spawnPos = pos;
+		if (entityMan)
+		{
+			entityManager = entityMan;
+		}
+	}
+	void execute() override
+	{
+		if (entityManager)
+		{
+			entityManager->spawnPlant(spawnPos);
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+	Vec3 spawnPos;
+};
+
 using namespace std::chrono;
 
 class CInputVREntity
@@ -51,6 +110,7 @@ public:
 	bool getOffsetEntity();
 	IEntity* spawnController(char* name);
 	void updateControllersLocation();
+	void processCommands();
 
 	virtual uint64 GetEventMask() const {
 		return BIT64(ENTITY_EVENT_UPDATE) | BIT64(ENTITY_EVENT_START_LEVEL) | BIT64(ENTITY_EVENT_RESET);
@@ -93,7 +153,9 @@ protected:
 	IEntity* controllerEntity2 = NULL;
 	Vec3 controllerPos2 = Vec3(0);
 	Quat controllerRot2 = Quat(IDENTITY);
-	
+
+	std::vector< Command* > commands;
+
 public:
 	enum EInputPorts
 	{

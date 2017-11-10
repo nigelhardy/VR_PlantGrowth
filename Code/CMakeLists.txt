@@ -52,6 +52,13 @@ set (SourceGroup_EntityHelpers
 )
 source_group("Entities" FILES ${SourceGroup_EntityHelpers})
 
+set (SourceGroup_Commands
+	"Commands/Commands.cpp"
+	"Commands/Commands.h"
+
+)
+source_group("Commands" FILES ${SourceGroup_Commands})
+
 set (SourceGroup_FlowNodes
 	"FlowNodes/TrackPadFlowNode.cpp"
 	"FlowNodes/TrackPadFlowNode.h"
@@ -96,8 +103,7 @@ set (SOURCE
 	${SourceGroup_Player}
 	${SourceGroup_PlayerInput}
 	${SourceGroup_PlayerMovement}
-	${SourceGroup_PlayerView}
-	
+	${SourceGroup_PlayerView}	
 )
 
 if(OPTION_PCH AND MSVC)

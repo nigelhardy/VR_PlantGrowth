@@ -21,32 +21,8 @@
 #include "robot.h"
 #include <limits>
 #include "InputVR.h"
-using namespace std::chrono;
 
-class Command
-{
-public:
-	virtual void execute() = 0;
-};
-class SpawnPlant : public Command
-{
-public:
-	SpawnPlant(IEntity* entityMan) 
-	{
-		if (entityMan)
-		{
-			entityManager = entityMan->GetComponent<CEntityManagerEntity>();
-		}
-	}
-	void execute() {
-		if (entityManager) 
-		{
-			//entityManager->spawnPlant();
-		}
-	}
-protected:
-	CEntityManagerEntity* entityManager;
-};
+using namespace std::chrono;
 
 void CInputVREntity::OnFlowgraphActivation(EntityId entityId, IFlowNode::SActivationInfo* pActInfo, const class CEntityFlowNode* pNode)
 {
@@ -105,8 +81,8 @@ void CInputVREntity::Initialize()
 
 void CInputVREntity::SerializeProperties(Serialization::IArchive& archive) // give control in editor over some properties
 {
-	archive(Serialization::ModelFilename(m_geometry), "Geometry", "Geometry");
-	archive(leftController, "Left", "Left");
+	//archive(Serialization::ModelFilename(m_geometry), "Geometry", "Geometry");
+	//archive(leftController, "Left", "Left");
 	if (archive.isInput())
 	{
 		Reset();
@@ -125,14 +101,21 @@ void CInputVREntity::ProcessEvent(SEntityEvent &event)
 	case ENTITY_EVENT_UPDATE:
 		posArea = GetEntity()->GetPos();
 		getControllerInput();
-			
+		processCommands();
 		break;
 	}
 }
-	
+void CInputVREntity::processCommands()
+{
+	if (commands.size() > 0)
+	{
+		commands.back()->execute();
+		commands.pop_back();
+	}
+}
 void CInputVREntity::getControllerInput()
 {
-	if (pController == NULL)
+	if (pController == NULL || !getEntityManager())
 	{
 		return;
 	}
@@ -155,8 +138,9 @@ void CInputVREntity::getControllerInput()
 		Vec2 trackpadVec = pController->GetThumbStickValue(currentController, eKI_Motion_OpenVR_TouchPad_X);
 
 		if (touchMenu != touchMenuLast) {
-			if (touchMenu) {
-				entityManager->spawnPlant(controllerPos1);
+			if (touchMenu) {		
+				commands.push_back(new SpawnPlant(entityManager, controllerPos1));
+				//entityManager->spawnPlant(controllerPos1);
 			}
 		}
 		if (touchGrip != touchGripLast) {

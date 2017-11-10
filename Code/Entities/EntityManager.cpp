@@ -7,11 +7,11 @@ class CEntityManagerEntityRegistrator : public IEntityRegistrator
 {
 	virtual void Register() override
 	{
-		RegisterEntityWithDefaultComponent<CEntityManagerEntity>("LightManager", "Plant_Tools");
+		RegisterEntityWithDefaultComponent<CEntityManagerEntity>("EntityManager", "Plant_Tools");
 		// Flow Node Defaults
-		CEntityFlowNodeFactory* pFlowNodeFactory = new CEntityFlowNodeFactory("entity:LightManager");
+		CEntityFlowNodeFactory* pFlowNodeFactory = new CEntityFlowNodeFactory("entity:EntityManager");
 
-		pFlowNodeFactory->m_inputs.push_back(InputPortConfig<EntityId>("LightEntityId", ""));
+		pFlowNodeFactory->m_inputs.push_back(InputPortConfig<EntityId>("EntityManagerId", ""));
 		pFlowNodeFactory->m_activateCallback = CEntityManagerEntity::OnFlowgraphActivation;
 		pFlowNodeFactory->Close();
 	}
@@ -77,7 +77,17 @@ IEntity* CEntityManagerEntity::spawnEntity(char* name, char* className, float si
 	return entity;
 }
 void CEntityManagerEntity::spawnPlant(Vec3 pos) {
-	spawnEntity("plantEntity", "GBeanPlantCustom", .01f, pos);
+	IEntity* newPlant = spawnEntity("plantEntity", "GBeanPlantCustom", 1.0f, pos);
+	if (newPlant)
+	{
+		CPlantEntityCustom* plantCustom = newPlant->GetComponent<CPlantEntityCustom>();
+		if (plantCustom)
+		{
+			plantCustom->growthSwitch(true);
+			addPlant(newPlant);
+		}
+	}
+	
 }
 void CEntityManagerEntity::removeLight(IEntity* light)
 {

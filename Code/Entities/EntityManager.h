@@ -66,9 +66,9 @@ protected:
 	void Reset();
 
 public:
-	std::vector<IEntity*> lightEntities = std::vector<IEntity*>();
-	std::vector<IEntity*> plantEntities = std::vector<IEntity*>();
-	std::vector<IEntity*> robotEntities = std::vector<IEntity*>();
+	std::vector<IEntity*> lightEntities;
+	std::vector<IEntity*> plantEntities;
+	std::vector<IEntity*> robotEntities;
 	bool globalGrowth = true;
 	enum EInputPorts
 	{

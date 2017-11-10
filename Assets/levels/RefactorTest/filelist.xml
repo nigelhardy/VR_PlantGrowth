@@ -1,6 +1,6 @@
-<download name="refactortest" type="Map">
+<download name="RefactorTest" type="Map">
  <index src="filelist.xml" dest="filelist.xml"/>
  <files>
-  <file src="level.pak" dest="level.pak" size="669811" md5="600f346891f360b51c8f9d2308107308"/>
+  <file src="level.pak" dest="level.pak" size="669852" md5="d03b083a5214dc052aa39e604d485d59"/>
  </files>
 </download>
