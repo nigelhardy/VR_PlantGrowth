@@ -49,6 +49,8 @@ public:
 
 	void getControllerInput();
 	bool getOffsetEntity();
+	IEntity* spawnController(char* name);
+	void updateControllersLocation();
 
 	virtual uint64 GetEventMask() const {
 		return BIT64(ENTITY_EVENT_UPDATE) | BIT64(ENTITY_EVENT_START_LEVEL) | BIT64(ENTITY_EVENT_RESET);
@@ -83,6 +85,15 @@ protected:
 
 	Vec3* movePlayerDest = NULL;
 	float lastResetTime = 0;
+
+	IEntity* controllerEntity1 = NULL;
+	Vec3 controllerPos1 = Vec3(0);
+	Quat controllerRot1 = Quat(IDENTITY);
+
+	IEntity* controllerEntity2 = NULL;
+	Vec3 controllerPos2 = Vec3(0);
+	Quat controllerRot2 = Quat(IDENTITY);
+	
 public:
 	enum EInputPorts
 	{

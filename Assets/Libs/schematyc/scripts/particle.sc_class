@@ -1,0 +1,240 @@
+<schematyc>
+ <version value="105"/>
+ <guid value="f46ffe52-2fc8-4333-a57e-750357d58ec7"/>
+ <scope value=""/>
+ <root>
+  <elementType value="Class"/>
+  <guid value="94fa8d79-06d4-44c6-a8c9-2aad1148bd65"/>
+  <name value="Particle"/>
+  <userDocumentation>
+   <author value="nigel"/>
+   <description value=""/>
+  </userDocumentation>
+  <extensions />
+  <children>
+   <Element>
+    <elementType value="Constructor"/>
+    <guid value="2a8e731d-ef23-420b-b842-6fb3bccc4af3"/>
+    <name value="ConstructionGraph"/>
+    <userDocumentation>
+     <author value="nigel"/>
+     <description value=""/>
+    </userDocumentation>
+    <extensions>
+     <Graph>
+      <pos>
+       <Element value="0"/>
+       <Element value="0"/>
+      </pos>
+      <nodes>
+       <Element>
+        <key value="dc3c7cb2-33c5-4763-87a0-8c7f38885f50"/>
+        <typeGUID value="12bdfa06-ba95-4e48-bb2d-bb48a7080abc"/>
+        <value>
+         <guid value="dc3c7cb2-33c5-4763-87a0-8c7f38885f50"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="0"/>
+         </pos>
+        </value>
+       </Element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </Element>
+   <Element>
+    <elementType value="SignalReceiver"/>
+    <guid value="9862fc5a-2cff-4d4e-bdcd-421939e86728"/>
+    <name value="SignalGraph"/>
+    <type value="Universal"/>
+    <signalGUID value=""/>
+    <userDocumentation>
+     <author value="nigel"/>
+     <description value=""/>
+    </userDocumentation>
+    <extensions>
+     <Graph>
+      <pos>
+       <Element value="0"/>
+       <Element value="0"/>
+      </pos>
+      <nodes>
+       <Element>
+        <key value="08ce399a-cdf2-4222-8b20-259f4bb24a36"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="08ce399a-cdf2-4222-8b20-259f4bb24a36"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="200"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="b2561caa-0753-458b-a91f-e8e38b0f0cdf"/>
+         </signalId>
+        </value>
+       </Element>
+       <Element>
+        <key value="2fa35b3a-e497-4693-b636-2c5536865a74"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="2fa35b3a-e497-4693-b636-2c5536865a74"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="0"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="a9279137-7c66-491d-b9a0-8752c24c8979"/>
+         </signalId>
+        </value>
+       </Element>
+       <Element>
+        <key value="81ae2d44-491b-471d-8c4f-d3b560497f55"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="81ae2d44-491b-471d-8c4f-d3b560497f55"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="100"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="52ad5add-7781-429b-b4a9-0cb6c905e353"/>
+         </signalId>
+        </value>
+       </Element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </Element>
+   <Element>
+    <elementType value="Base"/>
+    <guid value="f304648d-b2c8-499b-877a-4f919525fc71"/>
+    <name value="Base [Entity]"/>
+    <classId>
+     <domain value="Env"/>
+     <guid value="be845278-0dd2-409f-b8be-97895607c256"/>
+    </classId>
+    <envClassProperties>
+     <icon value="editor/objecticons/schematyc.bmp"/>
+     <bHideInEditor value="false"/>
+     <bTriggerAreas value="true"/>
+    </envClassProperties>
+    <extensions />
+    <children>
+     <Element>
+      <elementType value="ComponentInstance"/>
+      <guid value="c978622e-4435-43d8-959d-864224413047"/>
+      <name value="Debug"/>
+      <accessor value="Private"/>
+      <typeGUID value="082bb332-101f-48a7-8c78-b9f19f9e6ef2"/>
+      <transform>
+       <translation>
+        <Element value="0"/>
+        <Element value="0"/>
+        <Element value="0"/>
+       </translation>
+       <rotation>
+        <deg.x value="0"/>
+        <deg.y value="0"/>
+        <deg.z value="0"/>
+       </rotation>
+      </transform>
+      <extensions />
+      <children />
+     </Element>
+     <Element>
+      <elementType value="ComponentInstance"/>
+      <guid value="84ee34c5-d6e1-4286-a6ad-66050bcaafaf"/>
+      <name value="Utils"/>
+      <accessor value="Private"/>
+      <typeGUID value="e88093df-904f-4c52-af38-911e26777cdc"/>
+      <transform>
+       <translation>
+        <Element value="0"/>
+        <Element value="0"/>
+        <Element value="0"/>
+       </translation>
+       <rotation>
+        <deg.x value="0"/>
+        <deg.y value="0"/>
+        <deg.z value="0"/>
+       </rotation>
+      </transform>
+      <extensions />
+      <children />
+     </Element>
+    </children>
+   </Element>
+   <Element>
+    <elementType value="ComponentInstance"/>
+    <guid value="f34d0b65-790e-4ece-9fe3-67988be81f4c"/>
+    <name value="Pointer"/>
+    <accessor value="Private"/>
+    <typeGUID value="bf9503cf-d25c-4923-a1cb-8658847aa9a6"/>
+    <transform>
+     <translation>
+      <Element value="0"/>
+      <Element value="0"/>
+      <Element value="0"/>
+     </translation>
+     <rotation>
+      <deg.x value="0"/>
+      <deg.y value="0"/>
+      <deg.z value="0"/>
+     </rotation>
+    </transform>
+    <properties>
+     <effectName value=""/>
+     <visible value="true"/>
+     <prime value="false"/>
+     <scale value="1"/>
+     <countScale value="1"/>
+     <speedScale value="1"/>
+     <timeScale value="1"/>
+     <pulsePeriod value="0"/>
+     <strength value="-1"/>
+    </properties>
+    <extensions />
+    <children />
+   </Element>
+   <Element>
+    <elementType value="ComponentInstance"/>
+    <guid value="552b72ab-54c2-415d-949c-71b35fc28256"/>
+    <name value="ParticleEmitter"/>
+    <accessor value="Private"/>
+    <typeGUID value="bf9503cf-d25c-4923-a1cb-8658847aa9a6"/>
+    <transform>
+     <translation>
+      <Element value="0"/>
+      <Element value="0"/>
+      <Element value="0"/>
+     </translation>
+     <rotation>
+      <deg.x value="0"/>
+      <deg.y value="0"/>
+      <deg.z value="0"/>
+     </rotation>
+    </transform>
+    <properties>
+     <effectName value="particles/wand_particle.pfx"/>
+     <visible value="true"/>
+     <prime value="false"/>
+     <scale value="1"/>
+     <countScale value="1"/>
+     <speedScale value="1"/>
+     <timeScale value="1"/>
+     <pulsePeriod value="0"/>
+     <strength value="-1"/>
+    </properties>
+    <extensions />
+    <children />
+   </Element>
+  </children>
+ </root>
+</schematyc>

@@ -1,0 +1,8 @@
+<cryasset>
+ <AssetMetadata version="0" type="Texture" guid="{5865B21F-7047-3F18-B246-516576A3FF43}" source="pot textures_nor.tif">
+  <Files>
+   <File path="pot textures_nor.dds"/>
+  </Files>
+  <Details />
+ </AssetMetadata>
+</cryasset>

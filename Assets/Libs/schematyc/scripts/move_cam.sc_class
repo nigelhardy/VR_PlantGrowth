@@ -1,0 +1,176 @@
+<schematyc>
+ <version value="105"/>
+ <guid value="1fa28b41-f4eb-4784-bcd4-cfdac0694fe9"/>
+ <scope value=""/>
+ <root>
+  <elementType value="Class"/>
+  <guid value="2f4d9de0-30c2-47b6-a1cc-5a836bcd4a40"/>
+  <name value="MoveCam"/>
+  <userDocumentation>
+   <author value="nigel"/>
+   <description value=""/>
+  </userDocumentation>
+  <extensions />
+  <children>
+   <Element>
+    <elementType value="Constructor"/>
+    <guid value="ab5a7252-38cd-4775-928f-a760f7d4a5f8"/>
+    <name value="ConstructionGraph"/>
+    <userDocumentation>
+     <author value="nigel"/>
+     <description value=""/>
+    </userDocumentation>
+    <extensions>
+     <Graph>
+      <pos>
+       <Element value="0"/>
+       <Element value="0"/>
+      </pos>
+      <nodes>
+       <Element>
+        <key value="c4ed9992-0866-4138-b267-85c9303ea584"/>
+        <typeGUID value="12bdfa06-ba95-4e48-bb2d-bb48a7080abc"/>
+        <value>
+         <guid value="c4ed9992-0866-4138-b267-85c9303ea584"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="0"/>
+         </pos>
+        </value>
+       </Element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </Element>
+   <Element>
+    <elementType value="SignalReceiver"/>
+    <guid value="76c4d375-da73-49ef-9c9d-aa04d77ea9f4"/>
+    <name value="SignalGraph"/>
+    <type value="Universal"/>
+    <signalGUID value=""/>
+    <userDocumentation>
+     <author value="nigel"/>
+     <description value=""/>
+    </userDocumentation>
+    <extensions>
+     <Graph>
+      <pos>
+       <Element value="0"/>
+       <Element value="0"/>
+      </pos>
+      <nodes>
+       <Element>
+        <key value="978e8d31-545f-41cd-bfd6-b7339aa67168"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="978e8d31-545f-41cd-bfd6-b7339aa67168"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="200"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="b2561caa-0753-458b-a91f-e8e38b0f0cdf"/>
+         </signalId>
+        </value>
+       </Element>
+       <Element>
+        <key value="14ee3713-28bc-42ee-829b-ff0a036e6184"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="14ee3713-28bc-42ee-829b-ff0a036e6184"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="100"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="52ad5add-7781-429b-b4a9-0cb6c905e353"/>
+         </signalId>
+        </value>
+       </Element>
+       <Element>
+        <key value="484db06f-67a2-4f0c-9cc7-346b12f08aec"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="484db06f-67a2-4f0c-9cc7-346b12f08aec"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="0"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="a9279137-7c66-491d-b9a0-8752c24c8979"/>
+         </signalId>
+        </value>
+       </Element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </Element>
+   <Element>
+    <elementType value="Base"/>
+    <guid value="1d39dcc2-8b97-4b0a-82fa-b8e37da891c0"/>
+    <name value="Base [Entity]"/>
+    <classId>
+     <domain value="Env"/>
+     <guid value="be845278-0dd2-409f-b8be-97895607c256"/>
+    </classId>
+    <envClassProperties>
+     <icon value="editor/objecticons/schematyc.bmp"/>
+     <bHideInEditor value="false"/>
+     <bTriggerAreas value="true"/>
+    </envClassProperties>
+    <extensions />
+    <children>
+     <Element>
+      <elementType value="ComponentInstance"/>
+      <guid value="909b92d9-dad9-44bb-a367-79546f0a83e9"/>
+      <name value="Debug"/>
+      <accessor value="Private"/>
+      <typeGUID value="082bb332-101f-48a7-8c78-b9f19f9e6ef2"/>
+      <transform>
+       <translation>
+        <Element value="0"/>
+        <Element value="0"/>
+        <Element value="0"/>
+       </translation>
+       <rotation>
+        <deg.x value="0"/>
+        <deg.y value="0"/>
+        <deg.z value="0"/>
+       </rotation>
+      </transform>
+      <extensions />
+      <children />
+     </Element>
+     <Element>
+      <elementType value="ComponentInstance"/>
+      <guid value="f7ff7257-a291-4fe0-b1dd-1c9f42fb9983"/>
+      <name value="Utils"/>
+      <accessor value="Private"/>
+      <typeGUID value="e88093df-904f-4c52-af38-911e26777cdc"/>
+      <transform>
+       <translation>
+        <Element value="0"/>
+        <Element value="0"/>
+        <Element value="0"/>
+       </translation>
+       <rotation>
+        <deg.x value="0"/>
+        <deg.y value="0"/>
+        <deg.z value="0"/>
+       </rotation>
+      </transform>
+      <extensions />
+      <children />
+     </Element>
+    </children>
+   </Element>
+  </children>
+ </root>
+</schematyc>

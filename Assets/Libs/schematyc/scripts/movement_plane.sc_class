@@ -1,0 +1,200 @@
+<schematyc>
+ <version value="105"/>
+ <guid value="99f62df6-a22b-4fe6-be77-6165ced6f872"/>
+ <scope value=""/>
+ <root>
+  <elementType value="Class"/>
+  <guid value="27fc5cdc-a360-429e-a382-bad8f11a1a1c"/>
+  <name value="MovementPlane"/>
+  <userDocumentation>
+   <author value="nigel"/>
+   <description value=""/>
+  </userDocumentation>
+  <extensions />
+  <children>
+   <Element>
+    <elementType value="Constructor"/>
+    <guid value="01dbbd6b-f7db-4489-b6c6-ed67c2b5bd4e"/>
+    <name value="ConstructionGraph"/>
+    <userDocumentation>
+     <author value="nigel"/>
+     <description value=""/>
+    </userDocumentation>
+    <extensions>
+     <Graph>
+      <pos>
+       <Element value="0"/>
+       <Element value="0"/>
+      </pos>
+      <nodes>
+       <Element>
+        <key value="cebf31a6-d7bb-41eb-829d-014cf8e043f0"/>
+        <typeGUID value="12bdfa06-ba95-4e48-bb2d-bb48a7080abc"/>
+        <value>
+         <guid value="cebf31a6-d7bb-41eb-829d-014cf8e043f0"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="0"/>
+         </pos>
+        </value>
+       </Element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </Element>
+   <Element>
+    <elementType value="SignalReceiver"/>
+    <guid value="f11be639-fa28-44e2-8523-9936ca486500"/>
+    <name value="SignalGraph"/>
+    <type value="Universal"/>
+    <signalGUID value=""/>
+    <userDocumentation>
+     <author value="nigel"/>
+     <description value=""/>
+    </userDocumentation>
+    <extensions>
+     <Graph>
+      <pos>
+       <Element value="0"/>
+       <Element value="0"/>
+      </pos>
+      <nodes>
+       <Element>
+        <key value="2ec58579-8aff-4a8b-8a1d-9ae1a644b123"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="2ec58579-8aff-4a8b-8a1d-9ae1a644b123"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="0"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="a9279137-7c66-491d-b9a0-8752c24c8979"/>
+         </signalId>
+        </value>
+       </Element>
+       <Element>
+        <key value="afa64258-f953-4e29-90db-41ee52c157fc"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="afa64258-f953-4e29-90db-41ee52c157fc"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="200"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="b2561caa-0753-458b-a91f-e8e38b0f0cdf"/>
+         </signalId>
+        </value>
+       </Element>
+       <Element>
+        <key value="be646144-d2fc-4fa5-a8ce-f386c138cecd"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="be646144-d2fc-4fa5-a8ce-f386c138cecd"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="100"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="52ad5add-7781-429b-b4a9-0cb6c905e353"/>
+         </signalId>
+        </value>
+       </Element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </Element>
+   <Element>
+    <elementType value="Base"/>
+    <guid value="9da71446-2013-4cbd-932c-970bdf6d2671"/>
+    <name value="Base [Entity]"/>
+    <classId>
+     <domain value="Env"/>
+     <guid value="be845278-0dd2-409f-b8be-97895607c256"/>
+    </classId>
+    <envClassProperties>
+     <icon value="editor/objecticons/schematyc.bmp"/>
+     <bHideInEditor value="false"/>
+     <bTriggerAreas value="true"/>
+    </envClassProperties>
+    <extensions />
+    <children>
+     <Element>
+      <elementType value="ComponentInstance"/>
+      <guid value="7014f704-c2b8-49d9-acc5-c5a8d96c0aa4"/>
+      <name value="Debug"/>
+      <accessor value="Private"/>
+      <typeGUID value="082bb332-101f-48a7-8c78-b9f19f9e6ef2"/>
+      <transform>
+       <translation>
+        <Element value="0"/>
+        <Element value="0"/>
+        <Element value="0"/>
+       </translation>
+       <rotation>
+        <deg.x value="0"/>
+        <deg.y value="0"/>
+        <deg.z value="0"/>
+       </rotation>
+      </transform>
+      <extensions />
+      <children />
+     </Element>
+     <Element>
+      <elementType value="ComponentInstance"/>
+      <guid value="8db5a445-312c-4091-aa64-57d665a16e61"/>
+      <name value="Utils"/>
+      <accessor value="Private"/>
+      <typeGUID value="e88093df-904f-4c52-af38-911e26777cdc"/>
+      <transform>
+       <translation>
+        <Element value="0"/>
+        <Element value="0"/>
+        <Element value="0"/>
+       </translation>
+       <rotation>
+        <deg.x value="0"/>
+        <deg.y value="0"/>
+        <deg.z value="0"/>
+       </rotation>
+      </transform>
+      <extensions />
+      <children />
+     </Element>
+    </children>
+   </Element>
+   <Element>
+    <elementType value="ComponentInstance"/>
+    <guid value="4810aeaf-3688-412f-8626-cb5ac5941892"/>
+    <name value="Geom"/>
+    <accessor value="Private"/>
+    <typeGUID value="d2474675-c67c-42b2-af33-5c5ace2d1d8c"/>
+    <transform>
+     <translation>
+      <Element value="0"/>
+      <Element value="0"/>
+      <Element value="0"/>
+     </translation>
+     <rotation>
+      <deg.x value="0"/>
+      <deg.y value="0"/>
+      <deg.z value="0"/>
+     </rotation>
+    </transform>
+    <properties>
+     <fileName value="objects/movement_plane.cgf"/>
+    </properties>
+    <extensions />
+    <children />
+   </Element>
+  </children>
+ </root>
+</schematyc>

@@ -1,0 +1,12 @@
+<cryasset>
+ <AssetMetadata version="0" type="Mesh" guid="{15B59F68-AAF7-1B69-DA89-614C5C695E1F}">
+  <Files>
+   <File path="hall.cgf"/>
+  </Files>
+  <Details>
+   <Detail name="materialCount">14</Detail>
+   <Detail name="triangleCount">21390</Detail>
+   <Detail name="vertexCount">36121</Detail>
+  </Details>
+ </AssetMetadata>
+</cryasset>

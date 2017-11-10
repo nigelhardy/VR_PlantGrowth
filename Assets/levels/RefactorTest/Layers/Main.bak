@@ -1,0 +1,44 @@
+<ObjectLayer>
+ <Layer Name="Main" FullName="Main" GUID="{C7D9DF82-299C-2FE5-A8C7-781C3EA15069}" Hidden="0" Frozen="0" Expanded="0" Exportable="1" ExportLayerPak="1" DefaultLoaded="0" HavePhysics="1" IsDefaultColor="1">
+  <LayerObjects>
+   <Object Type="Entity" Layer="Main" LayerGUID="{C7D9DF82-299C-2FE5-A8C7-781C3EA15069}" Id="{02AD7396-80F9-4579-A462-508ABBC713FB}" Name="VR_Controller1" Pos="512.97229,519.85431,32.601917" FloorNumber="-1" Rotate="1,0,0,0" Scale="1.7000002,1.7000002,1.7000002" ColorRGB="65535" Material="vive_controller_ce1.mtlcontroller/vive_controller_ce1.mtlobjects/vive_controller_ce1.mtlcontroller/vive_controller_green" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="VR_Controller" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{55C03A10-70A5-448E-991C-F4BA2D66F8C6}"/>
+    </Components>
+   </Object>
+   <Object Type="Camera" Layer="Main" LayerGUID="{C7D9DF82-299C-2FE5-A8C7-781C3EA15069}" Id="{7FC7CA74-3890-CD4F-B41A-32DEF6B92ADA}" Name="VR_Cam" Pos="510.87302,519.34753,32.000099" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="16776960" FOV="1.0472" NearZ="0.25" FarZ="1024" EntityClass="CameraSource" HasEntity="1">
+    <ShakeParams AmplitudeA="1,1,1" AmplitudeAMult="0" FrequencyA="1,1,1" FrequencyAMult="0" NoiseAAmpMult="0" NoiseAFreqMult="0" TimeOffsetA="0" AmplitudeB="1,1,1" AmplitudeBMult="0" FrequencyB="1,1,1" FrequencyBMult="0" NoiseBAmpMult="0" NoiseBFreqMult="0" TimeOffsetB="0" CameraShakeSeed="0"/>
+    <Properties />
+    <Components>
+     <Component typeId="{9DA92DF2-37D7-4D2F-B64F-B827FCECFDD3}"/>
+     <Component typeId="{17E5EBA7-57E4-4662-A1C2-1F41DE946CDA}"/>
+     <Component typeId="{19D1AD13-1867-49A0-A93E-A7CA58B1F698}"/>
+    </Components>
+    <FlowGraph Description="" Group="VR_Cam_FG" enabled="1" MultiPlayer="ClientServer">
+     <Nodes>
+      <Node Id="2" Class="Camera:View" pos="-10,-170,0" flags="0" GraphEntity="0">
+       <Inputs entityId="0" Enable="0" Disable="0" FOV="60" Blend="0" BlendFOVSpeed="5" BlendFOVOffset="0" BlendPosSpeed="5" BlendPosOffset="0,0,0" BlendRotSpeed="10" BlendRotOffset="0,0,0"/>
+      </Node>
+      <Node Id="6" Class="Game:Start" pos="-190,-150,0" flags="0">
+       <Inputs InGame="1" InEditor="1"/>
+      </Node>
+     </Nodes>
+     <Edges>
+      <Edge nodeIn="2" nodeOut="6" portIn="Enable" portOut="output" enabled="1"/>
+     </Edges>
+     <GraphTokens />
+    </FlowGraph>
+   </Object>
+   <Object Type="Entity" Layer="Main" LayerGUID="{C7D9DF82-299C-2FE5-A8C7-781C3EA15069}" Id="{FBE2A24B-8FEE-7B99-DEE6-95BDA1765D94}" Name="InputVR1" Pos="500,500,32.000099" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="InputVR" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{25D1A6E5-2900-48E8-9A72-02192918DFAE}">
+      <Geometry value="objects/controller/vive_controller_ce.cgf"/>
+      <Left value="true"/>
+     </Component>
+    </Components>
+   </Object>
+  </LayerObjects>
+ </Layer>
+</ObjectLayer>

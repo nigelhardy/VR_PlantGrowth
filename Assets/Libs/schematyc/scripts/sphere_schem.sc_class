@@ -1,0 +1,200 @@
+<schematyc>
+ <version value="105"/>
+ <guid value="35b9583a-584a-4645-b5db-0296e8df6569"/>
+ <scope value=""/>
+ <root>
+  <elementType value="Class"/>
+  <guid value="14341576-ed0e-49aa-a963-ae701995538e"/>
+  <name value="SphereSchem"/>
+  <userDocumentation>
+   <author value="VRlab_admin"/>
+   <description value=""/>
+  </userDocumentation>
+  <extensions />
+  <children>
+   <Element>
+    <elementType value="Constructor"/>
+    <guid value="80cd487f-25ef-4a73-b2c7-9f950cb52a71"/>
+    <name value="ConstructionGraph"/>
+    <userDocumentation>
+     <author value="VRlab_admin"/>
+     <description value=""/>
+    </userDocumentation>
+    <extensions>
+     <Graph>
+      <pos>
+       <Element value="0"/>
+       <Element value="0"/>
+      </pos>
+      <nodes>
+       <Element>
+        <key value="2592da19-7f9c-41d6-be47-f7c45d8cdf95"/>
+        <typeGUID value="12bdfa06-ba95-4e48-bb2d-bb48a7080abc"/>
+        <value>
+         <guid value="2592da19-7f9c-41d6-be47-f7c45d8cdf95"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="0"/>
+         </pos>
+        </value>
+       </Element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </Element>
+   <Element>
+    <elementType value="SignalReceiver"/>
+    <guid value="297e2359-aef8-454a-a5d5-fca6ce0c5d0a"/>
+    <name value="SignalGraph"/>
+    <type value="Universal"/>
+    <signalGUID value=""/>
+    <userDocumentation>
+     <author value="VRlab_admin"/>
+     <description value=""/>
+    </userDocumentation>
+    <extensions>
+     <Graph>
+      <pos>
+       <Element value="0"/>
+       <Element value="0"/>
+      </pos>
+      <nodes>
+       <Element>
+        <key value="3a301ef0-45de-4017-8b3b-55c9ecd764e8"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="3a301ef0-45de-4017-8b3b-55c9ecd764e8"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="100"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="52ad5add-7781-429b-b4a9-0cb6c905e353"/>
+         </signalId>
+        </value>
+       </Element>
+       <Element>
+        <key value="2e8e928c-ac21-442b-b85f-9d23bfec6437"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="2e8e928c-ac21-442b-b85f-9d23bfec6437"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="0"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="a9279137-7c66-491d-b9a0-8752c24c8979"/>
+         </signalId>
+        </value>
+       </Element>
+       <Element>
+        <key value="5430a3fe-1f4e-4e0c-b960-5a0b36207498"/>
+        <typeGUID value="ad2aee64-0a60-4469-8ec7-38b4b720d30c"/>
+        <value>
+         <guid value="5430a3fe-1f4e-4e0c-b960-5a0b36207498"/>
+         <pos>
+          <Element value="0"/>
+          <Element value="200"/>
+         </pos>
+         <signalId>
+          <domain value="Env"/>
+          <guid value="b2561caa-0753-458b-a91f-e8e38b0f0cdf"/>
+         </signalId>
+        </value>
+       </Element>
+      </nodes>
+      <links />
+     </Graph>
+    </extensions>
+    <children />
+   </Element>
+   <Element>
+    <elementType value="Base"/>
+    <guid value="9f3c957d-31f3-437c-81b5-a1f540251437"/>
+    <name value="Base [Entity]"/>
+    <classId>
+     <domain value="Env"/>
+     <guid value="be845278-0dd2-409f-b8be-97895607c256"/>
+    </classId>
+    <envClassProperties>
+     <icon value="editor/objecticons/schematyc.bmp"/>
+     <bHideInEditor value="false"/>
+     <bTriggerAreas value="true"/>
+    </envClassProperties>
+    <extensions />
+    <children>
+     <Element>
+      <elementType value="ComponentInstance"/>
+      <guid value="e4911317-41e1-4c0b-9c90-d7506bdfcef8"/>
+      <name value="Debug"/>
+      <accessor value="Private"/>
+      <typeGUID value="082bb332-101f-48a7-8c78-b9f19f9e6ef2"/>
+      <transform>
+       <translation>
+        <Element value="0"/>
+        <Element value="0"/>
+        <Element value="0"/>
+       </translation>
+       <rotation>
+        <deg.x value="0"/>
+        <deg.y value="0"/>
+        <deg.z value="0"/>
+       </rotation>
+      </transform>
+      <extensions />
+      <children />
+     </Element>
+     <Element>
+      <elementType value="ComponentInstance"/>
+      <guid value="3acc05ee-b560-4109-8b84-e277acda53d8"/>
+      <name value="Utils"/>
+      <accessor value="Private"/>
+      <typeGUID value="e88093df-904f-4c52-af38-911e26777cdc"/>
+      <transform>
+       <translation>
+        <Element value="0"/>
+        <Element value="0"/>
+        <Element value="0"/>
+       </translation>
+       <rotation>
+        <deg.x value="0"/>
+        <deg.y value="0"/>
+        <deg.z value="0"/>
+       </rotation>
+      </transform>
+      <extensions />
+      <children />
+     </Element>
+    </children>
+   </Element>
+   <Element>
+    <elementType value="ComponentInstance"/>
+    <guid value="b6172229-404b-4d92-98f4-32892f20c855"/>
+    <name value="SphereGeom"/>
+    <accessor value="Public"/>
+    <typeGUID value="d2474675-c67c-42b2-af33-5c5ace2d1d8c"/>
+    <transform>
+     <translation>
+      <Element value="0"/>
+      <Element value="0"/>
+      <Element value="0"/>
+     </translation>
+     <rotation>
+      <deg.x value="0"/>
+      <deg.y value="0"/>
+      <deg.z value="0"/>
+     </rotation>
+    </transform>
+    <properties>
+     <fileName value="objects/playerMarker.cgf"/>
+    </properties>
+    <extensions />
+    <children />
+   </Element>
+  </children>
+ </root>
+</schematyc>

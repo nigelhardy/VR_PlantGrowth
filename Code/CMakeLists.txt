@@ -37,6 +37,8 @@ set (SourceGroup_EntityHelpers
 	"Entities/InputVR.h"
 	"Entities/EntityManager.h"
 	"Entities/EntityManager.cpp"
+	"Entities/ControllerEntity.cpp"
+	"Entities/ControllerEntity.h"
 	"Entities/LightGeom.cpp"
 	"Entities/LightGeom.h"
 	"Entities/Helpers/EntityFlowNode.cpp"

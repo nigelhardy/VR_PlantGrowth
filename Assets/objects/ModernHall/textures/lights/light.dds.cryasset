@@ -1,0 +1,8 @@
+<cryasset>
+ <AssetMetadata version="0" type="Texture" guid="{D62AF3EA-690E-D9D5-AAC4-D970CE52B357}" source="light.tif">
+  <Files>
+   <File path="light.dds"/>
+  </Files>
+  <Details />
+ </AssetMetadata>
+</cryasset>

@@ -1,0 +1,6 @@
+<Material MtlFlags="526336" Shader="Particles" GenMask="0" StringGenMask="" SurfaceType="mat_default" MatTemplate="" Diffuse="1,1,1" Specular="0,0,0" Emittance="1,1,1,47" Opacity="1" AlphaTest="0.23" CloakAmount="0" vertModifType="0" LayerAct="1">
+ <Textures>
+  <Texture Map="Diffuse" File="textures/defaults/logo_vertical_black_inverted.dds"/>
+ </Textures>
+ <PublicParams GlobalIlluminationAmount="1"/>
+</Material>

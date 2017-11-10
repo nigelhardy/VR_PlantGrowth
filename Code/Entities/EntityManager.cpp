@@ -62,6 +62,23 @@ void CEntityManagerEntity::addLight(IEntity* light)
 	}
 	
 }
+IEntity* CEntityManagerEntity::spawnEntity(char* name, char* className, float size, Vec3 pos) {
+	SEntitySpawnParams spawnParams;
+	spawnParams.sName = name;
+	spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass(className);
+	spawnParams.nFlags = ENTITY_FLAG_CLIENT_ONLY;
+	spawnParams.vScale = Vec3(size, size, size);
+	IEntity* entity = gEnv->pEntitySystem->SpawnEntity(spawnParams);
+	//GetEntity()->AttachChild(entity);
+	Matrix34 locMat = entity->GetLocalTM();
+	locMat.SetTranslation(pos);
+	entity->SetLocalTM(locMat);
+	//entity->Hide(true);
+	return entity;
+}
+void CEntityManagerEntity::spawnPlant(Vec3 pos) {
+	spawnEntity("plantEntity", "GBeanPlantCustom", .01f, pos);
+}
 void CEntityManagerEntity::removeLight(IEntity* light)
 {
 	if (light != NULL)
@@ -76,7 +93,6 @@ void CEntityManagerEntity::removeLight(IEntity* light)
 					plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->removeLight(light);
 				}
 				gEnv->pEntitySystem->RemoveEntity(light->GetId());
-				
 				return;
 			}
 		}

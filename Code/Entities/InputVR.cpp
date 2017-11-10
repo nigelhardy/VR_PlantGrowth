@@ -82,11 +82,25 @@ void CInputVREntity::RemoveEventListener(IEntityEventListener* pListener)
 {
 	//stl::find_and_erase(m_listeners, pListener);
 }
-
+IEntity* CInputVREntity::spawnController(char* name) {
+	SEntitySpawnParams spawnParams;
+	spawnParams.sName = name;
+	spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("VR_Controller");
+	spawnParams.nFlags = ENTITY_FLAG_CLIENT_ONLY;
+	//spawnParams.vScale = Vec3(size, size, size);
+	IEntity* entity = gEnv->pEntitySystem->SpawnEntity(spawnParams);
+	return entity;
+}
 void CInputVREntity::Initialize()
 {
 	//GetEntity()->SetUpdatePolicy(ENTITY_UPDATE_ALWAYS);
 	GetEntity()->Activate(true); // necessary for UPDATE event to be called
+	
+	controllerEntity1 = spawnController("controller1");
+	pMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/controller/vive_controller_ce1.mtl");
+	pMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMat);
+	controllerEntity1->SetMaterial(pMat);
+	controllerEntity2 = spawnController("controller2");
 }
 
 void CInputVREntity::SerializeProperties(Serialization::IArchive& archive) // give control in editor over some properties
@@ -122,8 +136,9 @@ void CInputVREntity::getControllerInput()
 	{
 		return;
 	}
+	updateControllersLocation();
 	currentController = eHmdController_OpenVR_1;
-	currentController = eHmdController_OpenVR_2;
+	//currentController = eHmdController_OpenVR_2;
 	// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
 	if (pController->IsConnected(currentController))
 	{
@@ -140,7 +155,9 @@ void CInputVREntity::getControllerInput()
 		Vec2 trackpadVec = pController->GetThumbStickValue(currentController, eKI_Motion_OpenVR_TouchPad_X);
 
 		if (touchMenu != touchMenuLast) {
-				
+			if (touchMenu) {
+				entityManager->spawnPlant(controllerPos1);
+			}
 		}
 		if (touchGrip != touchGripLast) {
 
@@ -157,21 +174,46 @@ void CInputVREntity::getControllerInput()
 		touchTrigLast = touchTrig;
 		touchTrackLast = touchTrack;
 
-		//if (getOffsetEntity())
-		//{
-		//	if (movePlayerDest)
-		//	{
-		//		Matrix34 vr_cam = m_pOffsetEntity->GetWorldTM();
-		//		vr_cam.SetTranslation(*movePlayerDest);
-		//		m_pOffsetEntity->SetWorldTM(vr_cam);
-		//		movePlayerDest = NULL;
-		//	}
-		//	CCamera cam = gEnv->pSystem->GetViewCamera();
-		//	HmdTrackingState state = pController->GetLocalTrackingState(currentController);
 
-		//	GetEntity()->SetRotation(state.pose.orientation);
-		//	GetEntity()->SetPos(m_pOffsetEntity->GetPos() + state.pose.position);
-		//}
+	}
+}
+void CInputVREntity::updateControllersLocation() {
+
+	if(getOffsetEntity())
+	{
+		if (movePlayerDest)
+		{
+			Matrix34 vr_cam = m_pOffsetEntity->GetWorldTM();
+			vr_cam.SetTranslation(*movePlayerDest);
+			m_pOffsetEntity->SetWorldTM(vr_cam);
+			movePlayerDest = NULL;
+		}
+		if (pController->IsConnected(eHmdController_OpenVR_1)) 
+		{
+			//CCamera cam = gEnv->pSystem->GetViewCamera();
+			HmdTrackingState state = pController->GetLocalTrackingState(eHmdController_OpenVR_1);
+			controllerPos1 = m_pOffsetEntity->GetPos() + state.pose.position;
+			controllerRot1 = state.pose.orientation;
+			if (controllerEntity1)
+			{
+				controllerEntity1->SetPos(controllerPos1);
+				controllerEntity1->SetRotation(controllerRot1);
+			}
+			
+		}
+		if (pController->IsConnected(eHmdController_OpenVR_2))
+		{
+			//CCamera cam = gEnv->pSystem->GetViewCamera();
+			HmdTrackingState state = pController->GetLocalTrackingState(eHmdController_OpenVR_2);
+			controllerPos2 = m_pOffsetEntity->GetPos() + state.pose.position;
+			controllerRot2 = state.pose.orientation;
+			if (controllerEntity2)
+			{
+				controllerEntity2->SetPos(controllerPos2);
+				controllerEntity2->SetRotation(controllerRot2);
+			}
+		}
+		
 	}
 }
 bool CInputVREntity::getOffsetEntity()

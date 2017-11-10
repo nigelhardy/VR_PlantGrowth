@@ -1,0 +1,12 @@
+<cryasset>
+ <AssetMetadata version="0" type="Mesh" guid="{3CE619A8-59A3-1378-104B-D56951F5F5D6}" source="Indoor plant_3_BI_blend.fbx">
+  <Files>
+   <File path="pot.cgf"/>
+  </Files>
+  <Details>
+   <Detail name="materialCount">2</Detail>
+   <Detail name="triangleCount">11456</Detail>
+   <Detail name="vertexCount">5926</Detail>
+  </Details>
+ </AssetMetadata>
+</cryasset>

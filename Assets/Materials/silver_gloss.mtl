@@ -1,0 +1,8 @@
+<Material MtlFlags="524288" Shader="Illum" GenMask="2030400000" StringGenMask="%NORMAL_MAP%SPECULAR_MAP%SUBSURFACE_SCATTERING%VERTCOLORS" SurfaceType="mat_metal" MatTemplate="" Diffuse="0,0,0" Specular="1,1,1" Emittance="1,1,1,8" Opacity="1" Shininess="17" vertModifType="0" LayerAct="1">
+ <Textures>
+  <Texture Map="Diffuse" File="textures/white.dds"/>
+  <Texture Map="Bumpmap" File="textures/generic/metal/metals_ddna.dds"/>
+  <Texture Map="Specular" File="textures/generic/metal/silver_spec.dds"/>
+ </Textures>
+ <PublicParams EmittanceMapGamma="1" SSSIndex="0"/>
+</Material>

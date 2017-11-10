@@ -1,0 +1,428 @@
+<ObjectLayer>
+ <Layer Name="VR_Control" FullName="VR_Control" GUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Hidden="0" Frozen="0" Expanded="0" Exportable="1" ExportLayerPak="1" DefaultLoaded="0" HavePhysics="1" IsDefaultColor="1">
+  <LayerObjects>
+   <Object Type="Camera" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{0A49D026-7571-28FD-D49D-53D226392465}" Name="VR_Cam" Pos="59.672966,57.229084,34.522335" FloorNumber="-1" Rotate="1,-2.7005581e-16,-3.0867494e-15,-8.3359458e-31" ColorRGB="16776960" FOV="1.0472" NearZ="0.05" FarZ="1024" EntityClass="CameraSource" HasEntity="1">
+    <ShakeParams AmplitudeA="1,1,1" AmplitudeAMult="0" FrequencyA="1,1,1" FrequencyAMult="0" NoiseAAmpMult="0" NoiseAFreqMult="0" TimeOffsetA="0" AmplitudeB="1,1,1" AmplitudeBMult="0" FrequencyB="1,1,1" FrequencyBMult="0" NoiseBAmpMult="0" NoiseBFreqMult="0" TimeOffsetB="0" CameraShakeSeed="0"/>
+    <Properties />
+    <Components>
+     <Component typeId="{9DA92DF2-37D7-4D2F-B64F-B827FCECFDD3}"/>
+     <Component typeId="{17E5EBA7-57E4-4662-A1C2-1F41DE946CDA}"/>
+     <Component typeId="{19D1AD13-1867-49A0-A93E-A7CA58B1F698}"/>
+    </Components>
+    <FlowGraph Description="" Group="" enabled="1" MultiPlayer="ClientServer">
+     <Nodes>
+      <Node Id="2" Class="Camera:View" pos="-1170,110,0" flags="1" GraphEntity="0">
+       <Inputs entityId="0" Enable="0" Disable="0" FOV="60" Blend="0" BlendFOVSpeed="5" BlendFOVOffset="0" BlendPosSpeed="5" BlendPosOffset="0,0,0" BlendRotSpeed="10" BlendRotOffset="0,0,0"/>
+      </Node>
+      <Node Id="6" Class="Game:Start" pos="-1350,130,0" flags="0">
+       <Inputs InGame="1" InEditor="1"/>
+      </Node>
+      <Node Id="8" Class="Entity:Spawn" pos="410,-20,0" flags="0">
+       <Inputs Class="LightGeom" Name="lightGeom" Pos="0,0,0" Rot="0,0,0" Scale="0.1,0.1,0.1"/>
+      </Node>
+      <Node Id="10" Class="Entity:GetPos" pos="170,70,0" flags="0" InHideMask="7" OutHideMask="63" EntityGUID="{74FFC86C-BAA7-3C57-F83A-0CF4A20E6DD1}" EntityGUID_64="74FFC86CBAA73C57">
+       <Inputs entityId="0" CoordSys="1"/>
+      </Node>
+      <Node Id="15" Class="Time:Delay" pos="170,10,0" flags="0" InHideMask="7" OutHideMask="1">
+       <Inputs delay="0.001" resetOnInput="0"/>
+      </Node>
+      <Node Id="17" Class="Vec3:SetVec3" pos="170,170,0" flags="0">
+       <Inputs In="0.2,0.2,0.2"/>
+      </Node>
+      <Node Id="18" Class="Entity:Spawn" pos="410,120,0" flags="0">
+       <Inputs Class="Light" Name="lightEntity" Pos="0,0,0" Rot="0,0,0" Scale="0.1,0.1,0.1"/>
+      </Node>
+      <Node Id="20" Class="VR:OpenVRController" pos="-870,140,0" flags="0">
+       <Inputs Enabled="1" Index="0"/>
+      </Node>
+      <Node Id="43" Class="Logic:Gate" pos="-240,110,0" flags="0" InHideMask="15" OutHideMask="1">
+       <Inputs Closed="0"/>
+      </Node>
+      <Node Id="47" Class="Logic:OnChange" pos="-500,110,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="48" Class="Time:Delay" pos="-370,80,0" flags="0" InHideMask="7" OutHideMask="1">
+       <Inputs delay="0.001" resetOnInput="0"/>
+      </Node>
+      <Node Id="50" Class="Logic:NOT" pos="-360,150,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="53" Name="Spawn_Light_Entity" Class="_commentbox" pos="150,-69.350288,0" flags="0">
+       <Inputs TextSize="1" Color="0.955974,0.0512695,0.0512695" DisplayFilled="1" DisplayBox="1" SortPriority="16"/>
+       <ResizeBorder X="0" Y="0" Width="590" Height="320"/>
+       <NodeSize Width="590" Height="357.15775"/>
+      </Node>
+      <Node Id="65" Class="entity:MyFlowNode" pos="-532.12958,315.5538,0" flags="0">
+       <Inputs TrackPadInput="0,0,0" placeholder1="0" placeholder2=""/>
+      </Node>
+      <Node Id="67" Class="Math:SetNumber" pos="-170,370,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="68" Class="Math:SetNumber" pos="-170,290,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="70" Class="Movement:MoveEntityTo" pos="380,500,0" flags="0">
+       <Inputs entityId="0" Destination="0,0,0" DynamicUpdate="1" ValueType="0" Speed="10" EaseDistance="0" EaseOutDistance="0" CoordSys="0"/>
+      </Node>
+      <Node Id="76" Class="Vec3:AddVec3" pos="250,390,0" flags="0">
+       <Inputs A="0,0,0" B="0,0,0"/>
+      </Node>
+      <Node Id="78" Class="Vec3:ToVec3" pos="40,380,0" flags="0">
+       <Inputs x="0" y="0" z="0"/>
+      </Node>
+      <Node Id="80" Class="Logic:Any" pos="110,470,0" flags="0" InHideMask="1023" OutHideMask="1">
+       <Inputs />
+      </Node>
+      <Node Id="89" Class="Logic:Gate" pos="-50,-330,0" flags="0">
+       <Inputs Closed="0"/>
+      </Node>
+      <Node Id="90" Class="Logic:OnChange" pos="-430,-320,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="91" Class="Time:Delay" pos="-270,-360,0" flags="0">
+       <Inputs delay="0.001" resetOnInput="0"/>
+      </Node>
+      <Node Id="92" Class="Logic:NOT" pos="-220,-280,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="105" Class="Entity:Spawn" pos="510,-370,0" flags="0">
+       <Inputs Class="GBeanPlant" Name="beanPlant" Pos="0,0,0" Rot="0,0,0" Scale="1,1,1"/>
+      </Node>
+      <Node Id="107" Class="Time:Delay" pos="360,-390,0" flags="0" InHideMask="7" OutHideMask="1">
+       <Inputs delay="0.001" resetOnInput="0"/>
+      </Node>
+      <Node Id="108" Class="Vec3:SetVec3" pos="360,-220,0" flags="0">
+       <Inputs In="1,1,1"/>
+      </Node>
+      <Node Id="110" Name="Spawn_Plant_Entity" Class="_commentbox" pos="130,-469.51712,0" flags="0">
+       <Inputs TextSize="1" Color="0.955974,0.0512695,0.0512695" DisplayFilled="1" DisplayBox="1" SortPriority="16"/>
+       <ResizeBorder X="0" Y="0" Width="700" Height="320"/>
+       <NodeSize Width="700" Height="357.15775"/>
+      </Node>
+      <Node Id="114" Class="Logic:Any" pos="170,-320,0" flags="0" InHideMask="1023" OutHideMask="1">
+       <Inputs />
+      </Node>
+      <Node Id="122" Class="Physics:RayCast" pos="340,-330,0" flags="0" InHideMask="63" OutHideMask="255" EntityGUID="{74FFC86C-BAA7-3C57-F83A-0CF4A20E6DD1}" EntityGUID_64="74FFC86CBAA73C57">
+       <Inputs entityId="0" direction="0,0,-1" maxLength="10" position="0,0,0" transformDir="0"/>
+      </Node>
+      <Node Id="123" Class="entity:LightTracker" pos="790,0,0" flags="0">
+       <Inputs LightEntityId="0" placeholder1="0" placeholder2=""/>
+      </Node>
+      <Node Id="125" Class="Entity:ChildAttach" pos="850,90,0" flags="0">
+       <Inputs entityId="0" Child="0" KeepTransform="1" DisablePhysics="0"/>
+      </Node>
+      <Node Id="126" Class="Time:Delay" pos="710,110,0" flags="0" InHideMask="7" OutHideMask="1">
+       <Inputs delay="0.1" resetOnInput="0"/>
+      </Node>
+     </Nodes>
+     <Edges>
+      <Edge nodeIn="2" nodeOut="6" portIn="Enable" portOut="output" enabled="1"/>
+      <Edge nodeIn="123" nodeOut="8" portIn="LightEntityId" portOut="Succeeded" enabled="1"/>
+      <Edge nodeIn="125" nodeOut="8" portIn="entityId" portOut="Succeeded" enabled="1"/>
+      <Edge nodeIn="126" nodeOut="8" portIn="in" portOut="Succeeded" enabled="1"/>
+      <Edge nodeIn="8" nodeOut="10" portIn="Pos" portOut="Pos" enabled="1"/>
+      <Edge nodeIn="8" nodeOut="10" portIn="Rot" portOut="Rotate" enabled="1"/>
+      <Edge nodeIn="18" nodeOut="10" portIn="Pos" portOut="Pos" enabled="1"/>
+      <Edge nodeIn="18" nodeOut="10" portIn="Rot" portOut="Rotate" enabled="1"/>
+      <Edge nodeIn="8" nodeOut="15" portIn="Spawn" portOut="out" enabled="0"/>
+      <Edge nodeIn="18" nodeOut="15" portIn="Spawn" portOut="out" enabled="0"/>
+      <Edge nodeIn="8" nodeOut="17" portIn="Scale" portOut="Out" enabled="1"/>
+      <Edge nodeIn="18" nodeOut="17" portIn="Scale" portOut="Out" enabled="1"/>
+      <Edge nodeIn="125" nodeOut="18" portIn="Child" portOut="Succeeded" enabled="1"/>
+      <Edge nodeIn="47" nodeOut="20" portIn="in" portOut="Button_Trigger" enabled="0"/>
+      <Edge nodeIn="65" nodeOut="20" portIn="TrackPadInput" portOut="TouchPad" enabled="0"/>
+      <Edge nodeIn="90" nodeOut="20" portIn="in" portOut="Button_Grip" enabled="0"/>
+      <Edge nodeIn="10" nodeOut="43" portIn="Get" portOut="Out" enabled="1"/>
+      <Edge nodeIn="15" nodeOut="43" portIn="in" portOut="Out" enabled="1"/>
+      <Edge nodeIn="17" nodeOut="43" portIn="Set" portOut="Out" enabled="1"/>
+      <Edge nodeIn="48" nodeOut="47" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="50" nodeOut="47" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="43" nodeOut="48" portIn="In" portOut="out" enabled="1"/>
+      <Edge nodeIn="43" nodeOut="50" portIn="Closed" portOut="out" enabled="1"/>
+      <Edge nodeIn="67" nodeOut="65" portIn="in" portOut="TrackPadDiffY" enabled="1"/>
+      <Edge nodeIn="67" nodeOut="65" portIn="set" portOut="TrackPadDiffY" enabled="1"/>
+      <Edge nodeIn="68" nodeOut="65" portIn="in" portOut="TrackPadDiffX" enabled="1"/>
+      <Edge nodeIn="70" nodeOut="65" portIn="Start" portOut="TrackPadDiffX" enabled="1"/>
+      <Edge nodeIn="78" nodeOut="67" portIn="y" portOut="out" enabled="1"/>
+      <Edge nodeIn="78" nodeOut="68" portIn="x" portOut="out" enabled="1"/>
+      <Edge nodeIn="80" nodeOut="70" portIn="in2" portOut="Current" enabled="1"/>
+      <Edge nodeIn="70" nodeOut="76" portIn="Destination" portOut="out" enabled="1"/>
+      <Edge nodeIn="76" nodeOut="78" portIn="B" portOut="vec3" enabled="1"/>
+      <Edge nodeIn="76" nodeOut="80" portIn="A" portOut="out" enabled="1"/>
+      <Edge nodeIn="114" nodeOut="89" portIn="in1" portOut="Out" enabled="1"/>
+      <Edge nodeIn="91" nodeOut="90" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="92" nodeOut="90" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="89" nodeOut="91" portIn="In" portOut="out" enabled="1"/>
+      <Edge nodeIn="89" nodeOut="92" portIn="Closed" portOut="out" enabled="1"/>
+      <Edge nodeIn="105" nodeOut="107" portIn="Spawn" portOut="out" enabled="0"/>
+      <Edge nodeIn="105" nodeOut="108" portIn="Scale" portOut="Out" enabled="1"/>
+      <Edge nodeIn="107" nodeOut="114" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="108" nodeOut="114" portIn="Set" portOut="out" enabled="1"/>
+      <Edge nodeIn="122" nodeOut="114" portIn="go" portOut="out" enabled="1"/>
+      <Edge nodeIn="105" nodeOut="122" portIn="Pos" portOut="hitpoint" enabled="1"/>
+      <Edge nodeIn="125" nodeOut="126" portIn="Attach" portOut="out" enabled="1"/>
+     </Edges>
+     <GraphTokens />
+    </FlowGraph>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{2FCBF2CE-E742-D69F-076A-7043C7C4A7CF}" Name="MovementPlane" Pos="63.102585,53.053799,32.5951" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Flags="4" Material="objects/highlighted" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::MovementPlane" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{EF65C1F5-4775-4454-8C4B-F14686F6512B}">
+      <components />
+      <variables />
+     </Component>
+     <Component typeId="{BD6403CF-3B49-F39E-9540-3FD1C6D4F755}"/>
+    </Components>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{4922C58B-2EB3-1BFD-B5B8-FB5420648729}" Name="GBeanPlant1" Pos="60.239681,59.427738,32.780128" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="GBeanPlant" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{81E16295-AA3B-456E-947E-C994AD923E18}">
+      <Geometry value="objects/default/custom_plant_cyl.cgf"/>
+     </Component>
+    </Components>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{5AAEE99B-569B-BD0F-C7EC-238C44C2A3DD}" Name="LightManager" Pos="58.827415,56.628147,32.000099" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="LightManager" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{30CD4C05-1030-40D9-BED4-1FCCB292ACFA}"/>
+    </Components>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{74FFC86C-BAA7-3C57-F83A-0CF4A20E6DD1}" Name="VR_ControllerL" Pos="59.672966,57.516666,32.754601" FloorNumber="-1" Rotate="1,0,0,0" Scale="40,40,40" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="ControllerR" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{17E5EBA7-57E4-4662-A1C2-1F41DE946CDA}"/>
+     <Component typeId="{A3A6A794-5344-4275-BA82-22F506311A79}">
+      <Geometry value="objects/controller/vive_controller_ce.cgf"/>
+      <Left value="true"/>
+     </Component>
+    </Components>
+    <FlowGraph Description="" Group="" enabled="1" MultiPlayer="ClientServer">
+     <Nodes>
+      <Node Id="43" Class="Logic:Gate" pos="-180,40,0" flags="1" InHideMask="15" OutHideMask="1">
+       <Inputs Closed="0"/>
+      </Node>
+      <Node Id="47" Class="Logic:OnChange" pos="-479,38,0" flags="1">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="48" Class="Time:Delay" pos="-349,8,0" flags="1" InHideMask="7" OutHideMask="1">
+       <Inputs delay="0.001" resetOnInput="0"/>
+      </Node>
+      <Node Id="50" Class="Logic:NOT" pos="-339,78,0" flags="1">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="51" Class="VR:OpenVRController" pos="-740,-40,0" flags="0">
+       <Inputs Enabled="1" Index="0"/>
+      </Node>
+      <Node Id="55" Class="entity:ControllerR" pos="10,60,0" flags="0" GraphEntity="0">
+       <Inputs entityId="0" AreaEntityID="0"/>
+      </Node>
+     </Nodes>
+     <Edges>
+      <Edge nodeIn="55" nodeOut="43" portIn="AreaEntityID" portOut="Out" enabled="1"/>
+      <Edge nodeIn="48" nodeOut="47" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="50" nodeOut="47" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="43" nodeOut="48" portIn="In" portOut="out" enabled="1"/>
+      <Edge nodeIn="43" nodeOut="50" portIn="Closed" portOut="out" enabled="1"/>
+      <Edge nodeIn="47" nodeOut="51" portIn="in" portOut="Button_AppMenu" enabled="1"/>
+     </Edges>
+     <GraphTokens />
+    </FlowGraph>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{A23E72E7-F38F-08CC-B607-2BD77C6C21CF}" Name="VR_ControllerR" Pos="59.672966,57.516666,32.754601" FloorNumber="-1" Rotate="1,0,0,0" Scale="40,40,40" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="ControllerR" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{17E5EBA7-57E4-4662-A1C2-1F41DE946CDA}"/>
+     <Component typeId="{A3A6A794-5344-4275-BA82-22F506311A79}">
+      <Geometry value="objects/controller/vive_controller_ce.cgf"/>
+      <Left value="false"/>
+     </Component>
+    </Components>
+    <FlowGraph Description="" Group="" enabled="1" MultiPlayer="ClientServer">
+     <Nodes>
+      <Node Id="2" Class="Physics:RayCast" pos="-90,-60,0" flags="0" GraphEntity="0">
+       <Inputs entityId="0" direction="0,1,0" maxLength="10" position="0,0,0" transformDir="1"/>
+      </Node>
+      <Node Id="4" Class="Movement:MoveEntityTo" pos="750,-50,0" flags="0" EntityGUID="{0A49D026-7571-28FD-D49D-53D226392465}" EntityGUID_64="A49D026757128FD">
+       <Inputs entityId="0" Destination="0,0,0" DynamicUpdate="1" ValueType="1" Speed="0.1" EaseDistance="0" EaseOutDistance="0" CoordSys="0"/>
+      </Node>
+      <Node Id="6" Class="VR:OpenVRController" pos="-1110,-40,0" flags="0">
+       <Inputs Enabled="1" Index="1"/>
+      </Node>
+      <Node Id="43" Class="Logic:Gate" pos="-500,-160,0" flags="0">
+       <Inputs Closed="0"/>
+      </Node>
+      <Node Id="47" Class="Logic:OnChange" pos="-830,-250,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="48" Class="Time:Delay" pos="-660,-160,0" flags="0" InHideMask="7" OutHideMask="1">
+       <Inputs delay="0.001" resetOnInput="0"/>
+      </Node>
+      <Node Id="50" Class="Logic:NOT" pos="-670,-100,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="67" Class="Math:InRange" pos="220,-120,0" flags="0">
+       <Inputs In="0" Min="100" Max="100"/>
+      </Node>
+      <Node Id="71" Class="VR:TransformInfo" pos="90,200,0" flags="0">
+       <Inputs Enabled="1"/>
+      </Node>
+      <Node Id="77" Class="Vec3:SubVec3" pos="500,230,0" flags="0">
+       <Inputs A="0,0,0" B="0,0,0"/>
+      </Node>
+      <Node Id="79" Class="Vec3:FromVec3" pos="732.71136,392.17813,0" flags="0">
+       <Inputs vec3="0,0,0"/>
+      </Node>
+      <Node Id="81" Class="Vec3:ToVec3" pos="920,310,0" flags="0">
+       <Inputs x="0" y="0" z="32.66"/>
+      </Node>
+      <Node Id="86" Class="Logic:Gate" pos="-490,100,0" flags="0">
+       <Inputs Closed="0"/>
+      </Node>
+      <Node Id="87" Class="Logic:OnChange" pos="-780,90,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="88" Class="Time:Delay" pos="-630,70,0" flags="0" InHideMask="7" OutHideMask="1">
+       <Inputs delay="0.001" resetOnInput="0"/>
+      </Node>
+      <Node Id="95" Class="Logic:Any" pos="-230,-30,0" flags="0">
+       <Inputs />
+      </Node>
+      <Node Id="97" Class="Vec3:SetVec3" pos="-350,-140,0" flags="0">
+       <Inputs In="0,0,0"/>
+      </Node>
+      <Node Id="99" Class="Logic:Once" pos="-240,-330,0" flags="0">
+       <Inputs />
+      </Node>
+      <Node Id="101" Class="Time:Timer" pos="-470,-310,0" flags="0">
+       <Inputs period="0" min="0" max="0" paused="0"/>
+      </Node>
+      <Node Id="103" Class="Movement:MoveEntityTo" pos="1140,-320,0" flags="0">
+       <Inputs entityId="0" Destination="0,0,0" DynamicUpdate="1" ValueType="1" Speed="0.2" EaseDistance="0" EaseOutDistance="0" CoordSys="0"/>
+      </Node>
+      <Node Id="110" Class="Logic:NOT" pos="-578.23053,-291.64691,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="112" Class="Logic:Gate" pos="60,-250,0" flags="0">
+       <Inputs Closed="0"/>
+      </Node>
+      <Node Id="114" Class="Logic:NOT" pos="130,-370,0" flags="0">
+       <Inputs in="0"/>
+      </Node>
+      <Node Id="115" Class="Logic:Gate" pos="370,-50,0" flags="0">
+       <Inputs Closed="0"/>
+      </Node>
+      <Node Id="117" Name="On_release" Class="_comment" pos="-640,140,0" flags="0"/>
+      <Node Id="118" Name="On_Press" Class="_comment" pos="-660,-50,0" flags="0"/>
+      <Node Id="119" Class="Time:Delay" pos="-140,-140,0" flags="0">
+       <Inputs delay="0.01" resetOnInput="0"/>
+      </Node>
+      <Node Id="121" Class="Vec3:SetVec3" pos="530,-100,0" flags="0">
+       <Inputs In="63,58,31"/>
+      </Node>
+      <Node Id="123" Class="Logic:Any" pos="430,-200,0" flags="0" InHideMask="1023" OutHideMask="1">
+       <Inputs />
+      </Node>
+      <Node Id="124" Class="Logic:Any" pos="820,-280,0" flags="0" InHideMask="1023" OutHideMask="1">
+       <Inputs />
+      </Node>
+      <Node Id="125" Class="Vec3:FromVec3" pos="700,-410,0" flags="0">
+       <Inputs vec3="0,0,0"/>
+      </Node>
+      <Node Id="126" Class="Vec3:ToVec3" pos="930,-470,0" flags="0">
+       <Inputs x="0" y="0" z="32.7563"/>
+      </Node>
+     </Nodes>
+     <Edges>
+      <Edge nodeIn="67" nodeOut="2" portIn="In" portOut="surfacetype" enabled="1"/>
+      <Edge nodeIn="77" nodeOut="2" portIn="A" portOut="hitpoint" enabled="1"/>
+      <Edge nodeIn="112" nodeOut="2" portIn="In" portOut="hitpoint" enabled="1"/>
+      <Edge nodeIn="47" nodeOut="6" portIn="in" portOut="Button_AppMenu" enabled="0"/>
+      <Edge nodeIn="48" nodeOut="6" portIn="in" portOut="Button_AppMenu" enabled="0"/>
+      <Edge nodeIn="87" nodeOut="6" portIn="in" portOut="Button_AppMenu" enabled="0"/>
+      <Edge nodeIn="97" nodeOut="43" portIn="Set" portOut="Out" enabled="1"/>
+      <Edge nodeIn="99" nodeOut="43" portIn="Input1" portOut="Out" enabled="1"/>
+      <Edge nodeIn="50" nodeOut="47" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="119" nodeOut="47" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="43" nodeOut="48" portIn="In" portOut="out" enabled="1"/>
+      <Edge nodeIn="43" nodeOut="50" portIn="Closed" portOut="out" enabled="1"/>
+      <Edge nodeIn="101" nodeOut="50" portIn="paused" portOut="out" enabled="1"/>
+      <Edge nodeIn="112" nodeOut="50" portIn="Closed" portOut="out" enabled="1"/>
+      <Edge nodeIn="115" nodeOut="67" portIn="In" portOut="true" enabled="1"/>
+      <Edge nodeIn="123" nodeOut="67" portIn="in2" portOut="true" enabled="1"/>
+      <Edge nodeIn="77" nodeOut="71" portIn="B" portOut="HMD pos" enabled="1"/>
+      <Edge nodeIn="79" nodeOut="77" portIn="vec3" portOut="out" enabled="1"/>
+      <Edge nodeIn="81" nodeOut="79" portIn="x" portOut="x" enabled="1"/>
+      <Edge nodeIn="81" nodeOut="79" portIn="y" portOut="y" enabled="1"/>
+      <Edge nodeIn="4" nodeOut="81" portIn="Destination" portOut="vec3" enabled="1"/>
+      <Edge nodeIn="95" nodeOut="86" portIn="in2" portOut="Out" enabled="1"/>
+      <Edge nodeIn="86" nodeOut="87" portIn="Closed" portOut="out" enabled="1"/>
+      <Edge nodeIn="88" nodeOut="87" portIn="in" portOut="out" enabled="1"/>
+      <Edge nodeIn="86" nodeOut="88" portIn="In" portOut="out" enabled="1"/>
+      <Edge nodeIn="2" nodeOut="95" portIn="go" portOut="out" enabled="1"/>
+      <Edge nodeIn="95" nodeOut="99" portIn="in1" portOut="Out" enabled="1"/>
+      <Edge nodeIn="99" nodeOut="101" portIn="Reset" portOut="out" enabled="1"/>
+      <Edge nodeIn="114" nodeOut="112" portIn="in" portOut="Out" enabled="1"/>
+      <Edge nodeIn="125" nodeOut="112" portIn="vec3" portOut="Out" enabled="1"/>
+      <Edge nodeIn="4" nodeOut="115" portIn="Start" portOut="Out" enabled="0"/>
+      <Edge nodeIn="121" nodeOut="115" portIn="Set" portOut="Out" enabled="1"/>
+      <Edge nodeIn="115" nodeOut="119" portIn="Closed" portOut="out" enabled="1"/>
+      <Edge nodeIn="123" nodeOut="121" portIn="in1" portOut="Out" enabled="1"/>
+      <Edge nodeIn="124" nodeOut="121" portIn="in2" portOut="Out" enabled="1"/>
+      <Edge nodeIn="103" nodeOut="123" portIn="Start" portOut="out" enabled="0"/>
+      <Edge nodeIn="103" nodeOut="124" portIn="Destination" portOut="out" enabled="1"/>
+      <Edge nodeIn="126" nodeOut="125" portIn="x" portOut="x" enabled="1"/>
+      <Edge nodeIn="126" nodeOut="125" portIn="y" portOut="y" enabled="1"/>
+      <Edge nodeIn="124" nodeOut="126" portIn="in1" portOut="vec3" enabled="1"/>
+     </Edges>
+     <GraphTokens />
+    </FlowGraph>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{CAB663F0-37FB-37BB-EE81-F29861ADE653}" Name="SphereSchem1" Pos="61.366184,56.689426,32.780128" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Material="Materials/silver_gloss" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::SphereSchem" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{EF65C1F5-4775-4454-8C4B-F14686F6512B}">
+      <components>
+       <Element>
+        <key value="b6172229-404b-4d92-98f4-32892f20c855"/>
+        <value>
+         <properties>
+          <fileName value="objects/playerMarker.cgf"/>
+         </properties>
+         <overridePolicy value="Default"/>
+        </value>
+       </Element>
+      </components>
+      <variables />
+     </Component>
+     <Component typeId="{BD6403CF-3B49-F39E-9540-3FD1C6D4F755}"/>
+    </Components>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{DBAD6140-2D45-8CB4-C159-A306B7CC6087}" Name="Wand" Pos="59.704117,58.309189,29.517496" FloorNumber="-1" Rotate="1,1.5131036e-08,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::Particle" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{EF65C1F5-4775-4454-8C4B-F14686F6512B}">
+      <components />
+      <variables />
+     </Component>
+     <Component typeId="{BD6403CF-3B49-F39E-9540-3FD1C6D4F755}"/>
+    </Components>
+   </Object>
+   <Object Type="Designer" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{DFA04D5D-8044-AB82-A106-FC8160E84FEF}" Name="PlayerMovementPlane" Pos="63.048767,53.11253,32.695099" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="16777215" Flags="4" Material="objects/transport_invis" RndFlags="1073741832" StaticObjFlags="0" ViewDistRatio="100">
+    <Brush DesignerModeFlags="0" SubdivisionLevel="0" SubdivisionSmoothingGroup="0" MirrorPlaneNormal="0,0,0" MirrorPlaneDistance="0">
+     <Polygon GUID="{12AF1D1A-DDA2-4E61-D1A8-31757C1ECD85}" BinaryData="BAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgq8S1PwAAAAAAAAAAAAAAgP+QGUAAAADgq8S1P2nXk6DDWhbAAAAAgP+QGUAAAADgq8S1P2nXk6DDWhbAAAAAAAAAAAAAAADgq8S1PwQAAAAAAAAAAQAAAAEAAAACAAAAAgAAAAMAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA/AACAPwAAAAAAAAAAAAAAgAAAAAAAAACAAAAAAAAA8D8AAADgq8S1vwAAAAAAAAAAAAAAAPyHzMAd1rLA/IfMwB3WssAAAAAA"/>
+     <Polygon GUID="{D5CB2E83-A9FE-7F03-136D-0D077D50815E}" BinaryData="BAAAAGnXk6DDWhbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgq8S1P2nXk6DDWhbAAAAAAAAAAAAAAADgq8S1PwQAAAAAAAAAAQAAAAEAAAACAAAAAgAAAAMAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA/AACAPwAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAAAAAAAAAAAAAAAgB3WssAAAAAAAAAAAAAAAAAAAAAAXyWuvR3WssBfJa69"/>
+     <Polygon GUID="{42C8EAAE-C459-C426-CE62-E1E92D4AD1E4}" BinaryData="BAAAAGnXk6DDWhbAAAAAgP+QGUAAAAAAAAAAAGnXk6DDWhbAAAAAAAAAAAAAAAAAAAAAAGnXk6DDWhbAAAAAAAAAAAAAAADgq8S1P2nXk6DDWhbAAAAAgP+QGUAAAADgq8S1PwQAAAAAAAAAAQAAAAEAAAACAAAAAgAAAAMAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA/AACAPwAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAAAAAABp15Ogw1oWwPyHzMAAAAAAAAAAAAAAAAAAAAAAXyWuvfyHzMBfJa69"/>
+     <Polygon GUID="{724D8F95-0AA4-5596-C5E0-84712791FA71}" BinaryData="BAAAAAAAAAAAAAAAAAAAgP+QGUAAAAAAAAAAAGnXk6DDWhbAAAAAgP+QGUAAAAAAAAAAAGnXk6DDWhbAAAAAgP+QGUAAAADgq8S1PwAAAAAAAAAAAAAAgP+QGUAAAADgq8S1PwQAAAAAAAAAAQAAAAEAAAACAAAAAgAAAAMAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA/AACAPwAAAAAAAAAAAAAAAAAAAAAAAPA/AAAAAAAAAAAAAACA/5AZwAAAAAAAAAAAHdayQAAAAAAd1rJAXyWuvQAAAABfJa69"/>
+     <Polygon GUID="{48D58D82-AD51-4B60-81BB-2BB0CE77DDB9}" BinaryData="BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgP+QGUAAAAAAAAAAAAAAAAAAAAAAAAAAgP+QGUAAAADgq8S1PwAAAAAAAAAAAAAAAAAAAAAAAADgq8S1PwQAAAAAAAAAAQAAAAEAAAACAAAAAgAAAAMAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA/AACAPwAAAAAAAAAAAADwPwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA/IfMQAAAAAD8h8xAXyWuvQAAAABfJa69"/>
+     <Polygon GUID="{1D0FF24A-1E51-A9C0-4CDA-8AB75670ED5F}" BinaryData="BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGnXk6DDWhbAAAAAAAAAAAAAAAAAAAAAAGnXk6DDWhbAAAAAgP+QGUAAAAAAAAAAAAAAAAAAAAAAAAAAgP+QGUAAAAAAAAAAAAQAAAAAAAAAAQAAAAEAAAACAAAAAgAAAAMAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA/AACAPwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAAAAgAAAAAAAAAAAHdayQAAAAAAd1rJA/IfMQAAAAAD8h8xA"/>
+     <SmoothingGroups />
+     <SemiSharpCrease />
+     <UVIslands />
+    </Brush>
+    <Mesh Version="2" BinaryData="AAAAAAAAAAAYAAAAGAAAACQAAAAYAAAAAQAAAAAAAAAAAAAAXyWuPQAAAAD8h8xAXyWuPR3WssD8h8xAXyWuPR3WssAAAAAAXyWuPR3WssAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXyWuPR3WssAAAAAAXyWuPR3WssD8h8xAAAAAAB3WssAAAAAAAAAAAB3WssAAAAAAXyWuPR3WssD8h8xAXyWuPQAAAAD8h8xAAAAAAB3WssD8h8xAAAAAAB3WssD8h8xAXyWuPQAAAAD8h8xAXyWuPQAAAAAAAAAAAAAAAAAAAAD8h8xAAAAAAAAAAAD8h8xAXyWuPQAAAAAAAAAAXyWuPQAAAAAAAAAAAAAAAB3WssAAAAAAAAAAAB3WssD8h8xAAAAAAAAAAAD8h8xAAAAAAAAAAIAAAACAAACAPwAAAIAAAACAAACAPwAAAIAAAACAAACAPwAAAIAAAACAAACAPwAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAPyHzMAd1rLA/IfMwB3WssAAAAAAHdaywAAAAAAAAAAAAAAAAAAAAABfJa69HdaywF8lrr38h8zAAAAAAAAAAAAAAAAAAAAAAF8lrr38h8zAXyWuvQAAAAAAAAAAHdayQAAAAAAd1rJAXyWuvQAAAABfJa69AAAAAAAAAAD8h8xAAAAAAPyHzEBfJa69AAAAAF8lrr0AAAAAAAAAAB3WskAAAAAAHdayQPyHzEAAAAAA/IfMQAAAAQACAAAAAgADAAQABQAGAAQABgAHAAgACQAKAAgACgALAAwADQAOAAwADgAPABAAEQASABAAEgATABQAFQAWABQAFgAXAP5/AAAAAAGAAAACgAAAAYD+fwAAAAABgAAAAoAAAAGA/n8AAAAAAYAAAAKAAAABgP5/AAAAAAGAAAACgAAAAYD+fwAAAAABgAAAAAACgAGA/38AAAAAAYAAAAAAAYABgP5/AAAAAAGAAAAAAAKAAYD/fwAAAAABgAAAAAABgAGAAAABgAAAAYAAAAAAAYABgAAAAYAAAAGAAAAAAAGAAYAAAAGAAAABgAAAAAABgAGAAAABgAAAAYAAAAAAAYABgAKAAAAAAAGAAAAAAAKAAYABgAAAAAABgAAAAAABgAGAAoAAAAAAAYAAAAAAAoABgAGAAAAAAAGAAAAAAAGAAYAAAP9/AAABgAAAAAABgAGAAAD/fwAAAYAAAAAAAYABgAAA/38AAAGAAAAAAAGAAYAAAP9/AAABgAAAAAABgAGAAoAAAAAA/38AAP5/AAD/fwKAAAAAAP9/AAD+fwAA/38CgAAAAAD/fwAA/n8AAP9/AoAAAAAA/38AAP5/AAD/fx3WMsD8h0xAXyUuPRHah0AAAAAAAAAAACQAAAAAAAAAGAAAAAAAAAAAAAAAABAAAA=="/>
+   </Object>
+  </LayerObjects>
+ </Layer>
+</ObjectLayer>

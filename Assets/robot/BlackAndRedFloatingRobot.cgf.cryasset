@@ -1,0 +1,12 @@
+<cryasset>
+ <AssetMetadata version="0" type="Mesh" guid="{4C1AA0B9-116A-75F1-D8C0-E8BE7DE9C6DE}" source="BlackAndRedFloatingRobot.fbx">
+  <Files>
+   <File path="BlackAndRedFloatingRobot.cgf"/>
+  </Files>
+  <Details>
+   <Detail name="materialCount">3</Detail>
+   <Detail name="triangleCount">4856</Detail>
+   <Detail name="vertexCount">2586</Detail>
+  </Details>
+ </AssetMetadata>
+</cryasset>

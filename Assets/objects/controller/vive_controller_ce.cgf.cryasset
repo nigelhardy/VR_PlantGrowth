@@ -1,0 +1,12 @@
+<cryasset>
+ <AssetMetadata version="0" type="Mesh" guid="{E1CE0AC6-2674-BF5A-2E13-06E1D6A22201}" source="vive_controller_ce.FBX">
+  <Files>
+   <File path="vive_controller_ce.cgf"/>
+  </Files>
+  <Details>
+   <Detail name="materialCount">2</Detail>
+   <Detail name="triangleCount">17326</Detail>
+   <Detail name="vertexCount">12208</Detail>
+  </Details>
+ </AssetMetadata>
+</cryasset>

@@ -34,6 +34,11 @@ public:
 	void addPlant(IEntity* plant);
 	void addRobot(IEntity* robot);
 
+
+	void spawnPlant(Vec3 pos);
+	IEntity* spawnEntity(char* name, char* className, float size, Vec3 pos);
+
+
 	void removeLight(IEntity* light);
 	void lightSwitch(IEntity* light, bool on);
 	void removePlant(IEntity* plant);

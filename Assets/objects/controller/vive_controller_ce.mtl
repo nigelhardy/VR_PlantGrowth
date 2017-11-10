@@ -1,0 +1,6 @@
+<Material MtlFlags="524288" Shader="Illum" GenMask="20000000" StringGenMask="%SUBSURFACE_SCATTERING" SurfaceType="" MatTemplate="" Diffuse="0.1441285,0.1441285,0.1441285" Specular="0.29613829,0.29613829,0.29613829" Emittance="0.090841718,0.090841718,0.090841718,0" Opacity="1" Shininess="106" CloakAmount="0" vertModifType="0" LayerAct="1">
+ <Textures>
+  <Texture Map="Diffuse" File="textures/cubemaps/example/environmentprobe_cm.tif"/>
+ </Textures>
+ <PublicParams EmittanceMapGamma="1" SSSIndex="0"/>
+</Material>

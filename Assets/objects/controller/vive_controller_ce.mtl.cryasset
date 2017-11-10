@@ -1,0 +1,8 @@
+<cryasset>
+ <AssetMetadata version="0" type="Material" guid="{E360EACC-50CB-7DFC-519C-8BFCF3F9BD96}" source="vive_controller_ce.FBX">
+  <Files>
+   <File path="vive_controller_ce.mtl"/>
+  </Files>
+  <Details />
+ </AssetMetadata>
+</cryasset>

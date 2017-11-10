@@ -1,0 +1,17 @@
+<ObjectLayer>
+ <Layer Name="Main" FullName="Main" GUID="{7DC816F2-D365-4BAE-9111-912CED6E8F6A}" Hidden="0" Frozen="0" Expanded="0" Exportable="1" ExportLayerPak="1" DefaultLoaded="0" HavePhysics="1" IsDefaultColor="1">
+  <LayerObjects>
+   <Object Type="Entity" Layer="Main" LayerGUID="{7DC816F2-D365-4BAE-9111-912CED6E8F6A}" Id="{025E1E8C-F827-883D-AAD0-00E269BCA222}" Name="lightGeom" Pos="61.653526,61.315937,33.950405" FloorNumber="-1" Rotate="1,0,0,0" Scale="0.49999991,0.49999991,0.49999991" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="LightGeom" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{DED9ED7E-11D2-4147-926B-0322E3B5725C}">
+      <Geometry value="objects/sphere.cgf"/>
+     </Component>
+    </Components>
+   </Object>
+   <Object Type="Brush" Layer="Main" LayerGUID="{7DC816F2-D365-4BAE-9111-912CED6E8F6A}" Id="{0DC80E91-FB68-45AB-BC28-0C385AFE9F4F}" Name="Modern_Hall" Pos="60.795902,64.554276,36.899986" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="16777215" Flags="4" Material="objects/ModernHall/material/modern_hall" MatLayersMask="0" Prefab="objects/ModernHall/models/hall.cgf" OutdoorOnly="0" CastShadowMaps="1" GIMode="1" RainOccluder="1" SupportSecondVisarea="0" DynamicDistanceShadows="0" Hideable="0" LodRatio="100" ViewDistRatio="100" NotTriangulate="0" NoDynamicWater="0" AIRadius="-1" NoStaticDecals="0" RecvWind="0" Occluder="0" DrawLast="0" ShadowLodBias="0" RndFlags="1610613768">
+    <CollisionFiltering />
+   </Object>
+  </LayerObjects>
+ </Layer>
+</ObjectLayer>

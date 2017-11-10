@@ -1,0 +1,6 @@
+<Material MtlFlags="524288" Shader="Illum" GenMask="20000000" StringGenMask="%SUBSURFACE_SCATTERING" SurfaceType="mat_movement" MatTemplate="" Diffuse="0.01228649,0.78353792,0.68668544" Specular="0.030713448,0.70110202,0.97344542" Emittance="0.0069954107,0.016807377,0.88792324,200" Opacity="0.2" Shininess="125" CloakAmount="0" vertModifType="0" LayerAct="1">
+ <Textures>
+  <Texture Map="Diffuse" File="textures/defaults/white.dds"/>
+ </Textures>
+ <PublicParams EmittanceMapGamma="1" SSSIndex="0"/>
+</Material>
