@@ -89,14 +89,14 @@ void CEntityManagerEntity::spawnPlant(Vec3 pos) {
 	}
 }
 void CEntityManagerEntity::spawnRobot(Vec3 pos) {
-	IEntity* newRobot = spawnEntity("robotPlaceholder", "Robot", 10.0f, pos);
+	IEntity* newRobot = spawnEntity("robotEntity", "Robot", 10.0f, pos);
 	if (newRobot)
 	{
 		addRobot(newRobot);
 	}
 }
 void CEntityManagerEntity::spawnLight(Vec3 pos) {
-	IEntity* newLight = spawnEntity("lightPlaceHolder", "LightGeom", .5f, pos);
+	IEntity* newLight = spawnEntity("lightEntity", "LightGeom", .5f, pos);
 	if (newLight)
 	{
 		addLight(newLight);
@@ -292,6 +292,92 @@ bool CEntityManagerEntity::GetGlobalGrowth()
 {
 	return globalGrowth;
 }
+void CEntityManagerEntity::attachClosestEntity(string name, IEntity* controller)
+{
+	IEntity* closest = getClosestEntity(name, controller->GetWorldPos());
+	if (closest)
+	{
+		Vec3 diffVec = closest->GetWorldPos() - controller->GetWorldPos();
+		controller->AttachChild(closest);
+		// 40 because scale of controller is 40
+		// Should somehow avoid setting scale of controller, load geometry scaled instead
+		diffVec.SetLength(diffVec.GetLength() / 40.0f);
+		closest->SetPos(diffVec);
+		closest->SetScale(closest->GetScale() / 40.0f);
+	}
+}
+void physicallizeEntity(IEntity* entity)
+{
+	// do this so it can be grabbed again
+	SEntityPhysicalizeParams params;
+	params.type = PE_RIGID;
+	entity->Physicalize(params);
+}
+void CEntityManagerEntity::detachEntities()
+{
+	for (int i = 0; i < plantEntities.size(); i++)
+	{
+		IEntity* parent = plantEntities.at(i)->GetParent();
+		if (parent)
+		{
+			Vec3 wPos = plantEntities.at(i)->GetWorldPos();
+			plantEntities.at(i)->DetachThis();
+			// 40 because scale of controller is 40
+			// Should somehow avoid setting scale of controller, load geometry scaled instead
+			plantEntities.at(i)->SetScale(plantEntities.at(i)->GetScale() * 40.0f);
+			plantEntities.at(i)->SetPos(wPos);
+			physicallizeEntity(plantEntities.at(i));
+		}
+		
+		
+		
+	}
+	for (int i = 0; i < lightEntities.size(); i++)
+	{
+		lightEntities.at(i)->DetachThis();
+	}
+	for (int i = 0; i < robotEntities.size(); i++)
+	{
+		robotEntities.at(i)->DetachThis();
+	}
+}
+IEntity* CEntityManagerEntity::getClosestEntity(string name, Vec3 pos)
+{
+	float constraintRadius = .2f;
+	const Vec3 boxMin = pos - Vec3(constraintRadius + 0.05f);
+	const Vec3 boxMax = pos + Vec3(constraintRadius + 0.05f);
+	IPhysicalEntity** nearbyEntities = 0;
+	IEntity* closest = NULL;
+	float* smallestDist = NULL;
+	if (size_t entityCount = gEnv->pPhysicalWorld->GetEntitiesInBox(boxMin, boxMax, nearbyEntities, ent_all))
+	{
+		for (size_t i = 0; i < entityCount; ++i)
+		{
+			if (IEntity* nearbyEntity = gEnv->pEntitySystem->GetEntityFromPhysics(nearbyEntities[i]))
+			{
+				string s = nearbyEntity->GetName();
+				CryLogAlways(s);
+				if (!s.compare(name))
+				{
+					CryLogAlways(name);
+					float dist = pos.GetDistance(nearbyEntity->GetWorldPos());
+					if (!smallestDist)
+					{
+						smallestDist = new float(dist);
+						closest = nearbyEntity;
+					}
+					else if (dist < *smallestDist)
+					{
+						*smallestDist = dist;
+						closest = nearbyEntity;
+					}
+				}
+			}
+		}
+		return closest;
+	}
+}
+
 void CEntityManagerEntity::SetFlowGraph(IFlowGraph* pFlowGraph)
 {
 	if (m_pFlowGraph)

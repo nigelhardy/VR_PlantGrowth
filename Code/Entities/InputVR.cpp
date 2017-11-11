@@ -150,7 +150,14 @@ void CInputVREntity::getControllerInput()
 			}
 		}
 		if (touchTrig != touchTrigLast) {
-
+			if (touchTrig)
+			{
+				commands.push_back(new AttachClosestEntityCommand(entityManager, controllerEntity1, "plantEntity"));
+			}
+			else if (!touchTrig)
+			{
+				commands.push_back(new DetachEntitiesCommand(entityManager));
+			}
 		}
 		if (touchTrack != touchTrackLast) {
 			if (touchTrack)

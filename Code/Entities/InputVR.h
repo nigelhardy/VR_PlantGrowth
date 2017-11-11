@@ -77,6 +77,46 @@ protected:
 	CEntityManagerEntity* entityManager;
 };
 
+class AttachClosestEntityCommand : public Command
+{
+public:
+	AttachClosestEntityCommand(CEntityManagerEntity* entityMan, IEntity* cont, string objectName)
+	{
+		controller = cont;
+		entityManager = entityMan;
+		name = objectName;
+	}
+	void execute() override
+	{
+		if (entityManager)
+		{
+			entityManager->attachClosestEntity(name, controller);
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+	IEntity* controller;
+	string name;
+};
+
+class DetachEntitiesCommand : public Command
+{
+public:
+	DetachEntitiesCommand(CEntityManagerEntity* entityMan)
+	{
+		entityManager = entityMan;
+	}
+	void execute() override
+	{
+		if (entityManager)
+		{
+			entityManager->detachEntities();
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+};
+
 class ChangeEntityCommand : public Command
 {
 public:

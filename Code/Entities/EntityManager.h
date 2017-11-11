@@ -52,6 +52,9 @@ public:
 	void removeAll();
 	bool GetGlobalGrowth();
 
+	void attachClosestEntity(string name, IEntity* controller);
+	void detachEntities();
+	IEntity* getClosestEntity(string name, Vec3 pos);
 	void changeSelectedEntity(int diff);
 
 
