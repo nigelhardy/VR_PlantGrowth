@@ -52,7 +52,7 @@ public:
 	void removeAll();
 	bool GetGlobalGrowth();
 
-	void attachClosestEntity(string name, IEntity* controller);
+	void attachClosestEntity(IEntity* controller);
 	void detachEntities();
 	IEntity* getClosestEntity(string name, Vec3 pos);
 	void changeSelectedEntity(int diff);
@@ -67,6 +67,7 @@ public:
 	virtual	void ProcessEvent(SEntityEvent &event);
 	void GetLightsInScene();
 	void GetPlantsInScene();
+	void GetRobotsInScene();
 	virtual uint64 GetEventMask() const;
 
 protected:
@@ -75,6 +76,7 @@ protected:
 	int currentSpawnEntity = plant;
 
 public:
+	std::vector<std::vector<IEntity*>*> allEntities;
 	std::vector<IEntity*> lightEntities;
 	std::vector<IEntity*> plantEntities;
 	std::vector<IEntity*> robotEntities;

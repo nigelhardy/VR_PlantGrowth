@@ -292,9 +292,24 @@ bool CEntityManagerEntity::GetGlobalGrowth()
 {
 	return globalGrowth;
 }
-void CEntityManagerEntity::attachClosestEntity(string name, IEntity* controller)
+void CEntityManagerEntity::attachClosestEntity(IEntity* controller)
 {
-	IEntity* closest = getClosestEntity(name, controller->GetWorldPos());
+	IEntity* closest = NULL;
+	switch(currentSpawnEntity)
+	{
+	case plant:
+		closest = getClosestEntity("plantEntity", controller->GetWorldPos());
+		break;
+	case light:
+		closest = getClosestEntity("lightEntity", controller->GetWorldPos());
+		break;
+	case robot:
+		closest = getClosestEntity("robotEntity", controller->GetWorldPos());
+		break;
+	default:
+		break;
+	}
+	
 	if (closest)
 	{
 		Vec3 diffVec = closest->GetWorldPos() - controller->GetWorldPos();
@@ -315,30 +330,22 @@ void physicallizeEntity(IEntity* entity)
 }
 void CEntityManagerEntity::detachEntities()
 {
-	for (int i = 0; i < plantEntities.size(); i++)
+	for (int i = 0; i < allEntities.size(); i++)
 	{
-		IEntity* parent = plantEntities.at(i)->GetParent();
-		if (parent)
+		for (int j = 0; j < allEntities.at(i)->size(); j++)
 		{
-			Vec3 wPos = plantEntities.at(i)->GetWorldPos();
-			plantEntities.at(i)->DetachThis();
-			// 40 because scale of controller is 40
-			// Should somehow avoid setting scale of controller, load geometry scaled instead
-			plantEntities.at(i)->SetScale(plantEntities.at(i)->GetScale() * 40.0f);
-			plantEntities.at(i)->SetPos(wPos);
-			physicallizeEntity(plantEntities.at(i));
+			IEntity* parent = allEntities.at(i)->at(j)->GetParent();
+			if (parent)
+			{
+				Vec3 wPos = allEntities.at(i)->at(j)->GetWorldPos();
+				allEntities.at(i)->at(j)->DetachThis();
+				// 40 because scale of controller is 40
+				// Should somehow avoid setting scale of controller, load geometry scaled instead
+				allEntities.at(i)->at(j)->SetScale(allEntities.at(i)->at(j)->GetScale() * 40.0f);
+				allEntities.at(i)->at(j)->SetPos(wPos);
+				physicallizeEntity(allEntities.at(i)->at(j));
+			}
 		}
-		
-		
-		
-	}
-	for (int i = 0; i < lightEntities.size(); i++)
-	{
-		lightEntities.at(i)->DetachThis();
-	}
-	for (int i = 0; i < robotEntities.size(); i++)
-	{
-		robotEntities.at(i)->DetachThis();
 	}
 }
 IEntity* CEntityManagerEntity::getClosestEntity(string name, Vec3 pos)
@@ -393,6 +400,9 @@ void CEntityManagerEntity::Initialize()
 {
 	GetEntity()->SetUpdatePolicy(ENTITY_UPDATE_ALWAYS);
 	GetEntity()->Activate(true); // necessary for UPDATE event to be called
+	allEntities.push_back(&plantEntities);
+	allEntities.push_back(&lightEntities);
+	allEntities.push_back(&robotEntities);
 	/*
 	SEntitySpawnParams spawnParams;
 	spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Light");
@@ -415,6 +425,7 @@ void CEntityManagerEntity::ProcessEvent(SEntityEvent &event)
 		Reset();
 		GetLightsInScene();
 		GetPlantsInScene();
+		GetRobotsInScene();
 		break;
 	case ENTITY_EVENT_RESET:
 		Reset();
@@ -445,7 +456,7 @@ void CEntityManagerEntity::GetLightsInScene()
 			if (IEntity* nearbyEntity = gEnv->pEntitySystem->GetEntityFromPhysics(nearbyEntities[i]))
 			{
 				string s = nearbyEntity->GetName();
-				if (!s.compare("lightGeom"))
+				if (!s.compare("lightEntity"))
 				{
 					CryLogAlways("Found a light already in scene");
 					CryLogAlways(s);
@@ -468,11 +479,34 @@ void CEntityManagerEntity::GetPlantsInScene()
 			if (IEntity* nearbyEntity = gEnv->pEntitySystem->GetEntityFromPhysics(nearbyEntities[i]))
 			{
 				string s = nearbyEntity->GetName();
-				if (!s.compare("beanPlant"))
+				if (!s.compare("plantEntity"))
 				{
 					CryLogAlways("Found a plant already in scene");
 					CryLogAlways(s);
 					addPlant(nearbyEntity);
+				}
+			}
+		}
+	}
+}
+void CEntityManagerEntity::GetRobotsInScene()
+{
+	float constraintRadius = 10.0f;
+	const Vec3 boxMin = GetEntity()->GetWorldPos() - Vec3(constraintRadius + 5.f);
+	const Vec3 boxMax = GetEntity()->GetWorldPos() + Vec3(constraintRadius + 5.f);
+	IPhysicalEntity** nearbyEntities = 0;
+	if (size_t entityCount = gEnv->pPhysicalWorld->GetEntitiesInBox(boxMin, boxMax, nearbyEntities, ent_all))
+	{
+		for (size_t i = 0; i < entityCount; ++i)
+		{
+			if (IEntity* nearbyEntity = gEnv->pEntitySystem->GetEntityFromPhysics(nearbyEntities[i]))
+			{
+				string s = nearbyEntity->GetName();
+				if (!s.compare("robotEntity"))
+				{
+					CryLogAlways("Found a plant already in scene");
+					CryLogAlways(s);
+					addRobot(nearbyEntity);
 				}
 			}
 		}

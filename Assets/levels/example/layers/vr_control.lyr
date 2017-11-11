@@ -1,7 +1,7 @@
 <ObjectLayer>
  <Layer Name="VR_Control" FullName="VR_Control" GUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Hidden="0" Frozen="0" Expanded="0" Exportable="1" ExportLayerPak="1" DefaultLoaded="0" HavePhysics="1" IsDefaultColor="1">
   <LayerObjects>
-   <Object Type="Camera" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{0A49D026-7571-28FD-D49D-53D226392465}" Name="VR_Cam" Pos="59.672966,57.229084,34.522335" FloorNumber="-1" Rotate="1,-2.7005581e-16,-3.0867494e-15,-8.3359458e-31" ColorRGB="16776960" FOV="1.0472" NearZ="0.05" FarZ="1024" EntityClass="CameraSource" HasEntity="1">
+   <Object Type="Camera" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{0A49D026-7571-28FD-D49D-53D226392465}" Name="VR_Cam" Pos="59.672966,57.229084,33.122356" FloorNumber="-1" Rotate="1,-2.7005581e-16,-3.0867494e-15,-8.3359458e-31" ColorRGB="16776960" FOV="1.0472" NearZ="0.05" FarZ="1024" EntityClass="CameraSource" HasEntity="1">
     <ShakeParams AmplitudeA="1,1,1" AmplitudeAMult="0" FrequencyA="1,1,1" FrequencyAMult="0" NoiseAAmpMult="0" NoiseAFreqMult="0" TimeOffsetA="0" AmplitudeB="1,1,1" AmplitudeBMult="0" FrequencyB="1,1,1" FrequencyBMult="0" NoiseBAmpMult="0" NoiseBFreqMult="0" TimeOffsetB="0" CameraShakeSeed="0"/>
     <Properties />
     <Components>
@@ -20,7 +20,7 @@
       <Node Id="8" Class="Entity:Spawn" pos="410,-20,0" flags="0">
        <Inputs Class="LightGeom" Name="lightGeom" Pos="0,0,0" Rot="0,0,0" Scale="0.1,0.1,0.1"/>
       </Node>
-      <Node Id="10" Class="Entity:GetPos" pos="170,70,0" flags="0" InHideMask="7" OutHideMask="63" EntityGUID="{74FFC86C-BAA7-3C57-F83A-0CF4A20E6DD1}" EntityGUID_64="74FFC86CBAA73C57">
+      <Node Id="10" Class="Entity:GetPos" pos="170,70,0" flags="0" InHideMask="7" OutHideMask="63">
        <Inputs entityId="0" CoordSys="1"/>
       </Node>
       <Node Id="15" Class="Time:Delay" pos="170,10,0" flags="0" InHideMask="7" OutHideMask="1">
@@ -102,7 +102,7 @@
       <Node Id="114" Class="Logic:Any" pos="170,-320,0" flags="0" InHideMask="1023" OutHideMask="1">
        <Inputs />
       </Node>
-      <Node Id="122" Class="Physics:RayCast" pos="340,-330,0" flags="0" InHideMask="63" OutHideMask="255" EntityGUID="{74FFC86C-BAA7-3C57-F83A-0CF4A20E6DD1}" EntityGUID_64="74FFC86CBAA73C57">
+      <Node Id="122" Class="Physics:RayCast" pos="340,-330,0" flags="0" InHideMask="63" OutHideMask="255">
        <Inputs entityId="0" direction="0,0,-1" maxLength="10" position="0,0,0" transformDir="0"/>
       </Node>
       <Node Id="123" Class="entity:LightTracker" pos="790,0,0" flags="0">
@@ -195,7 +195,7 @@
      <Component typeId="{30CD4C05-1030-40D9-BED4-1FCCB292ACFA}"/>
     </Components>
    </Object>
-   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{CAB663F0-37FB-37BB-EE81-F29861ADE653}" Name="SphereSchem1" Pos="61.366184,56.689426,32.780128" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Material="Materials/silver_gloss" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::SphereSchem" HasEntity="1">
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{CAB663F0-37FB-37BB-EE81-F29861ADE653}" Name="PlayerMarker" Pos="61.366184,56.689426,32.780128" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Material="Materials/silver_gloss" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::SphereSchem" HasEntity="1">
     <Properties />
     <Components>
      <Component typeId="{EF65C1F5-4775-4454-8C4B-F14686F6512B}">

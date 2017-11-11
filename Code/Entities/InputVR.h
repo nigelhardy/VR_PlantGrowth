@@ -90,7 +90,7 @@ public:
 	{
 		if (entityManager)
 		{
-			entityManager->attachClosestEntity(name, controller);
+			entityManager->attachClosestEntity(controller);
 		}
 	};
 protected:
@@ -117,6 +117,81 @@ protected:
 	CEntityManagerEntity* entityManager;
 };
 
+class ShowMovementPlaneCommand : public Command
+{
+public:
+	ShowMovementPlaneCommand(IEntity* movementPlane, IEntity* movementWand, bool showPlane)
+	{
+		plane = movementPlane;
+		wand = movementWand;
+		// true will hide it, so reverse logic
+		hide = !showPlane;
+	}
+	void execute() override
+	{
+		if (plane)
+		{
+			plane->Hide(hide);
+		}
+		if (wand)
+		{
+			wand->Hide(hide);
+		}
+	};
+protected:
+	IEntity* plane;
+	IEntity* wand;
+	bool hide;
+};
+
+class MovePlayerMarkerCommand : public Command
+{
+public:
+	MovePlayerMarkerCommand(IEntity* controller, IEntity* playerMarker, bool showPlane)
+	{
+		marker = playerMarker;
+		cont = controller;
+		// true will hide it, so reverse logic
+		hide = !showPlane;
+	}
+	void execute() override
+	{
+		if (cont && !hide)
+		{
+			ray_hit rayHit;
+			Vec3 origin = cont->GetWorldPos();
+			Vec3 dir = cont->GetForwardDir();
+			int numHits = gEnv->pPhysicalWorld->RayWorldIntersection(origin, dir * 10.0f, ent_static, rwi_stop_at_pierceable, &rayHit, 1);
+			if (numHits > 0)
+			{
+				if (rayHit.surface_idx == 103)
+				{
+					if (marker)
+					{
+						Matrix34 ind = marker->GetWorldTM();
+						ind.SetTranslation(rayHit.pt + Vec3(-.3f, -.3f, 0.0f));
+						marker->SetWorldTM(ind);
+						marker->Hide(hide);
+					}
+				}
+				else
+				{
+					// didn't hit movement plane, so hide player marker
+					marker->Hide(true);
+				}
+			}
+			
+		}
+		else if (hide && marker) {
+			marker->Hide(hide);
+		}
+	};
+protected:
+	IEntity* marker;
+	IEntity* cont;
+	bool hide;
+};
+
 class MovePlayerCommand : public Command
 {
 public:
@@ -132,13 +207,11 @@ public:
 		if (cont)
 		{
 			ray_hit rayHit;
-
 			Vec3 origin = cont->GetWorldPos();
 			Vec3 dir = cont->GetForwardDir();
 			int numHits = gEnv->pPhysicalWorld->RayWorldIntersection(origin, dir * 10.0f, ent_static, rwi_stop_at_pierceable, &rayHit, 1);
 			if (numHits > 0)
 			{
-				CryLogAlways(std::to_string(rayHit.surface_idx).c_str());
 				if (rayHit.surface_idx == 103)
 				{
 					if (pm)
@@ -214,7 +287,10 @@ public:
 	IEntity* spawnController(char* name);
 	void updateControllersLocation();
 	void processCommands();
-	bool movePlayerRayCast();
+	bool getMovementPlane();
+	bool getMovementWand();
+	bool getPlayerMarker();
+
 
 	virtual uint64 GetEventMask() const {
 		return BIT64(ENTITY_EVENT_UPDATE) | BIT64(ENTITY_EVENT_START_LEVEL) | BIT64(ENTITY_EVENT_RESET);
@@ -266,6 +342,8 @@ protected:
 	std::vector< Command* > commands;
 
 	IEntity* playerMarker = NULL;
+	IEntity* movementPlane = NULL;
+	IEntity* movementWand = NULL;
 public:
 	enum EInputPorts
 	{

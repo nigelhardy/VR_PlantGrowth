@@ -76,6 +76,9 @@ void CInputVREntity::Initialize()
 	pMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMat);
 	controllerEntity1->SetMaterial(pMat);
 	controllerEntity2 = spawnController("controller2");
+	getMovementWand();
+	getMovementPlane();
+	getPlayerMarker();
 }
 
 void CInputVREntity::SerializeProperties(Serialization::IArchive& archive) // give control in editor over some properties
@@ -204,17 +207,32 @@ void CInputVREntity::getControllerInput()
 
 			}
 		}
+		// this is a bit ugly, this could be done better
+		if (touchTrack2)
+		{
+			if (getPlayerMarker())
+			{
+				commands.push_back(new MovePlayerMarkerCommand(controllerEntity2, playerMarker, true));
+			}
+		}
 		if (touchTrack2 != touchTrackLast2) {
 			if (touchTrack2)
 			{
-				commands.push_back(new MovePlayerCommand(controllerEntity2, playerMarker, &movePlayerDest, hmdPos));
-				if (trackpadVec.y >= 0.0f)
+				if (getMovementPlane() && getMovementWand())
 				{
-
+					commands.push_back(new ShowMovementPlaneCommand(movementPlane, movementWand, true));
 				}
-				else
+			}
+			else if (!touchTrack2)
+			{
+				commands.push_back(new MovePlayerCommand(controllerEntity2, playerMarker, &movePlayerDest, hmdPos));
+				if (getMovementPlane() && getMovementWand())
 				{
-
+					commands.push_back(new ShowMovementPlaneCommand(movementPlane, movementWand, false));
+				}
+				if (getPlayerMarker())
+				{
+					commands.push_back(new MovePlayerMarkerCommand(controllerEntity2, playerMarker, false));
 				}
 			}
 
@@ -224,6 +242,57 @@ void CInputVREntity::getControllerInput()
 		touchGripLast2 = touchGrip2;
 		touchTrigLast2 = touchTrig2;
 		touchTrackLast2 = touchTrack2;
+	}
+}
+bool CInputVREntity::getMovementPlane() // make player movement plane vis and invis
+{
+	if (!movementPlane)
+	{
+		movementPlane = gEnv->pEntitySystem->FindEntityByName("MovementPlane");
+		if (movementPlane)
+		{
+			// 32.69 puts it just above floor of building
+			movementPlane->SetPos(Vec3(movementPlane->GetPos().x, movementPlane->GetPos().y, 32.6951));
+			movementPlane->Hide(true);
+			return true;
+		}
+	}
+	else
+	{
+		return true;
+	}
+	return false;
+}
+bool CInputVREntity::getMovementWand() // make player movement plane vis and invis
+{
+	if (movementWand)
+	{
+		return true;
+	}
+	else if (!movementWand)
+	{
+		movementWand = gEnv->pEntitySystem->FindEntityByName("Wand");
+		if (movementWand)
+		{
+			controllerEntity2->AttachChild(movementWand);
+			movementWand->SetLocalTM(IDENTITY);
+		}
+	}
+}
+bool CInputVREntity::getPlayerMarker() // make player movement plane vis and invis
+{
+	if (playerMarker)
+	{
+		return true;
+	}
+	else if (!playerMarker)
+	{
+		playerMarker = gEnv->pEntitySystem->FindEntityByName("PlayerMarker");
+		if (playerMarker)
+		{
+			playerMarker->Hide(true);
+			return true;
+		}
 	}
 }
 void CInputVREntity::updateControllersLocation() {
