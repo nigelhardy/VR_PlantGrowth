@@ -117,6 +117,51 @@ protected:
 	CEntityManagerEntity* entityManager;
 };
 
+class MovePlayerCommand : public Command
+{
+public:
+	MovePlayerCommand(IEntity* controller, IEntity* playerMarker, Vec3** movePlayerDest, Vec3 hmdPos)
+	{
+		cont = controller;
+		pm = playerMarker;
+		playerDest = movePlayerDest;
+		hmdPosVec = hmdPos;
+	}
+	void execute() override
+	{
+		if (cont)
+		{
+			ray_hit rayHit;
+
+			Vec3 origin = cont->GetWorldPos();
+			Vec3 dir = cont->GetForwardDir();
+			int numHits = gEnv->pPhysicalWorld->RayWorldIntersection(origin, dir * 10.0f, ent_static, rwi_stop_at_pierceable, &rayHit, 1);
+			if (numHits > 0)
+			{
+				CryLogAlways(std::to_string(rayHit.surface_idx).c_str());
+				if (rayHit.surface_idx == 103)
+				{
+					if (pm)
+					{
+						Matrix34 ind = pm->GetWorldTM();
+						ind.SetTranslation(rayHit.pt + Vec3(-.3f, -.3f, 0.0f));
+						pm->SetWorldTM(ind);
+					}
+					
+					Vec3* playerPos = new Vec3(Vec3(rayHit.pt - Vec3(hmdPosVec.x, hmdPosVec.y, 0.0f)));
+					*playerDest = playerPos;
+					
+				}
+			}
+		}
+	};
+protected:
+	IEntity* cont;
+	IEntity* pm;
+	Vec3** playerDest;
+	Vec3 hmdPosVec;
+};
+
 class ChangeEntityCommand : public Command
 {
 public:
@@ -169,6 +214,7 @@ public:
 	IEntity* spawnController(char* name);
 	void updateControllersLocation();
 	void processCommands();
+	bool movePlayerRayCast();
 
 	virtual uint64 GetEventMask() const {
 		return BIT64(ENTITY_EVENT_UPDATE) | BIT64(ENTITY_EVENT_START_LEVEL) | BIT64(ENTITY_EVENT_RESET);
@@ -196,10 +242,15 @@ protected:
 	size_t areaId = 0;
 	IArea* a = NULL;
 	EHmdController currentController;
-	bool touchGripLast = false;
-	bool touchTrigLast = false;
-	bool touchTrackLast = false;
-	bool touchMenuLast = false;
+	bool touchGripLast1 = false;
+	bool touchTrigLast1 = false;
+	bool touchTrackLast1 = false;
+	bool touchMenuLast1 = false;
+
+	bool touchGripLast2 = false;
+	bool touchTrigLast2 = false;
+	bool touchTrackLast2 = false;
+	bool touchMenuLast2 = false;
 
 	Vec3* movePlayerDest = NULL;
 	float lastResetTime = 0;
@@ -213,6 +264,8 @@ protected:
 	Quat controllerRot2 = Quat(IDENTITY);
 
 	std::vector< Command* > commands;
+
+	IEntity* playerMarker = NULL;
 public:
 	enum EInputPorts
 	{

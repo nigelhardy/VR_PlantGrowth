@@ -120,47 +120,40 @@ void CInputVREntity::getControllerInput()
 	}
 	updateControllersLocation();
 	currentController = eHmdController_OpenVR_1;
-	//currentController = eHmdController_OpenVR_2;
 	// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
-	if (pController->IsConnected(currentController))
+	if (pController->IsConnected(eHmdController_OpenVR_1))
 	{
-		if (pDevice)
-		{
-			// Get the current tracking state
-			HmdTrackingState stateHMD = pDevice->GetLocalTrackingState();
-			hmdPos = stateHMD.pose.position;
-		}
-		bool touchMenu = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_ApplicationMenu);
-		bool touchGrip = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_Grip);
-		bool touchTrig = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_Trigger);
-		bool touchTrack = pController->IsButtonPressed(currentController, eKI_Motion_OpenVR_TouchPadBtn);
+		bool touchMenu1 = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_ApplicationMenu);
+		bool touchGrip1 = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_Grip);
+		bool touchTrig1 = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_Trigger);
+		bool touchTrack1 = pController->IsButtonPressed(currentController, eKI_Motion_OpenVR_TouchPadBtn);
 		Vec2 trackpadVec = pController->GetThumbStickValue(currentController, eKI_Motion_OpenVR_TouchPad_X);
 
-		if (touchMenu != touchMenuLast) {
-			if (touchMenu) {
+		if (touchMenu1 != touchMenuLast1) {
+			if (touchMenu1) {
 				// spawn selected entity
 				//commands.push_back(new SpawnEntityCommand(entityManager, controllerPos1));
 				commands.insert(commands.begin(), new SpawnEntityCommand(entityManager, controllerPos1));
 			}
 		}
-		if (touchGrip != touchGripLast) {
-			if (touchGrip)
+		if (touchGrip1 != touchGripLast1) {
+			if (touchGrip1)
 			{
 				commands.push_back(new RemoveAllEntitiesCommand(entityManager));
 			}
 		}
-		if (touchTrig != touchTrigLast) {
-			if (touchTrig)
+		if (touchTrig1 != touchTrigLast1) {
+			if (touchTrig1)
 			{
 				commands.push_back(new AttachClosestEntityCommand(entityManager, controllerEntity1, "plantEntity"));
 			}
-			else if (!touchTrig)
+			else if (!touchTrig1)
 			{
 				commands.push_back(new DetachEntitiesCommand(entityManager));
 			}
 		}
-		if (touchTrack != touchTrackLast) {
-			if (touchTrack)
+		if (touchTrack1 != touchTrackLast1) {
+			if (touchTrack1)
 			{
 				if (trackpadVec.y >= 0.0f)
 				{
@@ -176,18 +169,68 @@ void CInputVREntity::getControllerInput()
 			
 		}
 
-		touchMenuLast = touchMenu;
-		touchGripLast = touchGrip;
-		touchTrigLast = touchTrig;
-		touchTrackLast = touchTrack;
+		touchMenuLast1 = touchMenu1;
+		touchGripLast1 = touchGrip1;
+		touchTrigLast1 = touchTrig1;
+		touchTrackLast1 = touchTrack1;
+	}
+	currentController = eHmdController_OpenVR_2;
+	if (pController->IsConnected(currentController))
+	{
+		bool touchMenu2 = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_ApplicationMenu);
+		bool touchGrip2 = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_Grip);
+		bool touchTrig2 = pController->IsButtonTouched(currentController, eKI_Motion_OpenVR_Trigger);
+		bool touchTrack2 = pController->IsButtonPressed(currentController, eKI_Motion_OpenVR_TouchPadBtn);
+		Vec2 trackpadVec = pController->GetThumbStickValue(currentController, eKI_Motion_OpenVR_TouchPad_X);
 
+		if (touchMenu2 != touchMenuLast2) {
+			if (touchMenu2) {
+				
+			}
+		}
+		if (touchGrip2 != touchGripLast2) {
+			if (touchGrip2)
+			{
 
+			}
+		}
+		if (touchTrig2 != touchTrigLast2) {
+			if (touchTrig2)
+			{
+
+			}
+			else if (!touchTrig2)
+			{
+
+			}
+		}
+		if (touchTrack2 != touchTrackLast2) {
+			if (touchTrack2)
+			{
+				commands.push_back(new MovePlayerCommand(controllerEntity2, playerMarker, &movePlayerDest, hmdPos));
+				if (trackpadVec.y >= 0.0f)
+				{
+
+				}
+				else
+				{
+
+				}
+			}
+
+		}
+
+		touchMenuLast2 = touchMenu2;
+		touchGripLast2 = touchGrip2;
+		touchTrigLast2 = touchTrig2;
+		touchTrackLast2 = touchTrack2;
 	}
 }
 void CInputVREntity::updateControllersLocation() {
 
 	if(getOffsetEntity())
 	{
+
 		if (movePlayerDest)
 		{
 			Matrix34 vr_cam = m_pOffsetEntity->GetWorldTM();
