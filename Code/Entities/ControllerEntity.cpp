@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "ControllerEntity.h"
 #include "GamePlugin.h"
+#include "EntityManager.h"
 
 class CControllerRegistrator
 	: public IEntityRegistrator
@@ -29,12 +30,43 @@ CRYREGISTER_CLASS(CControllerEntity)
 
 void CControllerEntity::Initialize()
 {
-	pMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/controller/vive_controller_ce.mtl");
-	pMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMat);
-	GetEntity()->SetMaterial(pMat);
+	pMatLight = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/controller/vive_controller_light.mtl");
+	pMatLight = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMatLight);
+
+	pMatRobot = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/controller/vive_controller_robot.mtl");
+	pMatRobot = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMatRobot);
+
+	pMatPlant = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/controller/vive_controller_plant.mtl");
+	pMatPlant = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMatPlant);
+
+	pMatController2 = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/controller/vive_controller_ce.mtl");
+	pMatController2 = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMatController2);
+
+
+	GetEntity()->SetMaterial(pMatController2);
 	Reset();
 }
-
+void CControllerEntity::AttachObject(IEntity* object, Vec3 posDiff, Quat rotDiff)
+{
+	// do something with object
+	attachedEntity ae;
+	ae.entity = object;
+	ae.posDiff = posDiff;
+	ae.rotDiff = rotDiff;
+	attachedEntities.push_back(ae);
+}
+void CControllerEntity::DetachObjects()
+{
+	// do something with objects
+	attachedEntities.clear();
+}
+void CControllerEntity::MoveAttachedEntities()
+{
+	for (int i = 0; i < attachedEntities.size(); i++)
+	{
+		attachedEntities.at(i).entity->SetPos(GetEntity()->GetWorldPos() + attachedEntities.at(i).posDiff);
+	}
+}
 void CControllerEntity::ProcessEvent(SEntityEvent & event)
 {
 	switch (event.event)
@@ -55,6 +87,7 @@ void CControllerEntity::ProcessEvent(SEntityEvent & event)
 	case ENTITY_EVENT_UPDATE:
 	{
 		//SEntityUpdateContext* param = (SEntityUpdateContext*)event.nParam[0];
+		MoveAttachedEntities();
 	}
 	case ENTITY_EVENT_START_LEVEL:
 	{
@@ -77,10 +110,24 @@ void CControllerEntity::SerializeProperties(Serialization::IArchive & archive)
 		//InitAI();
 	}
 }
-void CControllerEntity::dummyFunction()
+void CControllerEntity::setMode(int mode)
 {
-	CryLogAlways("DummyFunction");
+	switch (mode)
+	{
+	case plantMode:
+		GetEntity()->SetMaterial(pMatPlant);
+		break;
+	case lightMode:
+		GetEntity()->SetMaterial(pMatLight);
+		break;
+	case robotMode:
+		GetEntity()->SetMaterial(pMatRobot);
+		break;
+	default:
+		break;
+	}
 }
+
 void CControllerEntity::Reset()
 {
 

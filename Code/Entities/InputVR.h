@@ -22,15 +22,7 @@
 #include "robot.h"
 #include <limits>
 #include <vector>
-
-enum controllerCommands
-{
-	menu1Down = 0,
-	menu1Up,
-	trigger1Down,
-	trigger1up
-
-};
+#include "ControllerEntity.h"
 
 class Command
 {
@@ -102,19 +94,21 @@ protected:
 class DetachEntitiesCommand : public Command
 {
 public:
-	DetachEntitiesCommand(CEntityManagerEntity* entityMan)
+	DetachEntitiesCommand(CEntityManagerEntity* entityMan, IEntity* controller)
 	{
 		entityManager = entityMan;
+		cont = controller;
 	}
 	void execute() override
 	{
 		if (entityManager)
 		{
-			entityManager->detachEntities();
+			cont->GetComponent<CControllerEntity>()->DetachObjects();
 		}
 	};
 protected:
 	CEntityManagerEntity* entityManager;
+	IEntity* cont;
 };
 
 class ShowMovementPlaneCommand : public Command
@@ -238,20 +232,24 @@ protected:
 class ChangeEntityCommand : public Command
 {
 public:
-	ChangeEntityCommand(CEntityManagerEntity* entityMan, int diff)
+	ChangeEntityCommand(CEntityManagerEntity* entityMan, int diff, IEntity* controller)
 	{
 		entityManager = entityMan;
 		difference = diff;
+		cont = controller;
 	}
 	void execute() override
 	{
 		if (entityManager)
 		{
 			entityManager->changeSelectedEntity(difference);
+			// set controller color/mode
+			cont->GetComponent<CControllerEntity>()->setMode(entityManager->getSelectedEntity());
 		}
 	};
 protected:
 	CEntityManagerEntity* entityManager;
+	IEntity* cont;
 	int difference;
 };
 
@@ -303,7 +301,7 @@ protected:
 
 	int spawnEntitySelector = 0;
 	float lastSpawnEntityChange = 0.f;
-	IMaterial *pMat;
+
 	string m_geometry = "objects/controller/vive_controller_ce.cgf";
 	const IHmdController* pController;
 	IHmdDevice* pDevice;

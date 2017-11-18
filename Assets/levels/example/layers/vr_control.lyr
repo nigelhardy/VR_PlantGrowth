@@ -195,6 +195,12 @@
      <Component typeId="{30CD4C05-1030-40D9-BED4-1FCCB292ACFA}"/>
     </Components>
    </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{C67FC487-19A5-F368-9BB0-9FBEA6F9E337}" Name="VR_Controller1" Pos="60.290512,57.925484,33.180122" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Material="objects/controller/vive_controller_ce" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="VR_Controller" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{55C03A10-70A5-448E-991C-F4BA2D66F8C6}"/>
+    </Components>
+   </Object>
    <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{CAB663F0-37FB-37BB-EE81-F29861ADE653}" Name="PlayerMarker" Pos="61.366184,56.689426,32.780128" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Material="Materials/silver_gloss" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::SphereSchem" HasEntity="1">
     <Properties />
     <Components>

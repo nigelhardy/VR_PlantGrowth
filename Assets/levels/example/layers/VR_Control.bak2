@@ -165,6 +165,14 @@
      <GraphTokens />
     </FlowGraph>
    </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{22A3E4BA-59E1-4928-75D0-31E775F005EA}" Name="lightEntity" Pos="58.340958,59.525074,33.119461" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="LightGeom" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{DED9ED7E-11D2-4147-926B-0322E3B5725C}">
+      <Geometry value="objects/sphere.cgf"/>
+     </Component>
+    </Components>
+   </Object>
    <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{2FCBF2CE-E742-D69F-076A-7043C7C4A7CF}" Name="MovementPlane" Pos="63.102585,53.053799,32.5951" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Flags="4" Material="objects/highlighted" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::MovementPlane" HasEntity="1">
     <Properties />
     <Components>
@@ -195,7 +203,13 @@
      <Component typeId="{30CD4C05-1030-40D9-BED4-1FCCB292ACFA}"/>
     </Components>
    </Object>
-   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{CAB663F0-37FB-37BB-EE81-F29861ADE653}" Name="SphereSchem1" Pos="61.366184,56.689426,32.780128" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Material="Materials/silver_gloss" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::SphereSchem" HasEntity="1">
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{C67FC487-19A5-F368-9BB0-9FBEA6F9E337}" Name="VR_Controller1" Pos="60.290512,57.925484,33.180122" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Material="objects/controller/vive_controller_ce" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="VR_Controller" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{55C03A10-70A5-448E-991C-F4BA2D66F8C6}"/>
+    </Components>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{CAB663F0-37FB-37BB-EE81-F29861ADE653}" Name="PlayerMarker" Pos="61.366184,56.689426,32.780128" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" Material="Materials/silver_gloss" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Schematyc::SphereSchem" HasEntity="1">
     <Properties />
     <Components>
      <Component typeId="{EF65C1F5-4775-4454-8C4B-F14686F6512B}">
@@ -238,6 +252,20 @@
      <UVIslands />
     </Brush>
     <Mesh Version="2" BinaryData="AAAAAAAAAAAYAAAAGAAAACQAAAAYAAAAAQAAAAAAAAAAAAAAXyWuPQAAAAD8h8xAXyWuPR3WssD8h8xAXyWuPR3WssAAAAAAXyWuPR3WssAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXyWuPR3WssAAAAAAXyWuPR3WssD8h8xAAAAAAB3WssAAAAAAAAAAAB3WssAAAAAAXyWuPR3WssD8h8xAXyWuPQAAAAD8h8xAAAAAAB3WssD8h8xAAAAAAB3WssD8h8xAXyWuPQAAAAD8h8xAXyWuPQAAAAAAAAAAAAAAAAAAAAD8h8xAAAAAAAAAAAD8h8xAXyWuPQAAAAAAAAAAXyWuPQAAAAAAAAAAAAAAAB3WssAAAAAAAAAAAB3WssD8h8xAAAAAAAAAAAD8h8xAAAAAAAAAAIAAAACAAACAPwAAAIAAAACAAACAPwAAAIAAAACAAACAPwAAAIAAAACAAACAPwAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAAAAAAAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAACAvwAAAAAAAAAAAAAAAPyHzMAd1rLA/IfMwB3WssAAAAAAHdaywAAAAAAAAAAAAAAAAAAAAABfJa69HdaywF8lrr38h8zAAAAAAAAAAAAAAAAAAAAAAF8lrr38h8zAXyWuvQAAAAAAAAAAHdayQAAAAAAd1rJAXyWuvQAAAABfJa69AAAAAAAAAAD8h8xAAAAAAPyHzEBfJa69AAAAAF8lrr0AAAAAAAAAAB3WskAAAAAAHdayQPyHzEAAAAAA/IfMQAAAAQACAAAAAgADAAQABQAGAAQABgAHAAgACQAKAAgACgALAAwADQAOAAwADgAPABAAEQASABAAEgATABQAFQAWABQAFgAXAP5/AAAAAAGAAAACgAAAAYD+fwAAAAABgAAAAoAAAAGA/n8AAAAAAYAAAAKAAAABgP5/AAAAAAGAAAACgAAAAYD+fwAAAAABgAAAAAACgAGA/38AAAAAAYAAAAAAAYABgP5/AAAAAAGAAAAAAAKAAYD/fwAAAAABgAAAAAABgAGAAAABgAAAAYAAAAAAAYABgAAAAYAAAAGAAAAAAAGAAYAAAAGAAAABgAAAAAABgAGAAAABgAAAAYAAAAAAAYABgAKAAAAAAAGAAAAAAAKAAYABgAAAAAABgAAAAAABgAGAAoAAAAAAAYAAAAAAAoABgAGAAAAAAAGAAAAAAAGAAYAAAP9/AAABgAAAAAABgAGAAAD/fwAAAYAAAAAAAYABgAAA/38AAAGAAAAAAAGAAYAAAP9/AAABgAAAAAABgAGAAoAAAAAA/38AAP5/AAD/fwKAAAAAAP9/AAD+fwAA/38CgAAAAAD/fwAA/n8AAP9/AoAAAAAA/38AAP5/AAD/fx3WMsD8h0xAXyUuPRHah0AAAAAAAAAAACQAAAAAAAAAGAAAAAAAAAAAAAAAABAAAA=="/>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{F0C36E02-4879-E76E-60A3-F792A8356DBB}" Name="robotEntity" Pos="59.075863,58.557087,34.280106" FloorNumber="-1" Rotate="1,0,0,0" Scale="15.200008,15.200008,15.200008" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="Robot" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{1BF7A14A-410F-42DB-B8F8-8198503FB03D}"/>
+    </Components>
+   </Object>
+   <Object Type="Entity" Layer="VR_Control" LayerGUID="{C0D1BFF9-77C4-83A4-B1DF-4F9398924B42}" Id="{FF51875A-916B-8F1A-0039-6CF584C0359F}" Name="plantEntity" Pos="60.590382,59.792709,32.726582" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="GBeanPlantCustom" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{0DCE65E6-3DD2-456D-8275-052A50DDDEB2}">
+      <Geometry value="objects/default/custom_plant_cyl.cgf"/>
+     </Component>
+    </Components>
    </Object>
   </LayerObjects>
  </Layer>

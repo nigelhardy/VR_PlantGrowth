@@ -16,6 +16,12 @@
 #include <vector>
 #include "Entities/PlantEntityCustom.h"
 #include "GamePlugin.h"
+enum modes
+{
+	plantMode = 0,
+	lightMode,
+	robotMode,
+};
 
 class CPlantEntityCustom;
 
@@ -53,9 +59,10 @@ public:
 	bool GetGlobalGrowth();
 
 	void attachClosestEntity(IEntity* controller);
-	void detachEntities();
+	void detachEntities(IEntity* controller);
 	IEntity* getClosestEntity(string name, Vec3 pos);
 	void changeSelectedEntity(int diff);
+	int getSelectedEntity();
 
 
 	IEntity* getOneLight();
@@ -65,9 +72,7 @@ public:
 	virtual IFlowGraph* GetFlowGraph() override;
 	virtual void Initialize() override;
 	virtual	void ProcessEvent(SEntityEvent &event);
-	void GetLightsInScene();
-	void GetPlantsInScene();
-	void GetRobotsInScene();
+	void GetEntitiesInScene(string entityName);
 	virtual uint64 GetEventMask() const;
 
 protected:

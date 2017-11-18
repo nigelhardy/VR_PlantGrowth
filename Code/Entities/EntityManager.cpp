@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "EntityManager.h"
+#include "ControllerEntity.h"
 
 using namespace std::chrono;
 
@@ -117,6 +118,10 @@ void CEntityManagerEntity::spawnSelectedEntity(Vec3 pos) {
 	default:
 		break;
 	}
+}
+int CEntityManagerEntity::getSelectedEntity()
+{
+	return currentSpawnEntity;
 }
 void CEntityManagerEntity::removeLight(IEntity* light)
 {
@@ -313,12 +318,17 @@ void CEntityManagerEntity::attachClosestEntity(IEntity* controller)
 	if (closest)
 	{
 		Vec3 diffVec = closest->GetWorldPos() - controller->GetWorldPos();
-		controller->AttachChild(closest);
+		Quat diffRot = closest->GetRotation() - controller->GetRotation();
+		controller->GetComponent<CControllerEntity>()->AttachObject(closest, diffVec, diffRot);
+		
 		// 40 because scale of controller is 40
 		// Should somehow avoid setting scale of controller, load geometry scaled instead
-		diffVec.SetLength(diffVec.GetLength() / 40.0f);
-		closest->SetPos(diffVec);
-		closest->SetScale(closest->GetScale() / 40.0f);
+		//diffVec.SetLength(diffVec.GetLength() / 40.0f);
+		//closest->SetPosRotScale(diffVec, Quat(IDENTITY), closest->GetScale() / 40.0f);
+		
+		//closest->SetPos(diffVec);
+		//closest->SetScale(closest->GetScale() / 40.0f);
+		//closest->SetRotation(childRotation);
 	}
 }
 void physicallizeEntity(IEntity* entity)
@@ -328,23 +338,24 @@ void physicallizeEntity(IEntity* entity)
 	params.type = PE_RIGID;
 	entity->Physicalize(params);
 }
-void CEntityManagerEntity::detachEntities()
+void CEntityManagerEntity::detachEntities(IEntity* controller)
 {
+	controller->GetComponent<CControllerEntity>()->DetachObjects();
 	for (int i = 0; i < allEntities.size(); i++)
 	{
 		for (int j = 0; j < allEntities.at(i)->size(); j++)
 		{
-			IEntity* parent = allEntities.at(i)->at(j)->GetParent();
-			if (parent)
-			{
-				Vec3 wPos = allEntities.at(i)->at(j)->GetWorldPos();
-				allEntities.at(i)->at(j)->DetachThis();
-				// 40 because scale of controller is 40
-				// Should somehow avoid setting scale of controller, load geometry scaled instead
-				allEntities.at(i)->at(j)->SetScale(allEntities.at(i)->at(j)->GetScale() * 40.0f);
-				allEntities.at(i)->at(j)->SetPos(wPos);
-				physicallizeEntity(allEntities.at(i)->at(j));
-			}
+			//IEntity* parent = allEntities.at(i)->at(j)->GetParent();
+			//if (parent)
+			//{
+			//	Vec3 wPos = allEntities.at(i)->at(j)->GetWorldPos();
+			//	allEntities.at(i)->at(j)->DetachThis();
+			//	// 40 because scale of controller is 40
+			//	// Should somehow avoid setting scale of controller, load geometry scaled instead
+			//	allEntities.at(i)->at(j)->SetScale(allEntities.at(i)->at(j)->GetScale() * 40.0f);
+			//	allEntities.at(i)->at(j)->SetPos(wPos);
+			//	physicallizeEntity(allEntities.at(i)->at(j));
+			//}
 		}
 	}
 }
@@ -423,9 +434,9 @@ void CEntityManagerEntity::ProcessEvent(SEntityEvent &event)
 	{
 	case ENTITY_EVENT_START_GAME:
 		Reset();
-		GetLightsInScene();
-		GetPlantsInScene();
-		GetRobotsInScene();
+		GetEntitiesInScene("plantEntity");
+		GetEntitiesInScene("lightEntity");
+		GetEntitiesInScene("robotEntity");
 		break;
 	case ENTITY_EVENT_RESET:
 		Reset();
@@ -443,7 +454,7 @@ void CEntityManagerEntity::ProcessEvent(SEntityEvent &event)
 		break;
 	}
 }
-void CEntityManagerEntity::GetLightsInScene()
+void CEntityManagerEntity::GetEntitiesInScene(string entityName)
 {
 	float constraintRadius = 10.0f;
 	const Vec3 boxMin = GetEntity()->GetWorldPos() - Vec3(constraintRadius + 5.f);
@@ -456,62 +467,30 @@ void CEntityManagerEntity::GetLightsInScene()
 			if (IEntity* nearbyEntity = gEnv->pEntitySystem->GetEntityFromPhysics(nearbyEntities[i]))
 			{
 				string s = nearbyEntity->GetName();
-				if (!s.compare("lightEntity"))
+				if (!s.compare(entityName))
 				{
-					CryLogAlways("Found a light already in scene");
+					CryLogAlways("Found a " + entityName + " already in scene");
 					CryLogAlways(s);
-					addLight(nearbyEntity);
+					
+					if (!entityName.compare("plantEntity"))
+					{
+						addPlant(nearbyEntity);
+					}
+					else if (!entityName.compare("lightEntity"))
+					{
+						addLight(nearbyEntity);
+					}
+					else if (!entityName.compare("robotEntity"))
+					{
+						addRobot(nearbyEntity);
+					}
+					
 				}
 			}
 		}
 	}
 }
-void CEntityManagerEntity::GetPlantsInScene()
-{
-	float constraintRadius = 10.0f;
-	const Vec3 boxMin = GetEntity()->GetWorldPos() - Vec3(constraintRadius + 5.f);
-	const Vec3 boxMax = GetEntity()->GetWorldPos() + Vec3(constraintRadius + 5.f);
-	IPhysicalEntity** nearbyEntities = 0;
-	if (size_t entityCount = gEnv->pPhysicalWorld->GetEntitiesInBox(boxMin, boxMax, nearbyEntities, ent_all))
-	{
-		for (size_t i = 0; i < entityCount; ++i)
-		{
-			if (IEntity* nearbyEntity = gEnv->pEntitySystem->GetEntityFromPhysics(nearbyEntities[i]))
-			{
-				string s = nearbyEntity->GetName();
-				if (!s.compare("plantEntity"))
-				{
-					CryLogAlways("Found a plant already in scene");
-					CryLogAlways(s);
-					addPlant(nearbyEntity);
-				}
-			}
-		}
-	}
-}
-void CEntityManagerEntity::GetRobotsInScene()
-{
-	float constraintRadius = 10.0f;
-	const Vec3 boxMin = GetEntity()->GetWorldPos() - Vec3(constraintRadius + 5.f);
-	const Vec3 boxMax = GetEntity()->GetWorldPos() + Vec3(constraintRadius + 5.f);
-	IPhysicalEntity** nearbyEntities = 0;
-	if (size_t entityCount = gEnv->pPhysicalWorld->GetEntitiesInBox(boxMin, boxMax, nearbyEntities, ent_all))
-	{
-		for (size_t i = 0; i < entityCount; ++i)
-		{
-			if (IEntity* nearbyEntity = gEnv->pEntitySystem->GetEntityFromPhysics(nearbyEntities[i]))
-			{
-				string s = nearbyEntity->GetName();
-				if (!s.compare("robotEntity"))
-				{
-					CryLogAlways("Found a plant already in scene");
-					CryLogAlways(s);
-					addRobot(nearbyEntity);
-				}
-			}
-		}
-	}
-}
+
 uint64 CEntityManagerEntity::GetEventMask() const {
 	return BIT64(ENTITY_EVENT_UPDATE) | BIT64(ENTITY_EVENT_START_GAME) | BIT64(ENTITY_EVENT_RESET);
 }

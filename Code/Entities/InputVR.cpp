@@ -72,9 +72,11 @@ void CInputVREntity::Initialize()
 	//GetEntity()->SetUpdatePolicy(ENTITY_UPDATE_ALWAYS);
 	GetEntity()->Activate(true); // necessary for UPDATE event to be called
 	controllerEntity1 = spawnController("controller1");
-	pMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/controller/vive_controller_ce1.mtl");
-	pMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMat);
-	controllerEntity1->SetMaterial(pMat);
+
+	if (controllerEntity1) 
+	{
+		controllerEntity1->GetComponent<CControllerEntity>()->setMode(plantMode);
+	}
 	controllerEntity2 = spawnController("controller2");
 	getMovementWand();
 	getMovementPlane();
@@ -142,17 +144,18 @@ void CInputVREntity::getControllerInput()
 		if (touchGrip1 != touchGripLast1) {
 			if (touchGrip1)
 			{
-				commands.push_back(new RemoveAllEntitiesCommand(entityManager));
+				commands.insert(commands.begin(), new DetachEntitiesCommand(entityManager, controllerEntity1));
+				commands.insert(commands.begin(), new RemoveAllEntitiesCommand(entityManager));
 			}
 		}
 		if (touchTrig1 != touchTrigLast1) {
 			if (touchTrig1)
 			{
-				commands.push_back(new AttachClosestEntityCommand(entityManager, controllerEntity1, "plantEntity"));
+				commands.insert(commands.begin(), new AttachClosestEntityCommand(entityManager, controllerEntity1, "plantEntity"));
 			}
 			else if (!touchTrig1)
 			{
-				commands.push_back(new DetachEntitiesCommand(entityManager));
+				commands.insert(commands.begin(), new DetachEntitiesCommand(entityManager, controllerEntity1));
 			}
 		}
 		if (touchTrack1 != touchTrackLast1) {
@@ -161,12 +164,12 @@ void CInputVREntity::getControllerInput()
 				if (trackpadVec.y >= 0.0f)
 				{
 					// up on d-pad
-					commands.push_back(new ChangeEntityCommand(entityManager, 1));
+					commands.insert(commands.begin(), new ChangeEntityCommand(entityManager, 1, controllerEntity1));
 				}
 				else
 				{
 					// down on d-pad
-					commands.push_back(new ChangeEntityCommand(entityManager, -1));
+					commands.insert(commands.begin(), new ChangeEntityCommand(entityManager, -1, controllerEntity1));
 				}
 			}
 			

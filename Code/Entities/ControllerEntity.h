@@ -11,9 +11,15 @@
 #include <CryAISystem/IMovementSystem.h>
 #include <CryAISystem/MovementRequest.h>
 #include <IActorSystem.h>
+#include <vector>
 
 //#include "Player/ISimpleActor.h"
-
+struct attachedEntity
+{
+	IEntity* entity;
+	Quat rotDiff;
+	Vec3 posDiff;
+};
 class CControllerEntity
 	: public IEntityComponent
 	, public IEntityPropertyGroup
@@ -42,24 +48,25 @@ public:
 	virtual const char* GetLabel() const override { return "VR_Controller"; };
 	virtual void SerializeProperties(Serialization::IArchive& archive) override;
 	// IEntityPropertyGroup
-	void dummyFunction();
-
-
-protected:
+	void setMode(int mode);
+	void AttachObject(IEntity* object, Vec3 diffPos, Quat diffRot);
+	void DetachObjects();
+	void MoveAttachedEntities();
 
 protected:
 	void Reset();
 
-	string geometry = "";
 	float mass = 10;
-
-
 	bool m_bOnGround;
 	Vec3 m_groundNormal;
 
 	float scale = 40.0f;
-	IMaterial *pMat;
+	IMaterial *pMatLight;
+	IMaterial *pMatPlant;
+	IMaterial *pMatRobot;
+	IMaterial *pMatController2;
 	string m_geometry = "objects/controller/vive_controller_ce.cgf";
+	std::vector <attachedEntity> attachedEntities;
 };
 
 
