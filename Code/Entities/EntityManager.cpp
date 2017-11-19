@@ -85,6 +85,7 @@ void CEntityManagerEntity::spawnPlant(Vec3 pos) {
 		if (plantCustom)
 		{
 			plantCustom->growthSwitch(true);
+			plantCustom->SetTime(currentTime, currentTime);
 			addPlant(newPlant);
 		}
 	}

@@ -118,8 +118,10 @@ public:
 	Quat QmMR(Quat q, int digis);
 	Quat rotatePosition(Vec3* target);
 	void growSections();
+	void resizeSections();
 	void Reset();
 	void SetTime(int time);
+	void SetTime(int time, int offsetTime);
 
 
 
@@ -169,6 +171,7 @@ protected:
 	int plantRingVertices = 8;
 
 	int currentTime = 0;
+	int offsetTime = 0;
 	int plantTime = 0;
 public:
 	enum EInputPorts

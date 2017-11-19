@@ -82,7 +82,7 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 		}
 		Reset();
 		break;
-	case ENTITY_EVENT_UPDATE:\
+	case ENTITY_EVENT_UPDATE:
 		//// old way
 		//milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		//if (lastGrowth + growthRate < now && growActive) // add another cylinder periodically
@@ -97,13 +97,13 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 		//}
 
 
-		if (currentTime > plantTime) // add another cylinder periodically
+		if (currentTime - offsetTime > plantTime) // add another cylinder periodically
 		{
 			updateGrowth();
 			growSections();
 			plantTime++;
 		}
-		else if (plantTime > currentTime)
+		else if (plantTime > currentTime - offsetTime)
 		{
 			RemoveSection();
 			plantTime--;
@@ -194,7 +194,7 @@ void CPlantEntityCustom::PlantFaces()
 		GetEntity()->FreeSlot(2);
 		GetEntity()->UpdateSlotPhysics(2);
 	}
-	redraw();
+	resizeSections();
 }
 void CPlantEntityCustom::AddSection(Vec3 Pos)
 {
@@ -354,6 +354,23 @@ void CPlantEntityCustom::growSections()
 	}
 	redraw();
 }
+void CPlantEntityCustom::resizeSections()
+{
+
+	if (plant_sections.size() > 0)
+	{
+		plant_sections[plant_sections.size()-1].scale = Vec3(.005f);
+	}
+	for (int i = plant_sections.size() - 1; i > 0; i--)
+	{
+		if (plant_sections[i - 1].scale.x < .1f - (float)plant_sections.size() / 40000.0f)
+		{
+			plant_sections[i - 1].scale = Vec3(plant_sections[i].scale.x * 1.01f);
+		}
+		
+	}
+	redraw();
+}
 void CPlantEntityCustom::updateLeadTarget()
 {
 	Vec3* pos = NULL;
@@ -449,6 +466,11 @@ void CPlantEntityCustom::growthSwitch()
 void CPlantEntityCustom::SetTime(int time)
 {
 	currentTime = time;
+}
+void CPlantEntityCustom::SetTime(int time, int offsetTimeSet)
+{
+	currentTime = time;
+	offsetTime = offsetTimeSet;
 }
 void CPlantEntityCustom::setLight(IEntity* l)
 {
