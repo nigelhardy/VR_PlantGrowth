@@ -192,7 +192,7 @@ void CInputVREntity::getControllerInput()
 
 		if (touchMenu2 != touchMenuLast2) {
 			if (touchMenu2) {
-				
+				commands.insert(commands.begin(), new SwitchClosestLight(entityManager, controllerEntity2));
 			}
 		}
 		

@@ -91,6 +91,27 @@ protected:
 	string name;
 };
 
+
+class SwitchClosestLight : public Command
+{
+public:
+	SwitchClosestLight(CEntityManagerEntity* entityMan, IEntity* cont)
+	{
+		controller = cont;
+		entityManager = entityMan;
+	}
+	void execute() override
+	{
+		if (entityManager)
+		{
+			entityManager->switchClosestLight(controller);
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+	IEntity* controller;
+};
+
 class DetachEntitiesCommand : public Command
 {
 public:

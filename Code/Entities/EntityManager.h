@@ -16,6 +16,7 @@
 #include <vector>
 #include "Entities/PlantEntityCustom.h"
 #include "GamePlugin.h"
+#include "LightGeom.h"
 enum modes
 {
 	plantMode = 0,
@@ -60,6 +61,9 @@ public:
 	bool GetGlobalGrowth();
 
 	void attachClosestEntity(IEntity* controller);
+
+	void switchClosestLight(IEntity* controller);
+
 	void detachEntities(IEntity* controller);
 	IEntity* getClosestEntity(string name, Vec3 pos);
 	void changeSelectedEntity(int diff);
@@ -85,6 +89,7 @@ protected:
 public:
 	std::vector<std::vector<IEntity*>*> allEntities;
 	std::vector<IEntity*> lightEntities;
+	std::vector<IEntity*> lightOffEntities;
 	std::vector<IEntity*> plantEntities;
 	std::vector<IEntity*> robotEntities;
 	bool globalGrowth = true;

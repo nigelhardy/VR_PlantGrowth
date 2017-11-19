@@ -160,6 +160,13 @@ void CEntityManagerEntity::lightSwitch(IEntity* light, bool on)
 		if (on)
 		{
 			addLight(light);
+			for (int i = 0; i < lightOffEntities.size(); i++)
+			{
+				if (lightOffEntities.at(i)->GetId() == light->GetId())
+				{
+					lightOffEntities.erase(lightOffEntities.begin() + i);
+				}
+			}
 		}
 		else
 		{
@@ -168,6 +175,7 @@ void CEntityManagerEntity::lightSwitch(IEntity* light, bool on)
 				if (lightEntities.at(i)->GetId() == light->GetId())
 				{
 					lightEntities.erase(lightEntities.begin() + i);
+					lightOffEntities.push_back(light);
 					for (int i = 0; i < plantEntities.size(); i++)
 					{
 						plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->removeLight(light);
@@ -272,21 +280,37 @@ void CEntityManagerEntity::growSwitch()
 }
 void CEntityManagerEntity::removeAll()
 {
-	for (int i = 0; i < plantEntities.size(); i++)
+
+	for (int i = 0; i < allEntities.size(); i++)
 	{
-		gEnv->pEntitySystem->RemoveEntity(plantEntities.at(i)->GetId());
+		for (int j = 0; j < allEntities.at(i)->size(); j++)
+		{
+			gEnv->pEntitySystem->RemoveEntity(allEntities.at(i)->at(j)->GetId());
+		}
 	}
-	for (int i = 0; i < lightEntities.size(); i++)
-	{
-		gEnv->pEntitySystem->RemoveEntity(lightEntities.at(i)->GetId());
-	}
-	for (int i = 0; i < robotEntities.size(); i++)
-	{
-		gEnv->pEntitySystem->RemoveEntity(robotEntities.at(i)->GetId());
-	}
-	lightEntities.clear();
+
+	//for (int i = 0; i < plantEntities.size(); i++)
+	//{
+	//	gEnv->pEntitySystem->RemoveEntity(plantEntities.at(i)->GetId());
+	//}
+	//for (int i = 0; i < lightEntities.size(); i++)
+	//{
+	//	gEnv->pEntitySystem->RemoveEntity(lightEntities.at(i)->GetId());
+	//}
+	//for (int i = 0; i < lightOffEntities.size(); i++)
+	//{
+	//	gEnv->pEntitySystem->RemoveEntity(lightOffEntities.at(i)->GetId());
+	//}
+	//for (int i = 0; i < robotEntities.size(); i++)
+	//{
+	//	gEnv->pEntitySystem->RemoveEntity(robotEntities.at(i)->GetId());
+	//}
+
 	plantEntities.clear();
+	lightEntities.clear();
+	lightOffEntities.clear();
 	robotEntities.clear();
+	
 }
 IEntity* CEntityManagerEntity::getOneLight()
 {
@@ -336,6 +360,16 @@ void CEntityManagerEntity::attachClosestEntity(IEntity* controller)
 		//closest->SetPos(diffVec);
 		//closest->SetScale(closest->GetScale() / 40.0f);
 		//closest->SetRotation(childRotation);
+	}
+}
+void CEntityManagerEntity::switchClosestLight(IEntity * controller)
+{
+	IEntity* closest = NULL;
+	closest = getClosestEntity("lightEntity", controller->GetWorldPos());
+
+	if (closest)
+	{
+		lightSwitch(closest, closest->GetComponent<CMyLightGeomEntity>()->lightSwitch());
 	}
 }
 void physicallizeEntity(IEntity* entity)
@@ -403,7 +437,9 @@ void CEntityManagerEntity::Initialize()
 	GetEntity()->Activate(true); // necessary for UPDATE event to be called
 	allEntities.push_back(&plantEntities);
 	allEntities.push_back(&lightEntities);
+	allEntities.push_back(&lightOffEntities);
 	allEntities.push_back(&robotEntities);
+	
 	/*
 	SEntitySpawnParams spawnParams;
 	spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Light");

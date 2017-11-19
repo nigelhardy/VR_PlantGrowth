@@ -31,7 +31,7 @@ void CMyLightGeomEntity::Initialize()
 	//pMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/light_visual.mtl");
 	pMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/light_visual.mtl");
 	pMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMat);
-	pMatOff = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("Materials/generic/plastic/smooth_grey.mtl");
+	pMatOff = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("Materials/material_default.mtl");
 	pMatOff = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMatOff);
 	GetEntity()->SetMaterial(pMat);
 	//GetEntity()->SetScale(Vec3(scale, scale, scale));
