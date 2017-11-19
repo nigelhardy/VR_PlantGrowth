@@ -82,18 +82,31 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 		}
 		Reset();
 		break;
-	case ENTITY_EVENT_UPDATE:
-		// grow plant periodically (using flow graph instead) 
-		milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-		if (lastGrowth + growthRate < now && growActive) // add another cylinder periodically
+	case ENTITY_EVENT_UPDATE:\
+		//// old way
+		//milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		//if (lastGrowth + growthRate < now && growActive) // add another cylinder periodically
+		//{
+		//	lastGrowth = now;
+		//	updateGrowth();	
+		//}
+		//else if (lastGrowthSection + growthRate < now && growActive) // add another cylinder periodically
+		//{
+		//	lastGrowthSection = now;
+		//	growSections();
+		//}
+
+
+		if (currentTime > plantTime) // add another cylinder periodically
 		{
-			lastGrowth = now;
-			updateGrowth();	
-		}
-		else if (lastGrowthSection + growthRate < now && growActive) // add another cylinder periodically
-		{
-			lastGrowthSection = now;
+			updateGrowth();
 			growSections();
+			plantTime++;
+		}
+		else if (plantTime > currentTime)
+		{
+			RemoveSection();
+			plantTime--;
 		}
 		break;
 	}
@@ -166,6 +179,22 @@ void CPlantEntityCustom::PlantFaces()
 		faces[i].v[2] = 2;
 		faces[i].nSubset = i + 1;
 	}
+}void CPlantEntityCustom::RemoveSection()
+{
+	if (plant_sections.size() <= 2)
+	{
+		return; // only one right/section, can't draw yet
+	}
+	else
+	{
+		// add vertices for next section
+		count -= (6 * plantRingVertices);
+		plant_sections.pop_back();
+		GetEntity()->UnphysicalizeSlot(2);
+		GetEntity()->FreeSlot(2);
+		GetEntity()->UpdateSlotPhysics(2);
+	}
+	redraw();
 }
 void CPlantEntityCustom::AddSection(Vec3 Pos)
 {
@@ -183,57 +212,57 @@ void CPlantEntityCustom::AddSection(Vec3 Pos)
 			return;
 		}
 	}
+	redraw();
+	//IIndexedMesh* idxMesh = pStaticObject->GetIndexedMesh();
+	//CMesh* mesh = idxMesh->GetMesh();
 
-	IIndexedMesh* idxMesh = pStaticObject->GetIndexedMesh();
-	CMesh* mesh = idxMesh->GetMesh();
+	//mesh->SetIndexCount(count);
+	//mesh->SetVertexCount(count);
+	//mesh->SetTexCoordsCount(count);
+	//
+	//int gotElements = 0;
+	////pos = mesh->GetStreamPtr<Vec3>(CMesh::POSITIONS, &gotElements);
 
-	mesh->SetIndexCount(count);
-	mesh->SetVertexCount(count);
-	mesh->SetTexCoordsCount(count);
-	
-	int gotElements = 0;
-	//pos = mesh->GetStreamPtr<Vec3>(CMesh::POSITIONS, &gotElements);
+	//for (size_t i = 0; i <= plantRingVertices; i++)
+	//{
+	//	createRectangle(&plant_sections.at(plant_sections.size() - 2).points[i], &plant_sections.back().points[i], 
+	//		&pos[(plant_sections.size() - 2) * (6 * plantRingVertices) + i * 6]);
+	//}
+	//mesh->SetSharedStream(CMesh::POSITIONS, &pos[0], count);
 
-	for (size_t i = 0; i <= plantRingVertices; i++)
-	{
-		createRectangle(&plant_sections.at(plant_sections.size() - 2).points[i], &plant_sections.back().points[i], 
-			&pos[(plant_sections.size() - 2) * (6 * plantRingVertices) + i * 6]);
-	}
-	mesh->SetSharedStream(CMesh::POSITIONS, &pos[0], count);
+	//PlantTangents();
+	//mesh->SetSharedStream(CMesh::TANGENTS, &tng[0], count);
+	////uv = mesh->GetStreamPtr<Vec2>(CMesh::TEXCOORDS, &gotElements);
+	//TexturePlant();
+	//mesh->SetSharedStream(CMesh::TEXCOORDS, &uv[0], count);
 
-	PlantTangents();
-	mesh->SetSharedStream(CMesh::TANGENTS, &tng[0], count);
-	//uv = mesh->GetStreamPtr<Vec2>(CMesh::TEXCOORDS, &gotElements);
-	TexturePlant();
-	mesh->SetSharedStream(CMesh::TEXCOORDS, &uv[0], count);
+	////ind = mesh->GetStreamPtr<vtx_idx>(CMesh::INDICES, &gotElements);
+	//for (size_t i = (plant_sections.size() - 2) * 6 * plantRingVertices; i < count; i++)
+	//{
+	//	ind[i] = i;
+	//}
+	//mesh->SetSharedStream(CMesh::INDICES, &ind[0], count);
 
-	//ind = mesh->GetStreamPtr<vtx_idx>(CMesh::INDICES, &gotElements);
-	for (size_t i = (plant_sections.size() - 2) * 6 * plantRingVertices; i < count; i++)
-	{
-		ind[i] = i;
-	}
-	mesh->SetSharedStream(CMesh::INDICES, &ind[0], count);
+	//subset.nNumIndices = count;
+	//subset.nNumVerts = count;
+	////subset.nMatID = 0;
+	////subset.FixRanges(&ind[0]);
+	//subset.nFirstVertId = 0;
+	//subset.nFirstIndexId = 0;
+	//mesh->m_subsets.clear();
+	//mesh->m_subsets.push_back(subset);
 
-	subset.nNumIndices = count;
-	subset.nNumVerts = count;
-	//subset.nMatID = 0;
-	//subset.FixRanges(&ind[0]);
-	subset.nFirstVertId = 0;
-	subset.nFirstIndexId = 0;
-	mesh->m_subsets.clear();
-	mesh->m_subsets.push_back(subset);
+	//PlantFaces();
+	//mesh->SetSharedStream(CMesh::FACES, &faces[0], 2);
 
-	PlantFaces();
-	mesh->SetSharedStream(CMesh::FACES, &faces[0], 2);
+	//mesh->m_bbox = AABB(Vec3(-10, -10, -10), Vec3(10, 10, 10));
+	//bool ret = mesh->Validate(nullptr);
 
-	mesh->m_bbox = AABB(Vec3(-10, -10, -10), Vec3(10, 10, 10));
-	bool ret = mesh->Validate(nullptr);
-
-	// make the static object update
-	pStaticObject->SetFlags(STATIC_OBJECT_GENERATED | STATIC_OBJECT_DYNAMIC);
-	pStaticObject->Invalidate();
-	pStaticObject->SetMaterial(material);
-	GetEntity()->SetStatObj(pStaticObject, 2, false);
+	//// make the static object update
+	//pStaticObject->SetFlags(STATIC_OBJECT_GENERATED | STATIC_OBJECT_DYNAMIC);
+	//pStaticObject->Invalidate();
+	//pStaticObject->SetMaterial(material);
+	//GetEntity()->SetStatObj(pStaticObject, 2, false);
 }
 void CPlantEntityCustom::redraw()
 {
@@ -295,6 +324,10 @@ void CPlantEntityCustom::updateGrowth() // called periodically to grow plant
 	updateLeadTarget();
 	rotatePosition(leadTargetPos);
 	lastSectionPos += lastSectionRot * Vec3(0.f,0.005f,0.0f);
+	if (plant_sections.size() > 0)
+	{
+		lastSectionPos = plant_sections.back().pos + lastSectionRot * Vec3(0.f, 0.005f, 0.0f);
+	}
 
 	plant_sections.push_back(plant_section());
 	plant_sections.back().scale = Vec3(.005f);
@@ -412,6 +445,10 @@ void CPlantEntityCustom::growthSwitch(bool active)
 void CPlantEntityCustom::growthSwitch()
 {
 	growActive = !growActive;
+}
+void CPlantEntityCustom::SetTime(int time)
+{
+	currentTime = time;
 }
 void CPlantEntityCustom::setLight(IEntity* l)
 {

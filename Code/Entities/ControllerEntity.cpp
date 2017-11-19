@@ -65,6 +65,7 @@ void CControllerEntity::MoveAttachedEntities()
 	for (int i = 0; i < attachedEntities.size(); i++)
 	{
 		attachedEntities.at(i).entity->SetPos(GetEntity()->GetWorldPos() + attachedEntities.at(i).posDiff);
+		//attachedEntities.at(i).entity->SetRotation(GetEntity()->GetRotation() * attachedEntities.at(i).rotDiff);
 	}
 }
 void CControllerEntity::ProcessEvent(SEntityEvent & event)

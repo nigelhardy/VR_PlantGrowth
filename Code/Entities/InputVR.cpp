@@ -125,6 +125,7 @@ void CInputVREntity::getControllerInput()
 	}
 	updateControllersLocation();
 	currentController = eHmdController_OpenVR_1;
+	milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
 	if (pController->IsConnected(eHmdController_OpenVR_1))
 	{
@@ -194,16 +195,27 @@ void CInputVREntity::getControllerInput()
 				
 			}
 		}
+		
 		if (touchGrip2 != touchGripLast2) {
+			touchGripLastHeld2 = now;
 			if (touchGrip2)
 			{
-
+				commands.insert(commands.begin(), new ChangeTime(entityManager, -1));
 			}
 		}
+		if (touchGrip2)
+		{
+			if (touchGripLastHeld2 + (milliseconds)400 < now)
+			{
+				commands.insert(commands.begin(), new ChangeTime(entityManager, -1));
+				touchGripLastHeld2 = now - milliseconds(350);
+			}
+		}
+
 		if (touchTrig2 != touchTrigLast2) {
 			if (touchTrig2)
 			{
-
+				commands.insert(commands.begin(), new GrowthSwitch(entityManager));
 			}
 			else if (!touchTrig2)
 			{
@@ -215,7 +227,7 @@ void CInputVREntity::getControllerInput()
 		{
 			if (getPlayerMarker())
 			{
-				commands.push_back(new MovePlayerMarkerCommand(controllerEntity2, playerMarker, true));
+				commands.insert(commands.begin(), new MovePlayerMarkerCommand(controllerEntity2, playerMarker, true));
 			}
 		}
 		if (touchTrack2 != touchTrackLast2) {
@@ -223,19 +235,19 @@ void CInputVREntity::getControllerInput()
 			{
 				if (getMovementPlane() && getMovementWand())
 				{
-					commands.push_back(new ShowMovementPlaneCommand(movementPlane, movementWand, true));
+					commands.insert(commands.begin(), new ShowMovementPlaneCommand(movementPlane, movementWand, true));
 				}
 			}
 			else if (!touchTrack2)
 			{
-				commands.push_back(new MovePlayerCommand(controllerEntity2, playerMarker, &movePlayerDest, hmdPos));
+				commands.insert(commands.begin(), new MovePlayerCommand(controllerEntity2, playerMarker, &movePlayerDest, hmdPos));
 				if (getMovementPlane() && getMovementWand())
 				{
-					commands.push_back(new ShowMovementPlaneCommand(movementPlane, movementWand, false));
+					commands.insert(commands.begin(), new ShowMovementPlaneCommand(movementPlane, movementWand, false));
 				}
 				if (getPlayerMarker())
 				{
-					commands.push_back(new MovePlayerMarkerCommand(controllerEntity2, playerMarker, false));
+					commands.insert(commands.begin(), new MovePlayerMarkerCommand(controllerEntity2, playerMarker, false));
 				}
 			}
 

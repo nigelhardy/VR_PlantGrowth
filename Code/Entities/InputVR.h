@@ -111,6 +111,74 @@ protected:
 	IEntity* cont;
 };
 
+class RemoveGrowth : public Command
+{
+public:
+	RemoveGrowth(CEntityManagerEntity* entityMan)
+	{
+		entityManager = entityMan;
+	}
+	void execute() override
+	{
+		if (entityManager)
+		{
+			entityManager->backOneGrowth();
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+};
+
+class GrowthSwitch : public Command
+{
+public:
+	GrowthSwitch(CEntityManagerEntity* entityMan, bool grow)
+	{
+		entityManager = entityMan;
+		growStatus = grow;
+		switchGrowth = false;
+	}
+	GrowthSwitch(CEntityManagerEntity* entityMan)
+	{
+		entityManager = entityMan;
+	}
+	void execute() override
+	{
+		if (entityManager && switchGrowth)
+		{
+			entityManager->growSwitch();
+		}
+		else if (entityManager)
+		{
+			entityManager->grow(growStatus);
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+	bool growStatus;
+	bool switchGrowth = true;
+};
+
+class ChangeTime : public Command
+{
+public:
+	ChangeTime(CEntityManagerEntity* entityMan, int time)
+	{
+		entityManager = entityMan;
+		setTime = time;
+	}
+	void execute() override
+	{
+		if (entityManager)
+		{
+			entityManager->UpdateRelativeTime(setTime);
+		}
+	};
+protected:
+	CEntityManagerEntity* entityManager;
+	int setTime;
+};
+
 class ShowMovementPlaneCommand : public Command
 {
 public:
@@ -325,6 +393,9 @@ protected:
 	bool touchTrigLast2 = false;
 	bool touchTrackLast2 = false;
 	bool touchMenuLast2 = false;
+
+	milliseconds touchGripLastHeld2 = (milliseconds)0;
+
 
 	Vec3* movePlayerDest = NULL;
 	float lastResetTime = 0;

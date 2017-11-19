@@ -82,6 +82,7 @@ public:
 	double CPlantEntityCustom::mMR(double d, int x);
 	bool CPlantEntityCustom::cNEQ(Quat a, Quat b, int digis);
 	void CPlantEntityCustom::AddSection(Vec3 Pos);
+	void CPlantEntityCustom::RemoveSection();
 
 	virtual void Initialize() override;
 
@@ -118,6 +119,7 @@ public:
 	Quat rotatePosition(Vec3* target);
 	void growSections();
 	void Reset();
+	void SetTime(int time);
 
 
 
@@ -165,6 +167,9 @@ protected:
 	int count = 0;
 	int vertArraySize = 240000;
 	int plantRingVertices = 8;
+
+	int currentTime = 0;
+	int plantTime = 0;
 public:
 	enum EInputPorts
 	{

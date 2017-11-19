@@ -247,6 +247,13 @@ void CEntityManagerEntity::resetGrowth()
 		plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->Reset();
 	}
 }
+void CEntityManagerEntity::backOneGrowth()
+{
+	for (int i = 0; i < plantEntities.size(); i++)
+	{
+		plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->RemoveSection();
+	}
+}
 void CEntityManagerEntity::grow(bool grow)
 {
 	globalGrowth = grow;
@@ -318,7 +325,7 @@ void CEntityManagerEntity::attachClosestEntity(IEntity* controller)
 	if (closest)
 	{
 		Vec3 diffVec = closest->GetWorldPos() - controller->GetWorldPos();
-		Quat diffRot = closest->GetRotation() - controller->GetRotation();
+		Quat diffRot = controller->GetRotation();
 		controller->GetComponent<CControllerEntity>()->AttachObject(closest, diffVec, diffRot);
 		
 		// 40 because scale of controller is 40
@@ -341,23 +348,6 @@ void physicallizeEntity(IEntity* entity)
 void CEntityManagerEntity::detachEntities(IEntity* controller)
 {
 	controller->GetComponent<CControllerEntity>()->DetachObjects();
-	for (int i = 0; i < allEntities.size(); i++)
-	{
-		for (int j = 0; j < allEntities.at(i)->size(); j++)
-		{
-			//IEntity* parent = allEntities.at(i)->at(j)->GetParent();
-			//if (parent)
-			//{
-			//	Vec3 wPos = allEntities.at(i)->at(j)->GetWorldPos();
-			//	allEntities.at(i)->at(j)->DetachThis();
-			//	// 40 because scale of controller is 40
-			//	// Should somehow avoid setting scale of controller, load geometry scaled instead
-			//	allEntities.at(i)->at(j)->SetScale(allEntities.at(i)->at(j)->GetScale() * 40.0f);
-			//	allEntities.at(i)->at(j)->SetPos(wPos);
-			//	physicallizeEntity(allEntities.at(i)->at(j));
-			//}
-		}
-	}
 }
 IEntity* CEntityManagerEntity::getClosestEntity(string name, Vec3 pos)
 {
@@ -428,6 +418,19 @@ void CEntityManagerEntity::Initialize()
 	// Spawn the entity, bullet is propelled in CBullet based on the rotation and position here
 
 }
+void CEntityManagerEntity::UpdateTime(int time)
+{
+	for (int i = 0; i < plantEntities.size(); i++)
+	{
+		plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->SetTime(time);
+	}
+	// add other entities that need it
+}
+void CEntityManagerEntity::UpdateRelativeTime(int time)
+{
+	currentTime += time;
+	UpdateTime(currentTime);
+}
 void CEntityManagerEntity::ProcessEvent(SEntityEvent &event)
 {
 	switch (event.event)
@@ -442,15 +445,14 @@ void CEntityManagerEntity::ProcessEvent(SEntityEvent &event)
 		Reset();
 		break;
 	case ENTITY_EVENT_UPDATE:
-		/*if (lightEntities.size() > 0)
+		milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		if (lastGrowth + growthRate < now && globalGrowth) // add another cylinder periodically
 		{
-			std::string tmp = std::to_string(lightEntities.back()->GetPos().x);
-			string s = lightEntities.back()->GetName();
-			s.append("  ");
-			s.append(tmp.c_str());
-			CryLogAlways(s);
-			lightEntities.pop_back();
-		}*/
+			currentTime++;
+			UpdateTime(currentTime);
+			lastGrowth = now;
+		}
+		
 		break;
 	}
 }

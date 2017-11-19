@@ -53,6 +53,7 @@ public:
 	void removeRobot(IEntity* robot);
 
 	void resetGrowth();
+	void backOneGrowth();
 	void grow(bool grow);
 	void growSwitch();
 	void removeAll();
@@ -63,7 +64,8 @@ public:
 	IEntity* getClosestEntity(string name, Vec3 pos);
 	void changeSelectedEntity(int diff);
 	int getSelectedEntity();
-
+	void UpdateTime(int time);
+	void UpdateRelativeTime(int time);
 
 	IEntity* getOneLight();
 	
@@ -86,6 +88,10 @@ public:
 	std::vector<IEntity*> plantEntities;
 	std::vector<IEntity*> robotEntities;
 	bool globalGrowth = true;
+	int currentTime = 0;
+	milliseconds lastGrowth;
+	milliseconds growthRate = (milliseconds)100;
+
 	enum EInputPorts
 	{
 		eInputPort_LightPosition = 0,
