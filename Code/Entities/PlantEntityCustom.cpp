@@ -143,8 +143,11 @@ void CPlantEntityCustom::TexturePlant()
 		for (size_t i = 0; i < (6 * plantRingVertices); i = i + 6) // each rectangle
 		{
 			// text coord
-			float bottom = k / ((float)plant_sections.size() - 1);
-			float top = (k + 1.0) / ((float)plant_sections.size() - 1);
+			/*float bottom = k / ((float)plant_sections.size() - 1) / 2.f;
+			float top = (k + 1.0) / ((float)plant_sections.size() - 1) / 2.f;*/
+
+			float bottom = ((float)plant_sections.size() - k) / ((float)100.f - 1) / 20.f + .5f;
+			float top = (((float)plant_sections.size() - k) + 1.0) / ((float)100.f - 1) / 20.f + .5f;
 
 			float left = i / (float)(6 * plantRingVertices);
 			float right = (i + 6) / (float)(6 * plantRingVertices / 3);
