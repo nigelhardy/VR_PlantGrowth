@@ -143,15 +143,16 @@ void CPlantEntityCustom::TexturePlant()
 		for (size_t i = 0; i < (6 * plantRingVertices); i = i + 6) // each rectangle
 		{
 			// text coord
-			/*float bottom = k / ((float)plant_sections.size() - 1) / 2.f;
-			float top = (k + 1.0) / ((float)plant_sections.size() - 1) / 2.f;*/
+			float bottom = k / ((float)plant_sections.size() - 1) * 100.f;
+			float top = (k + 1.0) / ((float)plant_sections.size() - 1) * 100.f;
 
-			float bottom = ((float)plant_sections.size() - k) / ((float)100.f - 1) / 20.f + .5f;
-			float top = (((float)plant_sections.size() - k) + 1.0) / ((float)100.f - 1) / 20.f + .5f;
 
-			float left = i / (float)(6 * plantRingVertices);
-			float right = (i + 6) / (float)(6 * plantRingVertices / 3);
+			//float left = i / (float)(6 * plantRingVertices);
+			//float right = (i + 6) / (float)(6 * plantRingVertices / 3);
+			float left = i / 6 / (float)(plantRingVertices);
+			float right = (i / 6 + 1) / (float)(plantRingVertices);
 
+			// make texture go around plant properly, right now it repeats left and right 
 			uv[k * (6 * plantRingVertices) + i] = Vec2(left, bottom);
 			uv[k * (6 * plantRingVertices) + i + 1] = Vec2(right, bottom);
 			uv[k * (6 * plantRingVertices) + i + 2] = Vec2(right, top);
@@ -207,6 +208,10 @@ void CPlantEntityCustom::AddSection(Vec3 Pos)
 	}
 	else
 	{
+		if (plant_sections.size() > 100 && plant_sections.size() % 10 == 0)
+		{
+			// reduce sections
+		}
 		// add vertices for next section
 		count += (6 * plantRingVertices); 
 		if (count > vertArraySize)
@@ -216,56 +221,6 @@ void CPlantEntityCustom::AddSection(Vec3 Pos)
 		}
 	}
 	redraw();
-	//IIndexedMesh* idxMesh = pStaticObject->GetIndexedMesh();
-	//CMesh* mesh = idxMesh->GetMesh();
-
-	//mesh->SetIndexCount(count);
-	//mesh->SetVertexCount(count);
-	//mesh->SetTexCoordsCount(count);
-	//
-	//int gotElements = 0;
-	////pos = mesh->GetStreamPtr<Vec3>(CMesh::POSITIONS, &gotElements);
-
-	//for (size_t i = 0; i <= plantRingVertices; i++)
-	//{
-	//	createRectangle(&plant_sections.at(plant_sections.size() - 2).points[i], &plant_sections.back().points[i], 
-	//		&pos[(plant_sections.size() - 2) * (6 * plantRingVertices) + i * 6]);
-	//}
-	//mesh->SetSharedStream(CMesh::POSITIONS, &pos[0], count);
-
-	//PlantTangents();
-	//mesh->SetSharedStream(CMesh::TANGENTS, &tng[0], count);
-	////uv = mesh->GetStreamPtr<Vec2>(CMesh::TEXCOORDS, &gotElements);
-	//TexturePlant();
-	//mesh->SetSharedStream(CMesh::TEXCOORDS, &uv[0], count);
-
-	////ind = mesh->GetStreamPtr<vtx_idx>(CMesh::INDICES, &gotElements);
-	//for (size_t i = (plant_sections.size() - 2) * 6 * plantRingVertices; i < count; i++)
-	//{
-	//	ind[i] = i;
-	//}
-	//mesh->SetSharedStream(CMesh::INDICES, &ind[0], count);
-
-	//subset.nNumIndices = count;
-	//subset.nNumVerts = count;
-	////subset.nMatID = 0;
-	////subset.FixRanges(&ind[0]);
-	//subset.nFirstVertId = 0;
-	//subset.nFirstIndexId = 0;
-	//mesh->m_subsets.clear();
-	//mesh->m_subsets.push_back(subset);
-
-	//PlantFaces();
-	//mesh->SetSharedStream(CMesh::FACES, &faces[0], 2);
-
-	//mesh->m_bbox = AABB(Vec3(-10, -10, -10), Vec3(10, 10, 10));
-	//bool ret = mesh->Validate(nullptr);
-
-	//// make the static object update
-	//pStaticObject->SetFlags(STATIC_OBJECT_GENERATED | STATIC_OBJECT_DYNAMIC);
-	//pStaticObject->Invalidate();
-	//pStaticObject->SetMaterial(material);
-	//GetEntity()->SetStatObj(pStaticObject, 2, false);
 }
 void CPlantEntityCustom::redraw()
 {
@@ -326,10 +281,11 @@ void CPlantEntityCustom::updateGrowth() // called periodically to grow plant
 {
 	updateLeadTarget();
 	rotatePosition(leadTargetPos);
-	lastSectionPos += lastSectionRot * Vec3(0.f,0.005f,0.0f);
+	float growDistance = .05f;
+	lastSectionPos += lastSectionRot * Vec3(0.f, growDistance,0.0f);
 	if (plant_sections.size() > 0)
 	{
-		lastSectionPos = plant_sections.back().pos + lastSectionRot * Vec3(0.f, 0.005f, 0.0f);
+		lastSectionPos = plant_sections.back().pos + lastSectionRot * Vec3(0.f, growDistance, 0.0f);
 	}
 
 	plant_sections.push_back(plant_section());

@@ -1,6 +1,6 @@
-<Material MtlFlags="524288" Shader="Illum" GenMask="20000001" StringGenMask="%ALLOW_SILHOUETTE_POM%SUBSURFACE_SCATTERING" SurfaceType="" MatTemplate="" Diffuse="0.017641956,0.96468639,0.00060705398" Specular="0.0097212186,0.99110222,0" Opacity="1" Shininess="10" CloakAmount="0" vertModifType="0" LayerAct="1">
+<Material MtlFlags="524288" Shader="Illum" GenMask="20000001" StringGenMask="%ALLOW_SILHOUETTE_POM%SUBSURFACE_SCATTERING" SurfaceType="" MatTemplate="" Diffuse="1,1,1" Specular="0.21223079,0.21223079,0.21223079" Opacity="1" CloakAmount="0" vertModifType="0" LayerAct="1">
  <Textures>
-  <Texture Map="Diffuse" File="textures/cubemaps/example/environmentprobe_cm.tif"/>
+  <Texture Map="Diffuse" File="EngineAssets/TextureMsg/DefaultNoUVs.dds"/>
  </Textures>
  <PublicParams EmittanceMapGamma="1" SSSIndex="0"/>
 </Material>

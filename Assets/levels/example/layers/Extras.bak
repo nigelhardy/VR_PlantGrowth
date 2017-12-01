@@ -1,3 +1,14 @@
 <ObjectLayer>
- <Layer Name="Extras" FullName="Extras" GUID="{355A0531-C459-6F60-362F-095CF6B79BF4}" Hidden="0" Frozen="0" Expanded="0" Exportable="1" ExportLayerPak="1" DefaultLoaded="0" HavePhysics="1" IsDefaultColor="1"/>
+ <Layer Name="Extras" FullName="Extras" GUID="{355A0531-C459-6F60-362F-095CF6B79BF4}" Hidden="0" Frozen="0" Expanded="0" Exportable="1" ExportLayerPak="1" DefaultLoaded="0" HavePhysics="1" IsDefaultColor="1">
+  <LayerObjects>
+   <Object Type="Entity" Layer="Extras" LayerGUID="{355A0531-C459-6F60-362F-095CF6B79BF4}" Id="{8F67E9B2-E1A4-0F69-34CB-B9DC18579FCE}" Name="plantEntity" Pos="59.401798,58.721092,32.780128" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="GBeanPlantCustom" HasEntity="1">
+    <Properties />
+    <Components>
+     <Component typeId="{0DCE65E6-3DD2-456D-8275-052A50DDDEB2}">
+      <Geometry value="objects/default/custom_plant_cyl.cgf"/>
+     </Component>
+    </Components>
+   </Object>
+  </LayerObjects>
+ </Layer>
 </ObjectLayer>
