@@ -111,7 +111,7 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 		break;
 	}
 }
-void createRectangle(Vec3 *lPoint, Vec3 *nPoint, Vec3 *p)
+void CPlantEntityCustom::createRectangle(Vec3 *lPoint, Vec3 *nPoint, Vec3 *p)
 {
 	// Takes 6 points and makes a rectangle
 	p[0] = lPoint[0];
@@ -122,7 +122,7 @@ void createRectangle(Vec3 *lPoint, Vec3 *nPoint, Vec3 *p)
 	p[5] = nPoint[1];
 	p[4] = nPoint[0];
 }
-void buildSection(Vec3 Pos, Vec3 *points, float scale, Quat rotation, float vertices)
+void CPlantEntityCustom::buildSection(Vec3 Pos, Vec3 *points, float scale, Quat rotation, float vertices)
 {
 	// takes a central point, scale, and rotation
 	// makes (# of vertices) points in defining circle around point with rotation
@@ -135,53 +135,53 @@ void buildSection(Vec3 Pos, Vec3 *points, float scale, Quat rotation, float vert
 		totalRotation -= zRotation;
 	}
 }
-void CPlantEntityCustom::TexturePlant()
+void CPlantEntityCustom::TexturePlant(int ringVertexCount, Vec2* uv_tex, int vertex_count, int plant_section_size)
 {
 	// puts seamless texture on plant
-	for (size_t k = 0; k < count / (6 * plantRingVertices); k++) // each ring
+	for (size_t k = 0; k < vertex_count / (6 * ringVertexCount); k++) // each ring
 	{
-		for (size_t i = 0; i < (6 * plantRingVertices); i = i + 6) // each rectangle
+		for (size_t i = 0; i < (6 * ringVertexCount); i = i + 6) // each rectangle
 		{
 			// text coord
-			float bottom = k / ((float)plant_sections.size() - 1) * 100.f;
-			float top = (k + 1.0) / ((float)plant_sections.size() - 1) * 100.f;
+			float bottom = k / ((float)plant_section_size - 1) * 100.f;
+			float top = (k + 1.0) / ((float)plant_section_size - 1) * 100.f;
 
 
 			//float left = i / (float)(6 * plantRingVertices);
 			//float right = (i + 6) / (float)(6 * plantRingVertices / 3);
-			float left = i / 6 / (float)(plantRingVertices);
-			float right = (i / 6 + 1) / (float)(plantRingVertices);
+			float left = i / 6 / (float)(ringVertexCount);
+			float right = (i / 6 + 1) / (float)(ringVertexCount);
 
 			// make texture go around plant properly, right now it repeats left and right 
-			uv[k * (6 * plantRingVertices) + i] = Vec2(left, bottom);
-			uv[k * (6 * plantRingVertices) + i + 1] = Vec2(right, bottom);
-			uv[k * (6 * plantRingVertices) + i + 2] = Vec2(right, top);
+			uv_tex[k * (6 * ringVertexCount) + i] = Vec2(left, bottom);
+			uv_tex[k * (6 * ringVertexCount) + i + 1] = Vec2(right, bottom);
+			uv_tex[k * (6 * ringVertexCount) + i + 2] = Vec2(right, top);
 
-			uv[k * (6 * plantRingVertices) + i + 3] = Vec2(left, bottom);
-			uv[k * (6 * plantRingVertices) + i + 4] = Vec2(right, top);
-			uv[k * (6 * plantRingVertices) + i + 5] = Vec2(left, top);
+			uv_tex[k * (6 * ringVertexCount) + i + 3] = Vec2(left, bottom);
+			uv_tex[k * (6 * ringVertexCount) + i + 4] = Vec2(right, top);
+			uv_tex[k * (6 * ringVertexCount) + i + 5] = Vec2(left, top);
 		}
 	}
 }
-void CPlantEntityCustom::PlantTangents()
+void CPlantEntityCustom::PlantTangents(Vec3* tangents, int tng_count)
 {
 	// make a tangents the same
-	for (size_t i = 0; i < count; i = i + 3)
+	for (size_t i = 0; i < tng_count; i = i + 3)
 	{
-		tng[i] = Vec3(0, 1, 0);
-		tng[i + 1] = Vec3(0, 1, 0);
-		tng[i + 2] = Vec3(0, 1, 0);
+		tangents[i] = Vec3(0, 1, 0);
+		tangents[i + 1] = Vec3(0, 1, 0);
+		tangents[i + 2] = Vec3(0, 1, 0);
 	}
 }
-void CPlantEntityCustom::PlantFaces()
+void CPlantEntityCustom::PlantFaces(SMeshFace *mesh_faces)
 {
 	// set all faces
 	for (size_t i = 0; i < count / 3; i++)
 	{
-		faces[i].v[0] = 0;
-		faces[i].v[1] = 1;
-		faces[i].v[2] = 2;
-		faces[i].nSubset = i + 1;
+		mesh_faces[i].v[0] = 0;
+		mesh_faces[i].v[1] = 1;
+		mesh_faces[i].v[2] = 2;
+		mesh_faces[i].nSubset = i + 1;
 	}
 }void CPlantEntityCustom::RemoveSection()
 {
@@ -245,10 +245,10 @@ void CPlantEntityCustom::redraw()
 		}
 	}
 	mesh->SetSharedStream(CMesh::POSITIONS, &pos[0], count);
-	PlantTangents();
+	PlantTangents(tng, count);
 	mesh->SetSharedStream(CMesh::TANGENTS, &tng[0], count);
 	//uv = mesh->GetStreamPtr<Vec2>(CMesh::TEXCOORDS, &gotElements);
-	TexturePlant();
+	TexturePlant(plantRingVertices, uv, count, plant_sections.size());
 	mesh->SetSharedStream(CMesh::TEXCOORDS, &uv[0], count);
 	//ind = mesh->GetStreamPtr<vtx_idx>(CMesh::INDICES, &gotElements);
 	for (size_t i = 0; i < count; i++)
@@ -266,7 +266,7 @@ void CPlantEntityCustom::redraw()
 	mesh->m_subsets.push_back(subset);
 
 
-	PlantFaces();
+	PlantFaces(faces);
 	mesh->SetSharedStream(CMesh::FACES, &faces[0], 2);
 	mesh->m_bbox = AABB(Vec3(-10, -10, -10), Vec3(10, 10, 10));
 	bool ret = mesh->Validate(nullptr);
