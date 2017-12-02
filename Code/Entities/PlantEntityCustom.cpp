@@ -147,12 +147,7 @@ void CPlantEntityCustom::TexturePlant(int ringVertexCount, Vec2* uv_tex, int ver
 			// text coord
 			float bottom = (k % repeatEveryNumSections) / ((float)repeatEveryNumSections-1);
 			float top = ((k + 1) % repeatEveryNumSections) / ((float)repeatEveryNumSections-1);
-			//bottom = 0.f;
-			//top = 1.f;
 
-
-			//float left = i / (float)(6 * plantRingVertices);
-			//float right = (i + 6) / (float)(6 * plantRingVertices / 3);
 			float left = i / 6 / (float)(ringVertexCount);
 			float right = (i / 6 + 1) / (float)(ringVertexCount);
 
@@ -226,10 +221,6 @@ void CPlantEntityCustom::AddSection(Vec3 Pos)
 		}
 	}
 	redraw();
-	GetEntity()->UnphysicalizeSlot(2);
-	GetEntity()->FreeSlot(2);
-	GetEntity()->UpdateSlotPhysics(2);
-
 }
 void CPlantEntityCustom::redraw()
 {

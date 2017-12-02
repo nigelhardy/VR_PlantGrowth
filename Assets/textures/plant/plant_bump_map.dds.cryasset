@@ -1,0 +1,8 @@
+<cryasset>
+ <AssetMetadata version="0" type="Texture" guid="{DBA3835B-7D7A-F47D-EC2C-0764DF6FC147}" source="plant_bump_map.tif">
+  <Files>
+   <File path="plant_bump_map.dds"/>
+  </Files>
+  <Details />
+ </AssetMetadata>
+</cryasset>

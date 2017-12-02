@@ -1,0 +1,8 @@
+<cryasset>
+ <AssetMetadata version="0" type="Texture" guid="{8BE3C719-52A3-C76F-FE85-9D6544D2B3AB}" source="plant_tex.tif">
+  <Files>
+   <File path="plant_tex.dds"/>
+  </Files>
+  <Details />
+ </AssetMetadata>
+</cryasset>

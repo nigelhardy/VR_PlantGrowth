@@ -1,6 +1,7 @@
-<Material MtlFlags="524288" Shader="Illum" GenMask="20000000" StringGenMask="%SUBSURFACE_SCATTERING" SurfaceType="" MatTemplate="" Diffuse="0.12477184,0.12477184,0.12477184" Specular="0,0,0" Opacity="1" CloakAmount="0" vertModifType="0" LayerAct="1">
+<Material MtlFlags="524288" Shader="Illum" GenMask="20400000" StringGenMask="%NORMAL_MAP%SUBSURFACE_SCATTERING" SurfaceType="" MatTemplate="" Diffuse="0.010329825,0.18782079,0.006512091" Specular="0,0,0" Opacity="1" CloakAmount="0" vertModifType="0" LayerAct="1">
  <Textures>
-  <Texture Map="Diffuse" File="textures/plant/plant_texture.tif" Filter="5"/>
+  <Texture Map="Diffuse" File="textures/plant/plant_tex.tif" Filter="6"/>
+  <Texture Map="Bumpmap" File="textures/plant/plant_bump_map.tif" Filter="6"/>
  </Textures>
  <PublicParams EmittanceMapGamma="1" SSSIndex="0"/>
 </Material>
