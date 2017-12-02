@@ -115,12 +115,12 @@ void CPlantEntityCustom::createRectangle(Vec3 *lPoint, Vec3 *nPoint, Vec3 *p)
 {
 	// Takes 6 points and makes a rectangle
 	p[0] = lPoint[0];
-	p[2] = lPoint[1];
-	p[1] = nPoint[1];
+	p[1] = lPoint[1];
+	p[2] = nPoint[1];
 
 	p[3] = lPoint[0];
-	p[5] = nPoint[1];
-	p[4] = nPoint[0];
+	p[4] = nPoint[1];
+	p[5] = nPoint[0];
 }
 void CPlantEntityCustom::buildSection(Vec3 Pos, Vec3 *points, float scale, Quat rotation, float vertices)
 {
@@ -137,14 +137,18 @@ void CPlantEntityCustom::buildSection(Vec3 Pos, Vec3 *points, float scale, Quat 
 }
 void CPlantEntityCustom::TexturePlant(int ringVertexCount, Vec2* uv_tex, int vertex_count, int plant_section_size)
 {
+	int repeatEveryNumSections = 32;
+	repeatEveryNumSections++;
 	// puts seamless texture on plant
-	for (size_t k = 0; k < vertex_count / (6 * ringVertexCount); k++) // each ring
+	for (size_t k = 0; k < (vertex_count + 1) / (6 * ringVertexCount); k++) // each ring
 	{
 		for (size_t i = 0; i < (6 * ringVertexCount); i = i + 6) // each rectangle
 		{
 			// text coord
-			float bottom = k / ((float)plant_section_size - 1) * 100.f;
-			float top = (k + 1.0) / ((float)plant_section_size - 1) * 100.f;
+			float bottom = (k % repeatEveryNumSections) / ((float)repeatEveryNumSections-1);
+			float top = ((k + 1) % repeatEveryNumSections) / ((float)repeatEveryNumSections-1);
+			//bottom = 0.f;
+			//top = 1.f;
 
 
 			//float left = i / (float)(6 * plantRingVertices);
@@ -212,6 +216,7 @@ void CPlantEntityCustom::AddSection(Vec3 Pos)
 		{
 			// reduce sections
 		}
+
 		// add vertices for next section
 		count += (6 * plantRingVertices); 
 		if (count > vertArraySize)
@@ -221,6 +226,10 @@ void CPlantEntityCustom::AddSection(Vec3 Pos)
 		}
 	}
 	redraw();
+	GetEntity()->UnphysicalizeSlot(2);
+	GetEntity()->FreeSlot(2);
+	GetEntity()->UpdateSlotPhysics(2);
+
 }
 void CPlantEntityCustom::redraw()
 {
@@ -234,6 +243,7 @@ void CPlantEntityCustom::redraw()
 	{
 		plant_section *ps = &plant_sections.at(i);
 		buildSection(ps->pos, ps->points, ps->scale.x, ps->rot, ps->numVertices);
+		//buildSection(ps->pos, ps->points, .5f, ps->rot, ps->numVertices);
 	}
 	//pos = mesh->GetStreamPtr<Vec3>(CMesh::POSITIONS, &gotElements);
 	for (int i = 1; i < plant_sections.size(); i++)
@@ -281,7 +291,7 @@ void CPlantEntityCustom::updateGrowth() // called periodically to grow plant
 {
 	updateLeadTarget();
 	rotatePosition(leadTargetPos);
-	float growDistance = .05f;
+	float growDistance = .005f;
 	lastSectionPos += lastSectionRot * Vec3(0.f, growDistance,0.0f);
 	if (plant_sections.size() > 0)
 	{
