@@ -256,13 +256,6 @@ void CEntityManagerEntity::resetGrowth()
 		plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->Reset();
 	}
 }
-void CEntityManagerEntity::backOneGrowth()
-{
-	for (int i = 0; i < plantEntities.size(); i++)
-	{
-		plantEntities.at(i)->GetComponent<CPlantEntityCustom>()->RemoveSection();
-	}
-}
 void CEntityManagerEntity::grow(bool grow)
 {
 	globalGrowth = grow;

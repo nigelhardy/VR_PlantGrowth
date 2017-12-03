@@ -39,13 +39,15 @@ void CPlantEntityCustom::Initialize()
 	params.type = PE_RIGID;
 	GetEntity()->Physicalize(params);
 	srand(time(NULL));
-	lastSectionRot = Quat(Vec3(90.0f * 3.14f / 180.0f, 0.f, 0.f));
+	lastSectionRot = Quat(IDENTITY);
 	pos = new Vec3[vertArraySize];
 	tng = new Vec3[vertArraySize];
 	uv = new Vec2[vertArraySize];
 	ind = new vtx_idx[vertArraySize];
 	faces = new SMeshFace[vertArraySize / 3];
 	pStaticObject = gEnv->p3DEngine->CreateStatObj();
+
+	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, 3));
 }
 
 void CPlantEntityCustom::SerializeProperties(Serialization::IArchive& archive)  // give control in editor over some properties
@@ -99,322 +101,24 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 
 		if (currentTime - offsetTime > plantTime) // add another cylinder periodically
 		{
-			updateGrowth();
-			growSections();
+			for (int i = 0; i < branches.size(); i++)
+			{
+				branches.at(i).updateGrowth(lights);
+			}
 			plantTime++;
 		}
 		else if (plantTime > currentTime - offsetTime)
 		{
-			RemoveSection();
+			for (int i = 0; i < branches.size(); i++)
+			{
+				branches.at(i).RemoveSection();
+			}
 			plantTime--;
 		}
 		break;
 	}
 }
-void CPlantEntityCustom::createRectangle(Vec3 *lPoint, Vec3 *nPoint, Vec3 *p)
-{
-	// Takes 6 points and makes a rectangle
-	p[0] = lPoint[0];
-	p[1] = lPoint[1];
-	p[2] = nPoint[1];
 
-	p[3] = lPoint[0];
-	p[4] = nPoint[1];
-	p[5] = nPoint[0];
-}
-void CPlantEntityCustom::buildSection(Vec3 Pos, Vec3 *points, float scale, Quat rotation, float vertices)
-{
-	// takes a central point, scale, and rotation
-	// makes (# of vertices) points in defining circle around point with rotation
-	float twoPi = 6.28f;
-	float zRotation = twoPi / (float) vertices;
-	float totalRotation = 0;
-	for (size_t i = 0; i < vertices + 1; i++)
-	{
-		points[i] = Pos + (Vec3(scale, 0, 0) * Quat::CreateRotationZ(totalRotation)) * rotation;
-		totalRotation -= zRotation;
-	}
-}
-void CPlantEntityCustom::TexturePlant(int ringVertexCount, Vec2* uv_tex, int vertex_count, int plant_section_size)
-{
-	int repeatEveryNumSections = 32;
-	repeatEveryNumSections++;
-	// puts seamless texture on plant
-	for (size_t k = 0; k < (vertex_count + 1) / (6 * ringVertexCount); k++) // each ring
-	{
-		for (size_t i = 0; i < (6 * ringVertexCount); i = i + 6) // each rectangle
-		{
-			// text coord
-			float bottom = (k % repeatEveryNumSections) / ((float)repeatEveryNumSections-1);
-			float top = ((k + 1) % repeatEveryNumSections) / ((float)repeatEveryNumSections-1);
-
-			float left = i / 6 / (float)(ringVertexCount);
-			float right = (i / 6 + 1) / (float)(ringVertexCount);
-
-			// make texture go around plant properly, right now it repeats left and right 
-			uv_tex[k * (6 * ringVertexCount) + i] = Vec2(left, bottom);
-			uv_tex[k * (6 * ringVertexCount) + i + 1] = Vec2(right, bottom);
-			uv_tex[k * (6 * ringVertexCount) + i + 2] = Vec2(right, top);
-
-			uv_tex[k * (6 * ringVertexCount) + i + 3] = Vec2(left, bottom);
-			uv_tex[k * (6 * ringVertexCount) + i + 4] = Vec2(right, top);
-			uv_tex[k * (6 * ringVertexCount) + i + 5] = Vec2(left, top);
-		}
-	}
-}
-void CPlantEntityCustom::PlantTangents(Vec3* tangents, int tng_count)
-{
-	// make a tangents the same
-	for (size_t i = 0; i < tng_count; i = i + 3)
-	{
-		tangents[i] = Vec3(0, 1, 0);
-		tangents[i + 1] = Vec3(0, 1, 0);
-		tangents[i + 2] = Vec3(0, 1, 0);
-	}
-}
-void CPlantEntityCustom::PlantFaces(SMeshFace *mesh_faces)
-{
-	// set all faces
-	for (size_t i = 0; i < count / 3; i++)
-	{
-		mesh_faces[i].v[0] = 0;
-		mesh_faces[i].v[1] = 1;
-		mesh_faces[i].v[2] = 2;
-		mesh_faces[i].nSubset = i + 1;
-	}
-}void CPlantEntityCustom::RemoveSection()
-{
-	if (plant_sections.size() <= 2)
-	{
-		return; // only one right/section, can't draw yet
-	}
-	else
-	{
-		// add vertices for next section
-		count -= (6 * plantRingVertices);
-		plant_sections.pop_back();
-		GetEntity()->UnphysicalizeSlot(2);
-		GetEntity()->FreeSlot(2);
-		GetEntity()->UpdateSlotPhysics(2);
-	}
-	resizeSections();
-}
-void CPlantEntityCustom::AddSection(Vec3 Pos)
-{
-	if (plant_sections.size() <= 1)
-	{
-		return; // only one right/section, can't draw yet
-	}
-	else
-	{
-		if (plant_sections.size() > 100 && plant_sections.size() % 10 == 0)
-		{
-			// reduce sections
-		}
-
-		// add vertices for next section
-		count += (6 * plantRingVertices); 
-		if (count > vertArraySize)
-		{
-			CryLogAlways("MAX VERTEX COUNT");
-			return;
-		}
-	}
-	redraw();
-}
-void CPlantEntityCustom::redraw()
-{
-	IIndexedMesh* idxMesh = pStaticObject->GetIndexedMesh();
-	CMesh* mesh = idxMesh->GetMesh();
-	mesh->SetIndexCount(count);
-	mesh->SetVertexCount(count);
-	mesh->SetTexCoordsCount(count);
-	int gotElements = 0;
-	for (size_t i = 0; i < plant_sections.size(); i++)
-	{
-		plant_section *ps = &plant_sections.at(i);
-		buildSection(ps->pos, ps->points, ps->scale.x, ps->rot, ps->numVertices);
-		//buildSection(ps->pos, ps->points, .5f, ps->rot, ps->numVertices);
-	}
-	//pos = mesh->GetStreamPtr<Vec3>(CMesh::POSITIONS, &gotElements);
-	for (int i = 1; i < plant_sections.size(); i++)
-	{
-		for (size_t j = 0; j <= plantRingVertices; j++)
-		{
-			createRectangle(&plant_sections.at(i - 1).points[j], &plant_sections.at(i).points[j],
-				&pos[(i - 1) * (6 * plantRingVertices) + j * 6]);
-		}
-	}
-	mesh->SetSharedStream(CMesh::POSITIONS, &pos[0], count);
-	PlantTangents(tng, count);
-	mesh->SetSharedStream(CMesh::TANGENTS, &tng[0], count);
-	//uv = mesh->GetStreamPtr<Vec2>(CMesh::TEXCOORDS, &gotElements);
-	TexturePlant(plantRingVertices, uv, count, plant_sections.size());
-	mesh->SetSharedStream(CMesh::TEXCOORDS, &uv[0], count);
-	//ind = mesh->GetStreamPtr<vtx_idx>(CMesh::INDICES, &gotElements);
-	for (size_t i = 0; i < count; i++)
-	{
-		ind[i] = i;
-	}
-	mesh->SetSharedStream(CMesh::INDICES, &ind[0], count);
-	subset.nNumIndices = count;
-	subset.nNumVerts = count;
-	//subset.nMatID = 0;
-	//subset.FixRanges(&ind[0]);
-	subset.nFirstVertId = 0;
-	subset.nFirstIndexId = 0;
-	mesh->m_subsets.clear();
-	mesh->m_subsets.push_back(subset);
-
-
-	PlantFaces(faces);
-	mesh->SetSharedStream(CMesh::FACES, &faces[0], 2);
-	mesh->m_bbox = AABB(Vec3(-10, -10, -10), Vec3(10, 10, 10));
-	bool ret = mesh->Validate(nullptr);
-
-	// make the static object update
-	pStaticObject->SetFlags(STATIC_OBJECT_GENERATED | STATIC_OBJECT_DYNAMIC);
-	pStaticObject->Invalidate();
-	pStaticObject->SetMaterial(material);
-	GetEntity()->SetStatObj(pStaticObject, 2, false);
-}
-void CPlantEntityCustom::updateGrowth() // called periodically to grow plant
-{
-	updateLeadTarget();
-	rotatePosition(leadTargetPos);
-	float growDistance = .005f;
-	lastSectionPos += lastSectionRot * Vec3(0.f, growDistance,0.0f);
-	if (plant_sections.size() > 0)
-	{
-		lastSectionPos = plant_sections.back().pos + lastSectionRot * Vec3(0.f, growDistance, 0.0f);
-	}
-
-	plant_sections.push_back(plant_section());
-	plant_sections.back().scale = Vec3(.005f);
-	plant_sections.back().rot = lastSectionRot * Quat::CreateRotationX(-90.0f * 3.14 / 180.0f);
-	plant_sections.back().pos = lastSectionPos;
-	plant_sections.back().numVertices = plantRingVertices;
-
-	buildSection(lastSectionPos, plant_sections.back().points, plant_sections.back().scale.x, plant_sections.back().rot, plant_sections.back().numVertices);
-	AddSection(lastSectionPos);
-}
-void CPlantEntityCustom::growSections()
-{
-	for (int i = 0; i < plant_sections.size(); i++)
-	{
-		if (plant_sections[i].scale.x < 0.1f - (float)plant_sections.size() / 40000.0f)
-		{
-			float newScale = plant_sections[i].scale.x * 1.01f;
-			if (i > 0 && plant_sections[i - 1].scale.x - .000003f < newScale)
-			{
-				return;
-			}
-			plant_sections[i].scale = Vec3(newScale);
-		}	
-	}
-	redraw();
-}
-void CPlantEntityCustom::resizeSections()
-{
-
-	if (plant_sections.size() > 0)
-	{
-		plant_sections[plant_sections.size()-1].scale = Vec3(.005f);
-	}
-	for (int i = plant_sections.size() - 1; i > 0; i--)
-	{
-		if (plant_sections[i - 1].scale.x < .1f - (float)plant_sections.size() / 40000.0f)
-		{
-			plant_sections[i - 1].scale = Vec3(plant_sections[i].scale.x * 1.01f);
-		}
-		
-	}
-	redraw();
-}
-void CPlantEntityCustom::updateLeadTarget()
-{
-	Vec3* pos = NULL;
-	float max_light_intensity = 0.0f;
-	for (int i = 0; i < lights.size(); i++)
-	{
-		// to do, if enabled
-		max_light_intensity += 1.0f;
-	}
-	float tmp = 0.0f;
-	for (int i = 0; i < lights.size(); i++)
-	{
-		if (!pos) // first light
-		{
-			pos = new Vec3(lights.at(i)->GetPos());
-			tmp = 1.0f; // TO DO: Light intensity
-			*pos *= (tmp / max_light_intensity);
-			continue;
-		}
-		*pos += lights.at(i)->GetPos() * (tmp / max_light_intensity);
-	}
-	if (pos == NULL) // no lights, just grow up for now
-	{
-		pos = new Vec3(GetEntity()->GetPos() + lastSectionPos + Vec3(0, 0, 1.f));
-	}
-	leadTargetPos = pos;
-}
-Quat CPlantEntityCustom::QmMR(Quat q, int digis)
-{
-	q.v.x = mMR(q.v.x, digis);
-	q.v.y = mMR(q.v.y, digis);
-	q.v.z = mMR(q.v.z, digis);
-	q.w = mMR(q.w, digis);
-	return q;
-}
-double CPlantEntityCustom::mMR(double d, int x)
-{
-	return floor((d * pow(10, x))) / pow(10, x);
-}
-bool CPlantEntityCustom::cNEQ(Quat a, Quat b, int digis)
-{
-	return ((a.GetFwdX(), digis) != mMR(b.GetFwdX(), digis) || mMR(a.GetFwdY(), digis)
-		!= mMR(b.GetFwdY(), digis) || mMR(a.GetFwdZ(), digis) != mMR(b.GetFwdZ(), digis) || mMR(a.w, digis) != mMR(b.w, digis));
-}
-Quat CPlantEntityCustom::rotatePosition(Vec3* target)
-{
-	float tempStability = .5f;
-
-	Vec3 stp;
-	Vec3 tempTarget;
-	if (target)
-	{
-		stp = *target;
-		tempTarget = *target;
-	}
-	else // no light
-	{
-		float randomx = (rand() % 100) / 10.0f - 1.0f;
-		stp = lastSectionPos + GetEntity()->GetPos();
-		stp.z += 10.0f;
-		stp.y += randomx;
-		tempTarget = stp;
-	}
-	stp.x -= (1 - tempStability) * (tempTarget.x - (GetEntity()->GetPos().x + lastSectionPos.x));
-	stp.y -= (1 - tempStability) * tempStability * (tempTarget.x - (GetEntity()->GetPos().x + lastSectionPos.x));
-	stp.z -= (1 - tempStability) * (tempTarget.z - (GetEntity()->GetPos().z + lastSectionPos.z));
-	/*
-	TODO: if rotation angle is greater than 33 degree don't rotate or reposition LT
-	*/
-	int digis = 5;
-	Quat q = QmMR(Quat::CreateSlerp(lastSectionRot, Quat::CreateRotationVDir(stp - (lastSectionPos + GetEntity()->GetPos())), tempStability/ 10.0f), digis);
-	if (cNEQ(q, lastSectionRot, digis) && cNEQ(q, IDENTITY, digis))
-	{
-		lastSectionRot = q;
-	}
-	return lastSectionRot;
-}
-void CPlantEntityCustom::resetGrowth()
-{
-	GetEntity()->UnphysicalizeSlot(2);	
-	GetEntity()->FreeSlot(2);
-	GetEntity()->UpdateSlotPhysics(2);
-	count = 0;
-}
 void CPlantEntityCustom::growthSwitch(bool active)
 {
 	growActive = active;
@@ -456,18 +160,14 @@ void CPlantEntityCustom::removeLight(IEntity* light)
 }
 void CPlantEntityCustom::Reset()
 {
-	shrink = 1.0f;
-	lastSectionPos = Vec3(0, 0, .13f);
-	resetGrowth();
-	lastSectionRot = Quat(Vec3(90.0f * 3.14f / 180.0f, 0.f, 0.f));
-	plant_sections.clear();
-	//IRenderNode* rendNode = GetEntity()->GetRenderNode(1);
-	//Matrix34 lmat = GetEntity()->GetLocalTM();
-	//Matrix34 scaleMat = Matrix34::CreateScale(Vec3(sectionScale, sectionScale, sectionScale));
-	//rendNode->SetMatrix(scaleMat * lmat); // scaling, rotation, translate of new cylinder
-	/*SEntityPhysicalizeParams params;
-	params.type = PE_RIGID;
-	GetEntity()->Physicalize(params);*/
+	for (int i = 0; i < branches.size(); i++)
+	{
+		int slot = branches.at(i).slot;
+		GetEntity()->UnphysicalizeSlot(slot);
+		GetEntity()->FreeSlot(slot);
+	}
+	branches.clear();
+	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, 3));
 }
 
 CRYREGISTER_CLASS(CPlantEntityCustom)
