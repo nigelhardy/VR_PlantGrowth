@@ -40,11 +40,11 @@ private:
 	_smart_ptr<IStatObj> pStaticObject = nullptr;
 	Vec3* leadTargetPos = NULL;
 	IEntity* parent = NULL;
-	std::vector<plant_section> plant_sections;
 	IMaterial* material = NULL;
 	
 
 public:
+	std::vector<plant_section> plant_sections;
 	int slot = 0;
 	Branch(IEntity* parent_entity, Vec3 offsetPos, Quat rot, IMaterial* mat, int objectSlot)
 	{
@@ -401,6 +401,8 @@ public:
 	virtual void SerializeProperties(Serialization::IArchive& archive) override;
 	virtual uint64 GetEventMask() const;
 	virtual	void ProcessEvent(SEntityEvent &event);
+
+	void startBranch();
 
 	void logVector(string s, Vec3 v)
 	{

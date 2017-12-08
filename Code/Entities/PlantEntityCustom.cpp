@@ -105,6 +105,10 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 			{
 				branches.at(i).updateGrowth(lights);
 			}
+			if (plantTime % 100 == 99)
+			{
+				startBranch();
+			}
 			plantTime++;
 		}
 		else if (plantTime > currentTime - offsetTime)
@@ -118,7 +122,18 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 		break;
 	}
 }
-
+void CPlantEntityCustom::startBranch() 
+{
+	if (branches.size() > 0) 
+	{
+		if (branches.back().plant_sections.size() > 0)
+		{
+			Vec3 branch_start_pos = branches.back().plant_sections.back().pos;
+			Quat branch_start_rot = branches.back().plant_sections.back().rot;
+			branches.push_back(Branch(GetEntity(), branch_start_pos, branch_start_rot, pMat, 3 + branches.size()));
+		}
+	}
+}
 void CPlantEntityCustom::growthSwitch(bool active)
 {
 	growActive = active;
