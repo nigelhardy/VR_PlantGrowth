@@ -47,7 +47,7 @@ void CPlantEntityCustom::Initialize()
 	faces = new SMeshFace[vertArraySize / 3];
 	pStaticObject = gEnv->p3DEngine->CreateStatObj();
 
-	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, 3));
+	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, NULL, 3));
 }
 
 void CPlantEntityCustom::SerializeProperties(Serialization::IArchive& archive)  // give control in editor over some properties
@@ -124,13 +124,15 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 }
 void CPlantEntityCustom::startBranch() 
 {
-	if (branches.size() > 0) 
+	if (branches.size() > 0)
 	{
 		if (branches.back().plant_sections.size() > 0)
 		{
 			Vec3 branch_start_pos = branches.back().plant_sections.back().pos;
 			Quat branch_start_rot = branches.back().plant_sections.back().rot;
-			branches.push_back(Branch(GetEntity(), branch_start_pos, branch_start_rot, pMat, 3 + branches.size()));
+			Branch* previous_branch = &branches.back();
+			branches.push_back(Branch(GetEntity(), branch_start_pos, branch_start_rot, pMat, &branches.back(), 3 + branches.size()));
+			branches.back().addChildBranch(previous_branch);
 		}
 	}
 }
@@ -182,7 +184,7 @@ void CPlantEntityCustom::Reset()
 		GetEntity()->FreeSlot(slot);
 	}
 	branches.clear();
-	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, 3));
+	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, NULL, 3));
 }
 
 CRYREGISTER_CLASS(CPlantEntityCustom)

@@ -41,15 +41,18 @@ private:
 	Vec3* leadTargetPos = NULL;
 	IEntity* parent = NULL;
 	IMaterial* material = NULL;
-	
+
+	std::vector<Branch*> next;
+	Branch* prev = NULL;
 
 public:
 	std::vector<plant_section> plant_sections;
 	int slot = 0;
-	Branch(IEntity* parent_entity, Vec3 offsetPos, Quat rot, IMaterial* mat, int objectSlot)
+	Branch(IEntity* parent_entity, Vec3 offsetPos, Quat rot, IMaterial* mat, Branch* prev_branch,  int objectSlot)
 	{
 		parent = parent_entity;
 		material = mat;
+		prev = prev_branch;
 		slot = objectSlot;
 		pos = new Vec3[vertArraySize];
 		tng = new Vec3[vertArraySize];
@@ -64,6 +67,10 @@ public:
 		plant_sections.back().pos = offsetPos;
 		plant_sections.back().numVertices = plantRingVertices;
 
+	}
+	void addChildBranch(Branch* child)
+	{
+		next.push_back(child);
 	}
 	void updateGrowth(std::vector<IEntity*> lights) // called periodically to grow plant
 	{
