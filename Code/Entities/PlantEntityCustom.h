@@ -41,19 +41,21 @@ private:
 	Vec3* leadTargetPos = NULL;
 	IEntity* parent = NULL;
 	IMaterial* material = NULL;
-
+	std::vector<Branch>* branches;
 	std::vector<Branch*> next;
 	Branch* prev = NULL;
-
 public:
 	std::vector<plant_section> plant_sections;
 	int slot = 0;
+	bool end = true;
+	char grammar = 'A';
 	Branch(IEntity* parent_entity, Vec3 offsetPos, Quat rot, IMaterial* mat, Branch* prev_branch,  int objectSlot)
 	{
 		parent = parent_entity;
 		material = mat;
 		prev = prev_branch;
 		slot = objectSlot;
+
 		pos = new Vec3[vertArraySize];
 		tng = new Vec3[vertArraySize];
 		uv = new Vec2[vertArraySize];
@@ -63,10 +65,18 @@ public:
 
 		plant_sections.push_back(plant_section());
 		plant_sections.back().scale = Vec3(.005f);
-		plant_sections.back().rot = rot * Quat::CreateRotationX(90.0f * 3.14 / 180.0f);
+		plant_sections.back().rot = rot;
 		plant_sections.back().pos = offsetPos;
 		plant_sections.back().numVertices = plantRingVertices;
 
+	}
+	bool hasChild()
+	{
+		if (next.size() > 0)
+		{
+			return true;
+		}
+		return false;
 	}
 	void addChildBranch(Branch* child)
 	{
@@ -74,16 +84,27 @@ public:
 	}
 	void updateGrowth(std::vector<IEntity*> lights) // called periodically to grow plant
 	{
-		Vec3 leadTarget = updateLeadTarget(lights);
-		Quat nextRotation = rotatePosition(&leadTarget);
-		float growDistance = .005f;
-		Vec3 nextSectionPos = plant_sections.back().pos + nextRotation * Vec3(0.f, growDistance, 0.0f);
-		plant_sections.push_back(plant_section());
-		plant_sections.back().scale = Vec3(.005f);
-		plant_sections.back().rot = nextRotation;
-		plant_sections.back().pos = nextSectionPos;
-		plant_sections.back().numVertices = plantRingVertices;
-
+		if (end) {
+			Vec3 leadTarget = updateLeadTarget(lights);
+			Quat nextRotation = rotatePosition(&leadTarget);
+			float growDistance = .005f;
+			Vec3 nextSectionPos = plant_sections.back().pos + nextRotation * Vec3(0.f, growDistance, 0.0f);
+			if (plant_sections.size() > 100)
+			{
+				end = false;
+			}
+			else
+			{
+				// add new section
+				plant_sections.push_back(plant_section());
+				plant_sections.back().scale = Vec3(.005f);
+				plant_sections.back().rot = nextRotation;
+				plant_sections.back().pos = nextSectionPos;
+				plant_sections.back().numVertices = plantRingVertices;
+			}
+			
+		}
+		
 		//buildSection(lastSectionPos, plant_sections.back().points, plant_sections.back().scale.x, plant_sections.back().rot, plant_sections.back().numVertices);
 		growSections();
 		redraw();
@@ -409,7 +430,7 @@ public:
 	virtual uint64 GetEventMask() const;
 	virtual	void ProcessEvent(SEntityEvent &event);
 
-	void startBranch();
+	void CreateBranch(Vec3 offsetPos, Quat rot, Branch * prev_branch, char grammar);
 
 	void logVector(string s, Vec3 v)
 	{

@@ -39,14 +39,13 @@ void CPlantEntityCustom::Initialize()
 	params.type = PE_RIGID;
 	GetEntity()->Physicalize(params);
 	srand(time(NULL));
-	lastSectionRot = Quat(IDENTITY);
+	lastSectionRot = Quat(IDENTITY) * Quat::CreateRotationX(90.0f * 3.14 / 180.0f);
 	pos = new Vec3[vertArraySize];
 	tng = new Vec3[vertArraySize];
 	uv = new Vec2[vertArraySize];
 	ind = new vtx_idx[vertArraySize];
 	faces = new SMeshFace[vertArraySize / 3];
 	pStaticObject = gEnv->p3DEngine->CreateStatObj();
-
 	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, NULL, 3));
 }
 
@@ -104,10 +103,23 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 			for (int i = 0; i < branches.size(); i++)
 			{
 				branches.at(i).updateGrowth(lights);
-			}
-			if (plantTime % 100 == 99)
-			{
-				startBranch();
+				if (!branches.at(i).end && !branches.at(i).hasChild())
+				{
+					Vec3 branch_start_pos = branches.at(i).plant_sections.back().pos;
+					Quat last_section_rot = branches.at(i).plant_sections.back().rot;
+					if (branches.at(i).grammar == 'A')
+					{
+						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(90.0f * 3.14 / 180.0f);
+						CreateBranch(branch_start_pos, branch_start_rot, &branches.at(i), 'A');
+
+						Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(-90.0f * 3.14 / 180.0f);
+						CreateBranch(branch_start_pos, branch_start_rot_B, &branches.at(i), 'B');
+					}
+					else if (branches.at(i).grammar == 'B')
+					{
+						CreateBranch(branch_start_pos, last_section_rot, &branches.at(i), 'A');
+					}
+				}
 			}
 			plantTime++;
 		}
@@ -122,19 +134,13 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 		break;
 	}
 }
-void CPlantEntityCustom::startBranch() 
+void CPlantEntityCustom::CreateBranch(Vec3 offsetPos, Quat rot, Branch* prev_branch, char grammar)
 {
-	if (branches.size() > 0)
-	{
-		if (branches.back().plant_sections.size() > 0)
-		{
-			Vec3 branch_start_pos = branches.back().plant_sections.back().pos;
-			Quat branch_start_rot = branches.back().plant_sections.back().rot;
-			Branch* previous_branch = &branches.back();
-			branches.push_back(Branch(GetEntity(), branch_start_pos, branch_start_rot, pMat, &branches.back(), 3 + branches.size()));
-			branches.back().addChildBranch(previous_branch);
-		}
-	}
+	Branch new_branch = Branch(GetEntity(), offsetPos, rot, pMat, prev_branch, branches.size() + 3);
+	new_branch.grammar = grammar;
+	prev_branch->addChildBranch(&new_branch);
+	branches.push_back(new_branch);
+	
 }
 void CPlantEntityCustom::growthSwitch(bool active)
 {
