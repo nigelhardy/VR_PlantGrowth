@@ -22,33 +22,45 @@ void CPlantEntityCustom::RemoveEventListener(IEntityEventListener* pListener)
 void CPlantEntityCustom::Initialize()
 {		
 	lastGrowth = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-	pMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("Materials/plant.mtl");
-	pMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMat);
+
 	potMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/pot/pot_mtl_multi.mtl");
 	potMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(potMat);
 	invisMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("objects/pot/invis.mtl");
 	invisMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(invisMat);
-	GetEntity()->SetMaterial(pMat);
 	GetEntity()->SetUpdatePolicy(ENTITY_UPDATE_ALWAYS);
 	GetEntity()->Activate(true); // necessary for UPDATE event to be called
+
 	GetEntity()->LoadGeometry(0, m_potGeometry);
 	GetEntity()->SetSlotMaterial(0, potMat);
 	GetEntity()->LoadGeometry(1, m_potProxy);
 	GetEntity()->SetSlotMaterial(1, invisMat);
+
 	SEntityPhysicalizeParams params;
 	params.type = PE_RIGID;
 	GetEntity()->Physicalize(params);
 	srand(time(NULL));
-	lastSectionRot = Quat(IDENTITY) * Quat::CreateRotationX(90.0f * 3.14 / 180.0f);
-	pos = new Vec3[vertArraySize];
-	tng = new Vec3[vertArraySize];
-	uv = new Vec2[vertArraySize];
-	ind = new vtx_idx[vertArraySize];
-	faces = new SMeshFace[vertArraySize / 3];
-	pStaticObject = gEnv->p3DEngine->CreateStatObj();
-	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, NULL, 3));
+	lastSectionRot = Quat(IDENTITY);
+	branches.push_back(GrowBranch(GetEntity()->GetPos() + Vec3(0, 0, .13f), GetEntity()->GetRotation(), NULL));
 }
-
+CBranchEntity* CPlantEntityCustom::GrowBranch(Vec3 pos, Quat rot, CBranchEntity* cbChild)
+{
+	SEntitySpawnParams spawnParams;
+	spawnParams.sName = "Branch_";
+	spawnParams.pClass = gEnv->pEntitySystem->GetClassRegistry()->FindClass("Branch");
+	spawnParams.nFlags = ENTITY_FLAG_CLIENT_ONLY;
+	spawnParams.vScale = Vec3(1.0f);
+	IEntity* entity = gEnv->pEntitySystem->SpawnEntity(spawnParams);
+	GetEntity()->AttachChild(entity);
+	entity->SetLocalTM(Matrix34::CreateIdentity());
+	CBranchEntity* cb = entity->GetComponent<CBranchEntity>();
+	cb->SetParent(GetEntity());
+	cb->SetRoot(pos, rot);
+	if (cbChild)
+	{
+		cbChild->addChildBranch(cb);
+	}
+	return cb;
+}
 void CPlantEntityCustom::SerializeProperties(Serialization::IArchive& archive)  // give control in editor over some properties
 {
 	archive(Serialization::ModelFilename(m_geometry), "Geometry", "Geometry");
@@ -102,44 +114,112 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 		{
 			for (int i = 0; i < branches.size(); i++)
 			{
+				branches.at(i)->updateGrowth(lights);
+				if (!branches.at(i)->end && !branches.at(i)->hasChild())
+				{
+					Vec3 branch_start_pos = branches.at(i)->GetEnd();
+					Quat last_section_rot = branches.at(i)->plant_sections.back().rot;
+					int r = rand() % 4;
+					float angle = 45.0f;
+					Quat rand_rot = Quat::CreateRotationY((rand() % 360) * 3.14 / 180.0f);
+					if (r == 0 || true)
+					{
+						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(angle * 3.14 / 180.0f) * rand_rot;
+						Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(-angle * 3.14 / 180.0f) * rand_rot;
+
+
+						branches.push_back(GrowBranch(branch_start_pos, branch_start_rot, branches.at(i)));
+
+						
+						CreateBranch(branch_start_pos, branch_start_rot, branches.at(i), 'A');
+						
+						
+						CreateBranch(branch_start_pos, branch_start_rot_B, (branches.at(i)), 'B');
+					}
+					//else if (r == 1)
+					//{
+					//	CreateBranch(branch_start_pos, last_section_rot, branches.at(i), 'A');
+					//}
+					//else if (r == 2)
+					//{
+					//	Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(0.0f * 3.14 / 180.0f) * rand_rot;
+					//	CreateBranch(branch_start_pos, branch_start_rot, branches.at(i), 'A');
+
+					//	Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(-angle * 3.14 / 180.0f) * rand_rot;
+					//	CreateBranch(branch_start_pos, branch_start_rot_B, branches.at(i), 'B');
+
+					//}
+					//else if (r = 3)
+					//{
+					//	Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(angle * 3.14 / 180.0f) * rand_rot;
+					//	CreateBranch(branch_start_pos, branch_start_rot, branches.at(i), 'A');
+
+					//	Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(0.0f * 3.14 / 180.0f) * rand_rot;
+					//	CreateBranch(branch_start_pos, branch_start_rot_B, branches.at(i), 'B');
+					//}
+				}
+			}
+			/*for (int i = 0; i < branches.size(); i++)
+			{
 				branches.at(i).updateGrowth(lights);
+				
 				if (!branches.at(i).end && !branches.at(i).hasChild())
 				{
 					Vec3 branch_start_pos = branches.at(i).plant_sections.back().pos;
 					Quat last_section_rot = branches.at(i).plant_sections.back().rot;
-					if (branches.at(i).grammar == 'A')
+					int r = rand() % 4;
+					float angle = 45.0f;
+					Quat rand_rot = Quat::CreateRotationY((rand() % 360) * 3.14 / 180.0f);
+					if (r == 0)
 					{
-						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(90.0f * 3.14 / 180.0f);
+						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(angle * 3.14 / 180.0f) * rand_rot;
 						CreateBranch(branch_start_pos, branch_start_rot, &branches.at(i), 'A');
 
-						Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(-90.0f * 3.14 / 180.0f);
-						CreateBranch(branch_start_pos, branch_start_rot_B, &branches.at(i), 'B');
+						Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(-angle * 3.14 / 180.0f) * rand_rot;
+						CreateBranch(branch_start_pos, branch_start_rot_B, &(branches.at(i)), 'B');
 					}
-					else if (branches.at(i).grammar == 'B')
+					else if (r == 1)
 					{
 						CreateBranch(branch_start_pos, last_section_rot, &branches.at(i), 'A');
 					}
+					else if (r == 2)
+					{
+						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(0.0f * 3.14 / 180.0f) * rand_rot;
+						CreateBranch(branch_start_pos, branch_start_rot, &branches.at(i), 'A');
+
+						Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(-angle * 3.14 / 180.0f) * rand_rot;
+						CreateBranch(branch_start_pos, branch_start_rot_B, &branches.at(i), 'B');
+
+					}
+					else if (r = 3)
+					{
+						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(angle * 3.14 / 180.0f) * rand_rot;
+						CreateBranch(branch_start_pos, branch_start_rot, &branches.at(i), 'A');
+
+						Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(0.0f * 3.14 / 180.0f) * rand_rot;
+						CreateBranch(branch_start_pos, branch_start_rot_B, &branches.at(i), 'B');
+					}
 				}
-			}
+			}*/
 			plantTime++;
 		}
-		else if (plantTime > currentTime - offsetTime)
-		{
-			for (int i = 0; i < branches.size(); i++)
-			{
-				branches.at(i).RemoveSection();
-			}
-			plantTime--;
-		}
-		break;
+		//else if (plantTime > currentTime - offsetTime)
+		//{
+		//	for (int i = 0; i < branches.size(); i++)
+		//	{
+		//		//branches.at(i).RemoveSection();
+		//	}
+		//	plantTime--;
+		//}
+		//break;
 	}
 }
-void CPlantEntityCustom::CreateBranch(Vec3 offsetPos, Quat rot, Branch* prev_branch, char grammar)
+void CPlantEntityCustom::CreateBranch(Vec3 offsetPos, Quat rot, CBranchEntity* prev_branch, char grammar)
 {
-	Branch new_branch = Branch(GetEntity(), offsetPos, rot, pMat, prev_branch, branches.size() + 3);
-	new_branch.grammar = grammar;
-	prev_branch->addChildBranch(&new_branch);
-	branches.push_back(new_branch);
+	//CBranchEntity new_branch = Branch(GetEntity(), offsetPos, rot, pMat, prev_branch, branches.size() + 3);
+	//new_branch.grammar = grammar;
+	//prev_branch->addChildBranch(&new_branch);
+	//branches.push_back(new_branch);
 	
 }
 void CPlantEntityCustom::growthSwitch(bool active)
@@ -183,14 +263,14 @@ void CPlantEntityCustom::removeLight(IEntity* light)
 }
 void CPlantEntityCustom::Reset()
 {
-	for (int i = 0; i < branches.size(); i++)
+	/*for (int i = 0; i < branches.size(); i++)
 	{
 		int slot = branches.at(i).slot;
 		GetEntity()->UnphysicalizeSlot(slot);
 		GetEntity()->FreeSlot(slot);
 	}
 	branches.clear();
-	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, NULL, 3));
+	branches.push_back(Branch(GetEntity(), Vec3(0, 0, .13f), lastSectionRot, pMat, NULL, 3));*/
 }
 
 CRYREGISTER_CLASS(CPlantEntityCustom)

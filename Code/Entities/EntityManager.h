@@ -95,7 +95,7 @@ public:
 	bool globalGrowth = true;
 	int currentTime = 0;
 	milliseconds lastGrowth;
-	milliseconds growthRate = (milliseconds)100;
+	milliseconds growthRate = (milliseconds)50;
 
 	enum EInputPorts
 	{

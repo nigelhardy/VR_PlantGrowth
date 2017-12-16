@@ -33,6 +33,8 @@ set (SourceGroup_EntityHelpers
 	"Entities/PlantEntity.h"
 	"Entities/PlantEntityCustom.cpp"
 	"Entities/PlantEntityCustom.h"
+	"Entities/Branch.cpp"
+	"Entities/Branch.h"
 	"Entities/InputVR.cpp"
 	"Entities/InputVR.h"
 	"Entities/EntityManager.h"
