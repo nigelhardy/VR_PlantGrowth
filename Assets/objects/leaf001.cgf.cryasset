@@ -1,0 +1,12 @@
+<cryasset>
+ <AssetMetadata version="0" type="Mesh" guid="{EAB7EBCB-9C6D-C9B2-CE37-EFA1E2588F04}" source="leaf.FBX">
+  <Files>
+   <File path="leaf001.cgf"/>
+  </Files>
+  <Details>
+   <Detail name="materialCount">3</Detail>
+   <Detail name="triangleCount">3864</Detail>
+   <Detail name="vertexCount">2186</Detail>
+  </Details>
+ </AssetMetadata>
+</cryasset>

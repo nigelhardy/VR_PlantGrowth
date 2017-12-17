@@ -47,8 +47,10 @@ public:
 	void SetRoot(Vec3 rootPos, Quat rootRot);
 	float getLastSectionSize();
 	float getPrevLastSectionSize();
+	IEntity * GetBranchEntity();
 	bool hasChild();
 	void addChildBranch(CBranchEntity * child);
+	void JustLeaf();
 	void updateGrowth(std::vector<IEntity*> lights);
 	Vec3 updateLeadTarget(std::vector<IEntity*> lights);
 	Quat rotatePosition(Vec3 * target);
@@ -102,9 +104,10 @@ private:
 	std::vector<CBranchEntity>* branches;
 	std::vector<CBranchEntity*> next;
 	IMaterial *pMat;
-	float branchStability = .8f;
+	float branchStability = 0.35f;
 	int maxSections = 0;
 	int slot = 0;
+	string m_leafGeometry = "objects/leaf001.cgf";
 public:
 	std::vector<plant_section> plant_sections;
 	CBranchEntity* prev = NULL;

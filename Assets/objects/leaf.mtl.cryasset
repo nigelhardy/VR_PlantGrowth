@@ -1,0 +1,8 @@
+<cryasset>
+ <AssetMetadata version="0" type="Material" guid="{C5787587-8CB6-E886-D343-63B04FBE81FD}" source="leaf.FBX">
+  <Files>
+   <File path="leaf.mtl"/>
+  </Files>
+  <Details />
+ </AssetMetadata>
+</cryasset>

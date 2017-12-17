@@ -21,7 +21,17 @@ public:
 
 	}
 };
-
+void logVector(string s, Vec3 v)
+{
+	string r = s;
+	r.Append(" X: ");
+	r.Append(std::to_string(v.x).c_str());
+	r.Append(" Y: ");
+	r.Append(std::to_string(v.y).c_str());
+	r.Append(" Z: ");
+	r.Append(std::to_string(v.z).c_str());
+	CryLogAlways(r);
+}
 static CBranchRegistrator g_branchRegistrator;
 
 CRYREGISTER_CLASS(CBranchEntity)
@@ -29,15 +39,14 @@ CRYREGISTER_CLASS(CBranchEntity)
 
 void CBranchEntity::Initialize()
 {
-	Reset();
-
 	SEntityPhysicalizeParams params;
 	params.type = PE_RIGID;
 	GetEntity()->Physicalize(params);
 	GetEntity()->SetUpdatePolicy(ENTITY_UPDATE_ALWAYS);
 	GetEntity()->Activate(true); // necessary for UPDATE event to be called
 
-	maxSections = rand() % 50 + 50;
+	maxSections = rand() % 30 + 40;
+	CryLogAlways(std::to_string(maxSections).c_str());
 	pos = new Vec3[vertArraySize];
 	tng = new Vec3[vertArraySize];
 	uv = new Vec2[vertArraySize];
@@ -47,7 +56,6 @@ void CBranchEntity::Initialize()
 	pMat = gEnv->p3DEngine->GetMaterialManager()->LoadMaterial("Materials/plant.mtl");
 	pMat = gEnv->p3DEngine->GetMaterialManager()->CloneMultiMaterial(pMat);
 	GetEntity()->SetSlotMaterial(0, pMat);
-
 }
 
 void CBranchEntity::SetParent(IEntity* par)
@@ -56,6 +64,10 @@ void CBranchEntity::SetParent(IEntity* par)
 }
 Vec3 CBranchEntity::GetEnd()
 {
+	if (plant_sections.size() > 1)
+	{
+		return plant_sections.at(plant_sections.size()-2).pos;
+	}
 	return plant_sections.back().pos;
 }
 void CBranchEntity::SetRoot(Vec3 rootPos, Quat rootRot)
@@ -83,6 +95,10 @@ float CBranchEntity::getPrevLastSectionSize()
 		return 0;
 	}
 }
+IEntity* CBranchEntity::GetBranchEntity()
+{
+	return GetEntity();
+}
 bool CBranchEntity::hasChild()
 {
 	if (next.size() > 0)
@@ -96,13 +112,19 @@ void CBranchEntity::addChildBranch(CBranchEntity* child)
 	if (child)
 	{
 		next.push_back(child);
+		child->prev = this;
 	}
-	
+}
+void CBranchEntity::JustLeaf()
+{
+	GetEntity()->LoadGeometry(1, m_leafGeometry);
+	GetEntity()->SetSlotMaterial(1, pMat);
 }
 void CBranchEntity::updateGrowth(std::vector<IEntity*> lights) // called periodically to grow plant
 {
 	if (end) {
 		Vec3 leadTarget = updateLeadTarget(lights);
+		
 		Quat nextRotation = rotatePosition(&leadTarget);
 		float growDistance = .005f;
 		Vec3 nextSectionPos = plant_sections.back().pos + nextRotation * Vec3(0.f, growDistance, 0.0f);
@@ -111,7 +133,12 @@ void CBranchEntity::updateGrowth(std::vector<IEntity*> lights) // called periodi
 			end = false;
 		}
 		else
-		{
+		{ 
+			if (!prev)
+			{
+				branchStability = 0.65f;
+				maxSections = 150;
+			}
 			// add new section
 			plant_sections.push_back(plant_section());
 			plant_sections.back().scale = Vec3(.005f);
@@ -122,7 +149,7 @@ void CBranchEntity::updateGrowth(std::vector<IEntity*> lights) // called periodi
 
 	}
 
-	//growSections();
+	growSections();
 	redraw();
 }
 Vec3 CBranchEntity::updateLeadTarget(std::vector<IEntity*> lights)
@@ -133,6 +160,10 @@ Vec3 CBranchEntity::updateLeadTarget(std::vector<IEntity*> lights)
 	{
 		// to do, if enabled
 		max_light_intensity += 1.0f;
+		if ((lights.at(i)->GetPos() - plant_sections.back().pos).GetLength() < 1.0f)
+		{
+			max_light_intensity += 1.0f;
+		}
 	}
 	float tmp = 0.0f;
 	for (int i = 0; i < lights.size(); i++)
@@ -140,7 +171,14 @@ Vec3 CBranchEntity::updateLeadTarget(std::vector<IEntity*> lights)
 		if (!pos) // first light
 		{
 			pos = new Vec3(lights.at(i)->GetPos());
-			tmp = 1.0f; // TO DO: Light intensity
+			if ((lights.at(i)->GetPos() - plant_sections.back().pos).GetLength() < 1.0f)
+			{
+				tmp = 2.0f; // TO DO: Light intensity
+			}
+			else
+			{
+				tmp = 1.0f; // TO DO: Light intensity
+			}
 			*pos *= (tmp / max_light_intensity);
 			continue;
 		}
@@ -148,7 +186,7 @@ Vec3 CBranchEntity::updateLeadTarget(std::vector<IEntity*> lights)
 	}
 	if (pos == NULL) // no lights, just grow up for now
 	{
-		pos = new Vec3(parent->GetPos() + plant_sections.back().pos + Vec3(0, 0, 1.f));
+		pos = new Vec3(plant_sections.back().pos + Vec3(0, 0, 1.f));
 	}
 	return *pos;
 }
@@ -337,8 +375,13 @@ void CBranchEntity::PlantFaces(SMeshFace *mesh_faces)
 }
 void CBranchEntity::growSections()
 {
-	for (int i = 1; i < plant_sections.size(); i++)
+	if (prev)
 	{
+		plant_sections.at(0).scale = prev->plant_sections.back().scale;
+	}
+	for (int i = 0; i < plant_sections.size(); i++)
+	{
+		
 		if (plant_sections[i].scale.x < 0.1f - (float)plant_sections.size() / 40000.0f)
 		{
 			float newScale = plant_sections[i].scale.x * 1.01f;

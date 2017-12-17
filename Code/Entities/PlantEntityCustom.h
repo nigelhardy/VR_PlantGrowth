@@ -77,14 +77,14 @@ public:
 
 	CBranchEntity * GrowBranch(Vec3 pos, Quat rot, CBranchEntity* cbChild);
 
+	CBranchEntity * GrowLeaf(Vec3 pos, Quat rot, CBranchEntity * cbChild);
+
 	virtual IEntityPropertyGroup* GetPropertyGroup() override { return this; }
 
 	virtual const char* GetLabel() const override { return "GPlantEntityCustom"; }
 	virtual void SerializeProperties(Serialization::IArchive& archive) override;
 	virtual uint64 GetEventMask() const;
 	virtual	void ProcessEvent(SEntityEvent &event);
-
-	void CreateBranch(Vec3 offsetPos, Quat rot, CBranchEntity* prev_branch, char grammar);
 
 	void logVector(string s, Vec3 v)
 	{
