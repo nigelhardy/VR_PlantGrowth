@@ -125,7 +125,7 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 					float angle = 55.0f;
 					
 					Quat rand_rot = Quat::CreateRotationY((rand() % 360) * 3.14 / 180.0f);
-					if (r >= 0 && r <= 85)
+					if (r >= 0 && r <= 65)
 					{
 						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(0 * 3.14 / 180.0f) * rand_rot;
 						branches.push_back(GrowBranch(branch_start_pos, branch_start_rot, branches.at(i)));
@@ -135,7 +135,7 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 						}
 						break;
 					}
-					else if (r < 90)
+					else if (r < 75)
 					{
 						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(angle * 3.14 / 180.0f) * rand_rot;
 						Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(-angle * 3.14 / 180.0f) * rand_rot;
@@ -144,7 +144,7 @@ void CPlantEntityCustom::ProcessEvent(SEntityEvent &event)
 						branches.push_back(GrowBranch(branch_start_pos, branch_start_rot_B, branches.at(i)));
 						break;
 					}
-					else if (r < 95)
+					else if (r < 85)
 					{
 						Quat branch_start_rot = last_section_rot  * Quat::CreateRotationX(angle * 3.14 / 180.0f) * rand_rot;
 						Quat branch_start_rot_B = last_section_rot  * Quat::CreateRotationX(0 * 3.14 / 180.0f) * rand_rot;
